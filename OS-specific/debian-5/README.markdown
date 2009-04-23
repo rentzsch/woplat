@@ -2,14 +2,45 @@
 
 ## Create a new VMware VM
 
-* 250 GB Hard Disk file (it's sparse, so give us room for log and DB files)
 * 1024 MB RAM (will reduce to 256MB once the auto-partitioner has run)
+* 250 GB Hard Disk file (it's sparse, so give us room for log files and DB files)
 
 ## Install debian-500-i386-netinst.iso
 
-* Shutdown, reduce RAM back to 256MB.
+* English
+* United States
+* American English
+* Hostname: wovm
+* Domain name: webobjects.com
+* Time Zone: Central
+* Guided - use entire disk
+* SCSI1
+* All files in one partition
+* root password: pass (You'll want to change this later.)
+* nonadmin account: wolf
+* wolf password: pass
+* Mirror country: United States
+* Archive mirror: debian.uchicago.edu
+* Empty HTTP Proxy
+* Opt-in to package usage survey
+* Disable all software (Desktop environment and Standard system)
+* Install GRUB to the Master Boot Record
+* Allow restart
+* Shutdown, reduce RAM back to 256MB
+* Start-up
 
-`userdel --remove wolf`
+## Login
+
+User: root  
+Password: pass
+
+(You'll want to change this later.)
+
+## Remove nonadmin user
+
+You can add your own users later.
+
+	userdel --remove wolf
 
 ## Install ssh
 
@@ -18,10 +49,7 @@
 ## Install Mercurial
 
 	apt-get install mercurial
-	cd /etc
-	hg init
-	hg addremove
-	hg ci -m 'initial commit'
+	cd /etc && hg init && hg add && hg ci -m 'initial commit'
 
 ## Add contrib and non-free apt sources (prep for installing Java)
 
@@ -70,15 +98,13 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 
 	wget http://webobjects.mdimension.com/wolips/WOInstaller.jar
 	
-	mkdir /opt/wo533
-	mkdir /opt/wo543
+	mkdir /opt/wo533 && mkdir /opt/wo543
 
 	java -jar WOInstaller.jar 5.3.3 /opt/wo533
 	java -jar WOInstaller.jar 5.4.3 /opt/wo543
 
 	# Pick a version. We're defaulting to 5.3.3.
-	ln -s /opt/wo533/Local /opt
-	ln -s /opt/wo533/Library /opt
+	ln -s /opt/wo533/Local /opt && ln -s /opt/wo533/Library /opt
 
 	rm WOInstaller.jar
 
@@ -114,6 +140,7 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 
 	WOPLAT=woplat-20090423_debian-5_apache-2.2
 	cd && wget http://cloud.github.com/downloads/rentzsch/woplat/$WOPLAT.tgz
+	tar xfz $WOPLAT.tgz && rm $WOPLAT.tgz
 
 ## Either compile the web server adaptor yourself... (part 2 of 3)
 
@@ -126,12 +153,11 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 
 ## ... -or- just install the pre-compiled adaptor binary (part 2 of 3)
 
-	cd && tar xfz $WOPLAT.tgz
-	mv $WOPLAT/mod_WebObjects.so /usr/lib/apache2/modules/
+	mv ~/$WOPLAT/mod_WebObjects.so /usr/lib/apache2/modules/
 
 ## Install Adaptor (part 3 of 3)
 
-	mv $WOPLAT/apache_webobjects.conf /etc/apache2/apache_webobjects.conf
+	mv ~/$WOPLAT/apache_webobjects.conf /etc/apache2/apache_webobjects.conf
 	
 	pico /etc/apache2/sites-enabled/000-default
 
@@ -146,6 +172,12 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
  			Options FollowSymLinks
  			AllowOverride None
  		&lt;/Directory>
+ 		&lt;Directory /var/www/>
+ 			Options Indexes FollowSymLinks MultiViews
+ 			AllowOverride None
+ 			Order allow,deny
+ 			allow from all
+ 		&lt;/Directory>
  	
 -		ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 -		&lt;Directory "/usr/lib/cgi-bin">
@@ -154,13 +186,6 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 -			Order allow,deny
 -			Allow from all
 -		&lt;/Directory>
- 	
- 		&lt;Directory /var/www/>
- 			Options Indexes FollowSymLinks MultiViews
- 			AllowOverride None
- 			Order allow,deny
- 			allow from all
- 		&lt;/Directory>
  
  		ErrorLog /var/log/apache2/error.log
  
@@ -182,20 +207,46 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
  	&lt;/VirtualHost>
 </pre>
 
-	apache2ctl configtest
-	apache2ctl restart
+	apache2ctl configtest && apache2ctl restart
 	
 	cd /etc && hg addremove && hg ci -m 'Install apache mod_WebObjects'
 
-# Install webobjects init.d
+## Install webobjects init.d
 
+	cd ~/$WOPLAT
+	chmod u+x webobjects.init.d
 	mv ~/$WOPLAT/webobjects.init.d /etc/init.d/webobjects
 	update-rc.d webobjects defaults
 	cd /etc && hg addremove && hg ci -m 'Install WebObjects init.d'
 
 	# Clean up woplat
-	rm -rf $WOPLAT.tgz $WOPLAT
+	rm -rf ~/$WOPLAT
 
-# Start WebObjects
+## Start WebObjects
 
 	/etc/init.d/webobjects start
+
+## Strengthen your root password
+
+	passwd
+
+## (Optional) Install lsof
+
+	apt-get install lsof
+	lsof -i -P|grep LISTEN|grep java
+
+## (Optional) Install ntp
+
+	apt-get install ntp
+
+## Disable DHCP
+
+	TODO
+
+## Update domain name
+
+	TODO
+
+## Update Time Zone
+
+	TODO

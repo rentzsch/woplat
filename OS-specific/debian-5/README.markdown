@@ -29,13 +29,20 @@
 
 Add "contrib non-free" source qualifiers to the file:
 
+<style>
+.add {
+	font-weight: bold;
+	color: green;
+}
+</style>
+
 <pre style="outline:1px solid lightgray">
 	# 
 	# deb cdrom:[Debian GNU/Linux 5.0.0 _Lenny_ - Official i386 NETINST Binary-1 20090214-16:03]/ lenny main
 	
 	#deb cdrom:[Debian GNU/Linux 5.0.0 _Lenny_ - Official i386 NETINST Binary-1 20090214-16:03]/ lenny main
 	
-	http://debian.uchicago.edu/debian/ lenny main <span style="font-weight:bold;color:green">contrib non-free</span>
+	http://debian.uchicago.edu/debian/ lenny main <span class="add" style="font-weight:bold;color:green">contrib non-free</span>
 	deb-src http://debian.uchicago.edu/debian/ lenny main
 	
 	deb http://security.debian.org/ lenny/updates main <span style="font-weight:bold;color:green">contrib non-free</span>

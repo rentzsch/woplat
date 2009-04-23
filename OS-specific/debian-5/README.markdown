@@ -30,19 +30,22 @@
 Add "contrib non-free" source qualifiers to the file:
 
 <pre>
-	# 
-	# deb cdrom:[Debian GNU/Linux 5.0.0 _Lenny_ - Official i386 NETINST Binary-1 20090214-16:03]/ lenny main
-	
-	#deb cdrom:[Debian GNU/Linux 5.0.0 _Lenny_ - Official i386 NETINST Binary-1 20090214-16:03]/ lenny main
-	
-	http://debian.uchicago.edu/debian/ lenny main <font color="green"><b>contrib non-free</b></font>
-	deb-src http://debian.uchicago.edu/debian/ lenny main
-	
-	deb http://security.debian.org/ lenny/updates main <font color="green"><b>contrib non-free</b></font>
-	deb-src http://security.debian.org/ lenny/updates main
-	
-	deb http://volatile.debian.org/debian-volatile lenny/volatile main <font color="green"><b>contrib non-free</b></font>
-	deb-src http://volatile.debian.org/debian-volatile lenny/volatile main
+    # 
+    # deb cdrom:[Debian GNU/Linux 5.0.0 _Lenny_ - Official i386 NETINST Binary-1 20090214-16:03]/ lenny main
+ 
+    #deb cdrom:[Debian GNU/Linux 5.0.0 _Lenny_ - Official i386 NETINST Binary-1 20090214-16:03]/ lenny main
+ 
+-   deb http://debian.uchicago.edu/debian/ lenny main
++   deb http://debian.uchicago.edu/debian/ lenny main contrib non-free
+    deb-src http://debian.uchicago.edu/debian/ lenny main
+ 
+-   deb http://security.debian.org/ lenny/updates main
++   deb http://security.debian.org/ lenny/updates main contrib non-free
+    deb-src http://security.debian.org/ lenny/updates main
+ 
+-   deb http://volatile.debian.org/debian-volatile lenny/volatile main
++   deb http://volatile.debian.org/debian-volatile lenny/volatile main contrib non-free
+    deb-src http://volatile.debian.org/debian-volatile lenny/volatile main
 </pre>
 
 Save your changes, update the source:
@@ -133,50 +136,50 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 	pico /etc/apache2/sites-enabled/000-default
 
 <pre>
-	<font color="green"><b>Include /etc/apache2/apache_webobjects.conf</b></font>
-	
-	&lt;VirtualHost *:80>
-		ServerAdmin webmaster@localhost
-		
-		DocumentRoot /var/www/
-		&lt;Directory />
-			Options FollowSymLinks
-			AllowOverride None
-		&lt;/Directory>
-		
-		<font color="red"><b>ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
-		&lt;Directory "/usr/lib/cgi-bin">
-			AllowOverride None
-			Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
-			Order allow,deny
-			Allow from all
-		&lt;/Directory></b></font>
-		
-		&lt;Directory /var/www/>
-			Options Indexes FollowSymLinks MultiViews
-			AllowOverride None
-			Order allow,deny
-			allow from all
-		&lt;/Directory>
-	
-		ErrorLog /var/log/apache2/error.log
-	
-		# Possible values include: debug, info, notice, warn, error, crit,
-		# alert, emerg.
-		LogLevel warn
-	
-		CustomLog /var/log/apache2/access.log combined
-	
-		Alias /doc/ "/usr/share/doc/"
-		&lt;Directory "/usr/share/doc/">
-			Options Indexes MultiViews FollowSymLinks
-			AllowOverride None
-			Order deny,allow
-			Deny from all
-			Allow from 127.0.0.0/255.0.0.0 ::1/128
-		&lt;/Directory>
-	
-	&lt;/VirtualHost>
++	Include /etc/apache2/apache_webobjects.conf
+ 
+ 	&lt;VirtualHost *:80>
+ 		ServerAdmin webmaster@localhost
+ 	
+ 		DocumentRoot /var/www/
+ 		&lt;Directory />
+ 			Options FollowSymLinks
+ 			AllowOverride None
+ 		&lt;/Directory>
+ 	
+-		ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+-		&lt;Directory "/usr/lib/cgi-bin">
+-			AllowOverride None
+-			Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
+-			Order allow,deny
+-			Allow from all
+-		&lt;/Directory>
+ 	
+ 		&lt;Directory /var/www/>
+ 			Options Indexes FollowSymLinks MultiViews
+ 			AllowOverride None
+ 			Order allow,deny
+ 			allow from all
+ 		&lt;/Directory>
+ 
+ 		ErrorLog /var/log/apache2/error.log
+ 
+ 		# Possible values include: debug, info, notice, warn, error, crit,
+ 		# alert, emerg.
+ 		LogLevel warn
+ 
+ 		CustomLog /var/log/apache2/access.log combined
+ 
+ 		Alias /doc/ "/usr/share/doc/"
+ 		&lt;Directory "/usr/share/doc/">
+ 			Options Indexes MultiViews FollowSymLinks
+ 			AllowOverride None
+ 			Order deny,allow
+ 			Deny from all
+ 			Allow from 127.0.0.0/255.0.0.0 ::1/128
+ 		&lt;/Directory>
+ 
+ 	&lt;/VirtualHost>
 </pre>
 
 	apache2ctl configtest
@@ -190,7 +193,7 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 	update-rc.d webobjects defaults
 	cd /etc && hg addremove && hg ci -m 'Install WebObjects init.d'
 
-	# You can clean up the folders now.
+	# Clean up woplat
 	rm -rf $WOPLAT.tgz $WOPLAT
 
 # Start WebObjects

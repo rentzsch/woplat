@@ -1,0 +1,873 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ *//*
+ * The Apache Software License, Version 1.1
+ *
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
+ * reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowlegement:
+ *       "This product includes software developed by the
+ *        Apache Software Foundation (http://www.apache.org/)."
+ *    Alternately, this acknowlegement may appear in the software itself,
+ *    if and wherever such third-party acknowlegements normally appear.
+ *
+ * 4. The names "Ant" and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
+ *
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
+ *    permission of the Apache Group.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of the Apache Software Foundation.  For more
+ * information on the Apache Software Foundation, please see
+ * <http://www.apache.org/>.
+ */
+
+/*
+ * This package is based on the work done by Keiron Liddle, Aftex Software
+ * <keiron@aftexsw.com> to whom the Ant project is very grateful for his
+ * great code.
+ */
+package org.apache.tools.bzip2;
+
+import java.io.InputStream;
+import java.io.IOException;
+
+/**
+ * An input stream that decompresses from the BZip2 format (without the file
+ * header chars) to be read as any other stream.
+ *
+ * @author <a href="mailto:keiron@aftexsw.com">Keiron Liddle</a>
+ */
+@SuppressWarnings({"fallthrough"}) public class CBZip2InputStream extends InputStream implements BZip2Constants {public static class __CLR2_2_1111111fglxv45q{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,1333);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+    private static void cadvise() {__CLR2_2_1111111fglxv45q.R.E[1333]++;
+        __CLR2_2_1111111fglxv45q.R.E[1334]++;System.out.println("CRC Error");
+        //throw new CCoruptionError();
+    }
+
+    private static void badBGLengths() {__CLR2_2_1111111fglxv45q.R.E[1335]++;
+        __CLR2_2_1111111fglxv45q.R.E[1336]++;cadvise();
+    }
+
+    private static void bitStreamEOF() {__CLR2_2_1111111fglxv45q.R.E[1337]++;
+        __CLR2_2_1111111fglxv45q.R.E[1338]++;cadvise();
+    }
+
+    private static void compressedStreamEOF() {__CLR2_2_1111111fglxv45q.R.E[1339]++;
+        __CLR2_2_1111111fglxv45q.R.E[1340]++;cadvise();
+    }
+
+    private void makeMaps() {__CLR2_2_1111111fglxv45q.R.E[1341]++;
+        __CLR2_2_1111111fglxv45q.R.E[1342]++;int i;
+        __CLR2_2_1111111fglxv45q.R.E[1343]++;nInUse = 0;
+        __CLR2_2_1111111fglxv45q.R.E[1344]++;for (i = 0; (((i < 256)&&(++__CLR2_2_1111111fglxv45q.R.E[1345]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1346]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1347]++;if ((((inUse[i])&&(++__CLR2_2_1111111fglxv45q.R.E[1348]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1349]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1350]++;seqToUnseq[nInUse] = (char) i;
+                __CLR2_2_1111111fglxv45q.R.E[1351]++;unseqToSeq[i] = (char) nInUse;
+                __CLR2_2_1111111fglxv45q.R.E[1352]++;nInUse++;
+            }
+        }}
+    }}
+
+    /*
+      index of the last char in the block, so
+      the block size == last + 1.
+    */
+    private int  last;
+
+    /*
+      index in zptr[] of original string after sorting.
+    */
+    private int  origPtr;
+
+    /*
+      always: in the range 0 .. 9.
+      The current block size is 100000 * this number.
+    */
+    private int blockSize100k;
+
+    private boolean blockRandomised;
+
+    private int bsBuff;
+    private int bsLive;
+    private CRC mCrc = new CRC();
+
+    private boolean[] inUse = new boolean[256];
+    private int nInUse;
+
+    private char[] seqToUnseq = new char[256];
+    private char[] unseqToSeq = new char[256];
+
+    private char[] selector = new char[MAX_SELECTORS];
+    private char[] selectorMtf = new char[MAX_SELECTORS];
+
+    private int[] tt;
+    private char[] ll8;
+
+    /*
+      freq table collected to save a pass over the data
+      during decompression.
+    */
+    private int[] unzftab = new int[256];
+
+    private int[][] limit = new int[N_GROUPS][MAX_ALPHA_SIZE];
+    private int[][] base = new int[N_GROUPS][MAX_ALPHA_SIZE];
+    private int[][] perm = new int[N_GROUPS][MAX_ALPHA_SIZE];
+    private int[] minLens = new int[N_GROUPS];
+
+    private InputStream bsStream;
+
+    private boolean streamEnd = false;
+
+    private int currentChar = -1;
+
+    private static final int START_BLOCK_STATE = 1;
+    private static final int RAND_PART_A_STATE = 2;
+    private static final int RAND_PART_B_STATE = 3;
+    private static final int RAND_PART_C_STATE = 4;
+    private static final int NO_RAND_PART_A_STATE = 5;
+    private static final int NO_RAND_PART_B_STATE = 6;
+    private static final int NO_RAND_PART_C_STATE = 7;
+
+    private int currentState = START_BLOCK_STATE;
+
+    private int storedBlockCRC, storedCombinedCRC;
+    private int computedBlockCRC, computedCombinedCRC;
+
+    int i2, count, chPrev, ch2;
+    int i, tPos;
+    int rNToGo = 0;
+    int rTPos  = 0;
+    int j2;
+    char z;
+
+    public CBZip2InputStream(InputStream zStream) {__CLR2_2_1111111fglxv45q.R.E[1353]++;
+        __CLR2_2_1111111fglxv45q.R.E[1354]++;ll8 = null;
+        __CLR2_2_1111111fglxv45q.R.E[1355]++;tt = null;
+        __CLR2_2_1111111fglxv45q.R.E[1356]++;bsSetStream(zStream);
+        __CLR2_2_1111111fglxv45q.R.E[1357]++;initialize();
+        __CLR2_2_1111111fglxv45q.R.E[1358]++;initBlock();
+        __CLR2_2_1111111fglxv45q.R.E[1359]++;setupBlock();
+    }
+
+    public int read() {__CLR2_2_1111111fglxv45q.R.E[1360]++;
+        __CLR2_2_1111111fglxv45q.R.E[1361]++;if ((((streamEnd)&&(++__CLR2_2_1111111fglxv45q.R.E[1362]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1363]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1364]++;return -1;
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1365]++;int retChar = currentChar;
+            boolean __CLB2_2_1_bool0=false;__CLR2_2_1111111fglxv45q.R.E[1366]++;switch(currentState) {
+            case START_BLOCK_STATE:if (!__CLB2_2_1_bool0) {__CLR2_2_1111111fglxv45q.R.E[1367]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1111111fglxv45q.R.E[1368]++;break;
+            case RAND_PART_A_STATE:if (!__CLB2_2_1_bool0) {__CLR2_2_1111111fglxv45q.R.E[1369]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1111111fglxv45q.R.E[1370]++;break;
+            case RAND_PART_B_STATE:if (!__CLB2_2_1_bool0) {__CLR2_2_1111111fglxv45q.R.E[1371]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1111111fglxv45q.R.E[1372]++;setupRandPartB();
+                __CLR2_2_1111111fglxv45q.R.E[1373]++;break;
+            case RAND_PART_C_STATE:if (!__CLB2_2_1_bool0) {__CLR2_2_1111111fglxv45q.R.E[1374]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1111111fglxv45q.R.E[1375]++;setupRandPartC();
+                __CLR2_2_1111111fglxv45q.R.E[1376]++;break;
+            case NO_RAND_PART_A_STATE:if (!__CLB2_2_1_bool0) {__CLR2_2_1111111fglxv45q.R.E[1377]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1111111fglxv45q.R.E[1378]++;break;
+            case NO_RAND_PART_B_STATE:if (!__CLB2_2_1_bool0) {__CLR2_2_1111111fglxv45q.R.E[1379]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1111111fglxv45q.R.E[1380]++;setupNoRandPartB();
+                __CLR2_2_1111111fglxv45q.R.E[1381]++;break;
+            case NO_RAND_PART_C_STATE:if (!__CLB2_2_1_bool0) {__CLR2_2_1111111fglxv45q.R.E[1382]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1111111fglxv45q.R.E[1383]++;setupNoRandPartC();
+                __CLR2_2_1111111fglxv45q.R.E[1384]++;break;
+            default:if (!__CLB2_2_1_bool0) {__CLR2_2_1111111fglxv45q.R.E[1385]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1111111fglxv45q.R.E[1386]++;break;
+            }
+            __CLR2_2_1111111fglxv45q.R.E[1387]++;return retChar;
+        }
+    }}
+
+    private void initialize() {__CLR2_2_1111111fglxv45q.R.E[1388]++;
+        __CLR2_2_1111111fglxv45q.R.E[1389]++;char magic3, magic4;
+        __CLR2_2_1111111fglxv45q.R.E[1390]++;magic3 = bsGetUChar();
+        __CLR2_2_1111111fglxv45q.R.E[1391]++;magic4 = bsGetUChar();
+        __CLR2_2_1111111fglxv45q.R.E[1392]++;if ((((magic3 != 'h' || magic4 < '1' || magic4 > '9')&&(++__CLR2_2_1111111fglxv45q.R.E[1393]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1394]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1395]++;bsFinishedWithStream();
+            __CLR2_2_1111111fglxv45q.R.E[1396]++;streamEnd = true;
+            __CLR2_2_1111111fglxv45q.R.E[1397]++;return;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1398]++;setDecompressStructureSizes(magic4 - '0');
+        __CLR2_2_1111111fglxv45q.R.E[1399]++;computedCombinedCRC = 0;
+    }
+
+    private void initBlock() {__CLR2_2_1111111fglxv45q.R.E[1400]++;
+        __CLR2_2_1111111fglxv45q.R.E[1401]++;char magic1, magic2, magic3, magic4;
+        __CLR2_2_1111111fglxv45q.R.E[1402]++;char magic5, magic6;
+        __CLR2_2_1111111fglxv45q.R.E[1403]++;magic1 = bsGetUChar();
+        __CLR2_2_1111111fglxv45q.R.E[1404]++;magic2 = bsGetUChar();
+        __CLR2_2_1111111fglxv45q.R.E[1405]++;magic3 = bsGetUChar();
+        __CLR2_2_1111111fglxv45q.R.E[1406]++;magic4 = bsGetUChar();
+        __CLR2_2_1111111fglxv45q.R.E[1407]++;magic5 = bsGetUChar();
+        __CLR2_2_1111111fglxv45q.R.E[1408]++;magic6 = bsGetUChar();
+        __CLR2_2_1111111fglxv45q.R.E[1409]++;if ((((magic1 == 0x17 && magic2 == 0x72 && magic3 == 0x45
+            && magic4 == 0x38 && magic5 == 0x50 && magic6 == 0x90)&&(++__CLR2_2_1111111fglxv45q.R.E[1410]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1411]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1412]++;complete();
+            __CLR2_2_1111111fglxv45q.R.E[1413]++;return;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1414]++;if ((((magic1 != 0x31 || magic2 != 0x41 || magic3 != 0x59
+            || magic4 != 0x26 || magic5 != 0x53 || magic6 != 0x59)&&(++__CLR2_2_1111111fglxv45q.R.E[1415]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1416]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1417]++;badBlockHeader();
+            __CLR2_2_1111111fglxv45q.R.E[1418]++;streamEnd = true;
+            __CLR2_2_1111111fglxv45q.R.E[1419]++;return;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1420]++;storedBlockCRC = bsGetInt32();
+
+        __CLR2_2_1111111fglxv45q.R.E[1421]++;if ((((bsR(1) == 1)&&(++__CLR2_2_1111111fglxv45q.R.E[1422]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1423]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1424]++;blockRandomised = true;
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1425]++;blockRandomised = false;
+        }
+
+        //        currBlockNo++;
+        }__CLR2_2_1111111fglxv45q.R.E[1426]++;getAndMoveToFrontDecode();
+
+        __CLR2_2_1111111fglxv45q.R.E[1427]++;mCrc.initialiseCRC();
+        __CLR2_2_1111111fglxv45q.R.E[1428]++;currentState = START_BLOCK_STATE;
+    }
+
+    private void endBlock() {__CLR2_2_1111111fglxv45q.R.E[1429]++;
+        __CLR2_2_1111111fglxv45q.R.E[1430]++;computedBlockCRC = mCrc.getFinalCRC();
+        /* A bad CRC is considered a fatal error. */
+        __CLR2_2_1111111fglxv45q.R.E[1431]++;if ((((storedBlockCRC != computedBlockCRC)&&(++__CLR2_2_1111111fglxv45q.R.E[1432]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1433]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1434]++;crcError();
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1435]++;computedCombinedCRC = (computedCombinedCRC << 1)
+            | (computedCombinedCRC >>> 31);
+        __CLR2_2_1111111fglxv45q.R.E[1436]++;computedCombinedCRC ^= computedBlockCRC;
+    }
+
+    private void complete() {__CLR2_2_1111111fglxv45q.R.E[1437]++;
+        __CLR2_2_1111111fglxv45q.R.E[1438]++;storedCombinedCRC = bsGetInt32();
+        __CLR2_2_1111111fglxv45q.R.E[1439]++;if ((((storedCombinedCRC != computedCombinedCRC)&&(++__CLR2_2_1111111fglxv45q.R.E[1440]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1441]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1442]++;crcError();
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1443]++;bsFinishedWithStream();
+        __CLR2_2_1111111fglxv45q.R.E[1444]++;streamEnd = true;
+    }
+
+    private static void blockOverrun() {__CLR2_2_1111111fglxv45q.R.E[1445]++;
+        __CLR2_2_1111111fglxv45q.R.E[1446]++;cadvise();
+    }
+
+    private static void badBlockHeader() {__CLR2_2_1111111fglxv45q.R.E[1447]++;
+        __CLR2_2_1111111fglxv45q.R.E[1448]++;cadvise();
+    }
+
+    private static void crcError() {__CLR2_2_1111111fglxv45q.R.E[1449]++;
+        __CLR2_2_1111111fglxv45q.R.E[1450]++;cadvise();
+    }
+
+    private void bsFinishedWithStream() {__CLR2_2_1111111fglxv45q.R.E[1451]++;
+        __CLR2_2_1111111fglxv45q.R.E[1452]++;try {
+            __CLR2_2_1111111fglxv45q.R.E[1453]++;if ((((this.bsStream != null)&&(++__CLR2_2_1111111fglxv45q.R.E[1454]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1455]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1456]++;if ((((this.bsStream != System.in)&&(++__CLR2_2_1111111fglxv45q.R.E[1457]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1458]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1459]++;this.bsStream.close();
+                    __CLR2_2_1111111fglxv45q.R.E[1460]++;this.bsStream = null;
+                }
+            }}
+        }} catch (IOException ioe) {
+            //ignore
+        }
+    }
+
+    private void bsSetStream(InputStream f) {__CLR2_2_1111111fglxv45q.R.E[1461]++;
+        __CLR2_2_1111111fglxv45q.R.E[1462]++;bsStream = f;
+        __CLR2_2_1111111fglxv45q.R.E[1463]++;bsLive = 0;
+        __CLR2_2_1111111fglxv45q.R.E[1464]++;bsBuff = 0;
+    }
+
+    private int bsR(int n) {__CLR2_2_1111111fglxv45q.R.E[1465]++;
+        __CLR2_2_1111111fglxv45q.R.E[1466]++;int v;
+        __CLR2_2_1111111fglxv45q.R.E[1467]++;while ((((bsLive < n)&&(++__CLR2_2_1111111fglxv45q.R.E[1468]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1469]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1470]++;int zzi;
+            __CLR2_2_1111111fglxv45q.R.E[1471]++;char thech = 0;
+            __CLR2_2_1111111fglxv45q.R.E[1472]++;try {
+                __CLR2_2_1111111fglxv45q.R.E[1473]++;thech = (char) bsStream.read();
+            } catch (IOException e) {
+                __CLR2_2_1111111fglxv45q.R.E[1474]++;compressedStreamEOF();
+            }
+            __CLR2_2_1111111fglxv45q.R.E[1475]++;if ((((thech == -1)&&(++__CLR2_2_1111111fglxv45q.R.E[1476]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1477]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1478]++;compressedStreamEOF();
+            }
+            }__CLR2_2_1111111fglxv45q.R.E[1479]++;zzi = thech;
+            __CLR2_2_1111111fglxv45q.R.E[1480]++;bsBuff = (bsBuff << 8) | (zzi & 0xff);
+            __CLR2_2_1111111fglxv45q.R.E[1481]++;bsLive += 8;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1482]++;v = (bsBuff >> (bsLive - n)) & ((1 << n) - 1);
+        __CLR2_2_1111111fglxv45q.R.E[1483]++;bsLive -= n;
+        __CLR2_2_1111111fglxv45q.R.E[1484]++;return v;
+    }
+
+    private char bsGetUChar() {__CLR2_2_1111111fglxv45q.R.E[1485]++;
+        __CLR2_2_1111111fglxv45q.R.E[1486]++;return (char) bsR(8);
+    }
+
+    private int bsGetint() {__CLR2_2_1111111fglxv45q.R.E[1487]++;
+        __CLR2_2_1111111fglxv45q.R.E[1488]++;int u = 0;
+        __CLR2_2_1111111fglxv45q.R.E[1489]++;u = (u << 8) | bsR(8);
+        __CLR2_2_1111111fglxv45q.R.E[1490]++;u = (u << 8) | bsR(8);
+        __CLR2_2_1111111fglxv45q.R.E[1491]++;u = (u << 8) | bsR(8);
+        __CLR2_2_1111111fglxv45q.R.E[1492]++;u = (u << 8) | bsR(8);
+        __CLR2_2_1111111fglxv45q.R.E[1493]++;return u;
+    }
+
+    private int bsGetIntVS(int numBits) {__CLR2_2_1111111fglxv45q.R.E[1494]++;
+        __CLR2_2_1111111fglxv45q.R.E[1495]++;return (int) bsR(numBits);
+    }
+
+    private int bsGetInt32() {__CLR2_2_1111111fglxv45q.R.E[1496]++;
+        __CLR2_2_1111111fglxv45q.R.E[1497]++;return (int) bsGetint();
+    }
+
+    private void hbCreateDecodeTables(int[] limit, int[] base,
+                                      int[] perm, char[] length,
+                                      int minLen, int maxLen, int alphaSize) {__CLR2_2_1111111fglxv45q.R.E[1498]++;
+        __CLR2_2_1111111fglxv45q.R.E[1499]++;int pp, i, j, vec;
+
+        __CLR2_2_1111111fglxv45q.R.E[1500]++;pp = 0;
+        __CLR2_2_1111111fglxv45q.R.E[1501]++;for (i = minLen; (((i <= maxLen)&&(++__CLR2_2_1111111fglxv45q.R.E[1502]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1503]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1504]++;for (j = 0; (((j < alphaSize)&&(++__CLR2_2_1111111fglxv45q.R.E[1505]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1506]==0&false)); j++) {{
+                __CLR2_2_1111111fglxv45q.R.E[1507]++;if ((((length[j] == i)&&(++__CLR2_2_1111111fglxv45q.R.E[1508]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1509]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1510]++;perm[pp] = j;
+                    __CLR2_2_1111111fglxv45q.R.E[1511]++;pp++;
+                }
+            }}
+        }}
+
+        }__CLR2_2_1111111fglxv45q.R.E[1512]++;for (i = 0; (((i < MAX_CODE_LEN)&&(++__CLR2_2_1111111fglxv45q.R.E[1513]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1514]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1515]++;base[i] = 0;
+        }
+        }__CLR2_2_1111111fglxv45q.R.E[1516]++;for (i = 0; (((i < alphaSize)&&(++__CLR2_2_1111111fglxv45q.R.E[1517]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1518]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1519]++;base[length[i] + 1]++;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1520]++;for (i = 1; (((i < MAX_CODE_LEN)&&(++__CLR2_2_1111111fglxv45q.R.E[1521]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1522]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1523]++;base[i] += base[i - 1];
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1524]++;for (i = 0; (((i < MAX_CODE_LEN)&&(++__CLR2_2_1111111fglxv45q.R.E[1525]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1526]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1527]++;limit[i] = 0;
+        }
+        }__CLR2_2_1111111fglxv45q.R.E[1528]++;vec = 0;
+
+        __CLR2_2_1111111fglxv45q.R.E[1529]++;for (i = minLen; (((i <= maxLen)&&(++__CLR2_2_1111111fglxv45q.R.E[1530]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1531]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1532]++;vec += (base[i + 1] - base[i]);
+            __CLR2_2_1111111fglxv45q.R.E[1533]++;limit[i] = vec - 1;
+            __CLR2_2_1111111fglxv45q.R.E[1534]++;vec <<= 1;
+        }
+        }__CLR2_2_1111111fglxv45q.R.E[1535]++;for (i = minLen + 1; (((i <= maxLen)&&(++__CLR2_2_1111111fglxv45q.R.E[1536]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1537]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1538]++;base[i] = ((limit[i - 1] + 1) << 1) - base[i];
+        }
+    }}
+
+    private void recvDecodingTables() {__CLR2_2_1111111fglxv45q.R.E[1539]++;
+        __CLR2_2_1111111fglxv45q.R.E[1540]++;char len[][] = new char[N_GROUPS][MAX_ALPHA_SIZE];
+        __CLR2_2_1111111fglxv45q.R.E[1541]++;int i, j, t, nGroups, nSelectors, alphaSize;
+        __CLR2_2_1111111fglxv45q.R.E[1542]++;int minLen, maxLen;
+        __CLR2_2_1111111fglxv45q.R.E[1543]++;boolean[] inUse16 = new boolean[16];
+
+        /* Receive the mapping table */
+        __CLR2_2_1111111fglxv45q.R.E[1544]++;for (i = 0; (((i < 16)&&(++__CLR2_2_1111111fglxv45q.R.E[1545]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1546]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1547]++;if ((((bsR(1) == 1)&&(++__CLR2_2_1111111fglxv45q.R.E[1548]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1549]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1550]++;inUse16[i] = true;
+            } }else {{
+                __CLR2_2_1111111fglxv45q.R.E[1551]++;inUse16[i] = false;
+            }
+        }}
+
+        }__CLR2_2_1111111fglxv45q.R.E[1552]++;for (i = 0; (((i < 256)&&(++__CLR2_2_1111111fglxv45q.R.E[1553]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1554]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1555]++;inUse[i] = false;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1556]++;for (i = 0; (((i < 16)&&(++__CLR2_2_1111111fglxv45q.R.E[1557]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1558]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1559]++;if ((((inUse16[i])&&(++__CLR2_2_1111111fglxv45q.R.E[1560]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1561]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1562]++;for (j = 0; (((j < 16)&&(++__CLR2_2_1111111fglxv45q.R.E[1563]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1564]==0&false)); j++) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1565]++;if ((((bsR(1) == 1)&&(++__CLR2_2_1111111fglxv45q.R.E[1566]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1567]==0&false))) {{
+                        __CLR2_2_1111111fglxv45q.R.E[1568]++;inUse[i * 16 + j] = true;
+                    }
+                }}
+            }}
+        }}
+
+        }__CLR2_2_1111111fglxv45q.R.E[1569]++;makeMaps();
+        __CLR2_2_1111111fglxv45q.R.E[1570]++;alphaSize = nInUse + 2;
+
+        /* Now the selectors */
+        __CLR2_2_1111111fglxv45q.R.E[1571]++;nGroups = bsR(3);
+        __CLR2_2_1111111fglxv45q.R.E[1572]++;nSelectors = bsR(15);
+        __CLR2_2_1111111fglxv45q.R.E[1573]++;for (i = 0; (((i < nSelectors)&&(++__CLR2_2_1111111fglxv45q.R.E[1574]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1575]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1576]++;j = 0;
+            __CLR2_2_1111111fglxv45q.R.E[1577]++;while ((((bsR(1) == 1)&&(++__CLR2_2_1111111fglxv45q.R.E[1578]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1579]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1580]++;j++;
+            }
+            }__CLR2_2_1111111fglxv45q.R.E[1581]++;selectorMtf[i] = (char) j;
+        }
+
+        /* Undo the MTF values for the selectors. */
+        }{
+            __CLR2_2_1111111fglxv45q.R.E[1582]++;char[] pos = new char[N_GROUPS];
+            __CLR2_2_1111111fglxv45q.R.E[1583]++;char tmp, v;
+            __CLR2_2_1111111fglxv45q.R.E[1584]++;for (v = 0; (((v < nGroups)&&(++__CLR2_2_1111111fglxv45q.R.E[1585]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1586]==0&false)); v++) {{
+                __CLR2_2_1111111fglxv45q.R.E[1587]++;pos[v] = v;
+            }
+
+            }__CLR2_2_1111111fglxv45q.R.E[1588]++;for (i = 0; (((i < nSelectors)&&(++__CLR2_2_1111111fglxv45q.R.E[1589]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1590]==0&false)); i++) {{
+                __CLR2_2_1111111fglxv45q.R.E[1591]++;v = selectorMtf[i];
+                __CLR2_2_1111111fglxv45q.R.E[1592]++;tmp = pos[v];
+                __CLR2_2_1111111fglxv45q.R.E[1593]++;while ((((v > 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1594]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1595]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1596]++;pos[v] = pos[v - 1];
+                    __CLR2_2_1111111fglxv45q.R.E[1597]++;v--;
+                }
+                }__CLR2_2_1111111fglxv45q.R.E[1598]++;pos[0] = tmp;
+                __CLR2_2_1111111fglxv45q.R.E[1599]++;selector[i] = tmp;
+            }
+        }}
+
+        /* Now the coding tables */
+        __CLR2_2_1111111fglxv45q.R.E[1600]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1111111fglxv45q.R.E[1601]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1602]==0&false)); t++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1603]++;int curr = bsR(5);
+            __CLR2_2_1111111fglxv45q.R.E[1604]++;for (i = 0; (((i < alphaSize)&&(++__CLR2_2_1111111fglxv45q.R.E[1605]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1606]==0&false)); i++) {{
+                __CLR2_2_1111111fglxv45q.R.E[1607]++;while ((((bsR(1) == 1)&&(++__CLR2_2_1111111fglxv45q.R.E[1608]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1609]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1610]++;if ((((bsR(1) == 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1611]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1612]==0&false))) {{
+                        __CLR2_2_1111111fglxv45q.R.E[1613]++;curr++;
+                    } }else {{
+                        __CLR2_2_1111111fglxv45q.R.E[1614]++;curr--;
+                    }
+                }}
+                }__CLR2_2_1111111fglxv45q.R.E[1615]++;len[t][i] = (char) curr;
+            }
+        }}
+
+        /* Create the Huffman decoding tables */
+        }__CLR2_2_1111111fglxv45q.R.E[1616]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1111111fglxv45q.R.E[1617]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1618]==0&false)); t++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1619]++;minLen = 32;
+            __CLR2_2_1111111fglxv45q.R.E[1620]++;maxLen = 0;
+            __CLR2_2_1111111fglxv45q.R.E[1621]++;for (i = 0; (((i < alphaSize)&&(++__CLR2_2_1111111fglxv45q.R.E[1622]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1623]==0&false)); i++) {{
+                __CLR2_2_1111111fglxv45q.R.E[1624]++;if ((((len[t][i] > maxLen)&&(++__CLR2_2_1111111fglxv45q.R.E[1625]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1626]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1627]++;maxLen = len[t][i];
+                }
+                }__CLR2_2_1111111fglxv45q.R.E[1628]++;if ((((len[t][i] < minLen)&&(++__CLR2_2_1111111fglxv45q.R.E[1629]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1630]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1631]++;minLen = len[t][i];
+                }
+            }}
+            }__CLR2_2_1111111fglxv45q.R.E[1632]++;hbCreateDecodeTables(limit[t], base[t], perm[t], len[t], minLen,
+                                 maxLen, alphaSize);
+            __CLR2_2_1111111fglxv45q.R.E[1633]++;minLens[t] = minLen;
+        }
+    }}
+
+    private void getAndMoveToFrontDecode() {__CLR2_2_1111111fglxv45q.R.E[1634]++;
+        __CLR2_2_1111111fglxv45q.R.E[1635]++;char[] yy = new char[256];
+        __CLR2_2_1111111fglxv45q.R.E[1636]++;int i, j, nextSym, limitLast;
+        __CLR2_2_1111111fglxv45q.R.E[1637]++;int EOB, groupNo, groupPos;
+
+        __CLR2_2_1111111fglxv45q.R.E[1638]++;limitLast = baseBlockSize * blockSize100k;
+        __CLR2_2_1111111fglxv45q.R.E[1639]++;origPtr = bsGetIntVS(24);
+
+        __CLR2_2_1111111fglxv45q.R.E[1640]++;recvDecodingTables();
+        __CLR2_2_1111111fglxv45q.R.E[1641]++;EOB = nInUse + 1;
+        __CLR2_2_1111111fglxv45q.R.E[1642]++;groupNo = -1;
+        __CLR2_2_1111111fglxv45q.R.E[1643]++;groupPos = 0;
+
+        /*
+          Setting up the unzftab entries here is not strictly
+          necessary, but it does save having to do it later
+          in a separate pass, and so saves a block's worth of
+          cache misses.
+        */
+        __CLR2_2_1111111fglxv45q.R.E[1644]++;for (i = 0; (((i <= 255)&&(++__CLR2_2_1111111fglxv45q.R.E[1645]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1646]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1647]++;unzftab[i] = 0;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1648]++;for (i = 0; (((i <= 255)&&(++__CLR2_2_1111111fglxv45q.R.E[1649]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1650]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1651]++;yy[i] = (char) i;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1652]++;last = -1;
+
+        {
+            __CLR2_2_1111111fglxv45q.R.E[1653]++;int zt, zn, zvec, zj;
+            __CLR2_2_1111111fglxv45q.R.E[1654]++;if ((((groupPos == 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1655]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1656]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1657]++;groupNo++;
+                __CLR2_2_1111111fglxv45q.R.E[1658]++;groupPos = G_SIZE;
+            }
+            }__CLR2_2_1111111fglxv45q.R.E[1659]++;groupPos--;
+            __CLR2_2_1111111fglxv45q.R.E[1660]++;zt = selector[groupNo];
+            __CLR2_2_1111111fglxv45q.R.E[1661]++;zn = minLens[zt];
+            __CLR2_2_1111111fglxv45q.R.E[1662]++;zvec = bsR(zn);
+            __CLR2_2_1111111fglxv45q.R.E[1663]++;while ((((zvec > limit[zt][zn])&&(++__CLR2_2_1111111fglxv45q.R.E[1664]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1665]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1666]++;zn++;
+                {
+                    {
+                        __CLR2_2_1111111fglxv45q.R.E[1667]++;while ((((bsLive < 1)&&(++__CLR2_2_1111111fglxv45q.R.E[1668]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1669]==0&false))) {{
+                            __CLR2_2_1111111fglxv45q.R.E[1670]++;int zzi;
+                            __CLR2_2_1111111fglxv45q.R.E[1671]++;char thech = 0;
+                            __CLR2_2_1111111fglxv45q.R.E[1672]++;try {
+                                __CLR2_2_1111111fglxv45q.R.E[1673]++;thech = (char) bsStream.read();
+                            } catch (IOException e) {
+                                __CLR2_2_1111111fglxv45q.R.E[1674]++;compressedStreamEOF();
+                            }
+                            __CLR2_2_1111111fglxv45q.R.E[1675]++;if ((((thech == -1)&&(++__CLR2_2_1111111fglxv45q.R.E[1676]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1677]==0&false))) {{
+                                __CLR2_2_1111111fglxv45q.R.E[1678]++;compressedStreamEOF();
+                            }
+                            }__CLR2_2_1111111fglxv45q.R.E[1679]++;zzi = thech;
+                            __CLR2_2_1111111fglxv45q.R.E[1680]++;bsBuff = (bsBuff << 8) | (zzi & 0xff);
+                            __CLR2_2_1111111fglxv45q.R.E[1681]++;bsLive += 8;
+                        }
+                    }}
+                    __CLR2_2_1111111fglxv45q.R.E[1682]++;zj = (bsBuff >> (bsLive - 1)) & 1;
+                    __CLR2_2_1111111fglxv45q.R.E[1683]++;bsLive--;
+                }
+                __CLR2_2_1111111fglxv45q.R.E[1684]++;zvec = (zvec << 1) | zj;
+            }
+            }__CLR2_2_1111111fglxv45q.R.E[1685]++;nextSym = perm[zt][zvec - base[zt][zn]];
+        }
+
+        __CLR2_2_1111111fglxv45q.R.E[1686]++;while (true) {{
+
+            __CLR2_2_1111111fglxv45q.R.E[1687]++;if ((((nextSym == EOB)&&(++__CLR2_2_1111111fglxv45q.R.E[1688]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1689]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1690]++;break;
+            }
+
+            }__CLR2_2_1111111fglxv45q.R.E[1691]++;if ((((nextSym == RUNA || nextSym == RUNB)&&(++__CLR2_2_1111111fglxv45q.R.E[1692]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1693]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1694]++;char ch;
+                __CLR2_2_1111111fglxv45q.R.E[1695]++;int s = -1;
+                __CLR2_2_1111111fglxv45q.R.E[1696]++;int N = 1;
+                __CLR2_2_1111111fglxv45q.R.E[1697]++;do {{
+                    __CLR2_2_1111111fglxv45q.R.E[1698]++;if ((((nextSym == RUNA)&&(++__CLR2_2_1111111fglxv45q.R.E[1699]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1700]==0&false))) {{
+                        __CLR2_2_1111111fglxv45q.R.E[1701]++;s = s + (0 + 1) * N;
+                    } }else {__CLR2_2_1111111fglxv45q.R.E[1702]++;if ((((nextSym == RUNB)&&(++__CLR2_2_1111111fglxv45q.R.E[1703]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1704]==0&false))) {{
+                        __CLR2_2_1111111fglxv45q.R.E[1705]++;s = s + (1 + 1) * N;
+                           }
+                    }}__CLR2_2_1111111fglxv45q.R.E[1706]++;N = N * 2;
+                    {
+                        __CLR2_2_1111111fglxv45q.R.E[1707]++;int zt, zn, zvec, zj;
+                        __CLR2_2_1111111fglxv45q.R.E[1708]++;if ((((groupPos == 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1709]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1710]==0&false))) {{
+                            __CLR2_2_1111111fglxv45q.R.E[1711]++;groupNo++;
+                            __CLR2_2_1111111fglxv45q.R.E[1712]++;groupPos = G_SIZE;
+                        }
+                        }__CLR2_2_1111111fglxv45q.R.E[1713]++;groupPos--;
+                        __CLR2_2_1111111fglxv45q.R.E[1714]++;zt = selector[groupNo];
+                        __CLR2_2_1111111fglxv45q.R.E[1715]++;zn = minLens[zt];
+                        __CLR2_2_1111111fglxv45q.R.E[1716]++;zvec = bsR(zn);
+                        __CLR2_2_1111111fglxv45q.R.E[1717]++;while ((((zvec > limit[zt][zn])&&(++__CLR2_2_1111111fglxv45q.R.E[1718]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1719]==0&false))) {{
+                            __CLR2_2_1111111fglxv45q.R.E[1720]++;zn++;
+                            {
+                                {
+                                    __CLR2_2_1111111fglxv45q.R.E[1721]++;while ((((bsLive < 1)&&(++__CLR2_2_1111111fglxv45q.R.E[1722]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1723]==0&false))) {{
+                                        __CLR2_2_1111111fglxv45q.R.E[1724]++;int zzi;
+                                        __CLR2_2_1111111fglxv45q.R.E[1725]++;char thech = 0;
+                                        __CLR2_2_1111111fglxv45q.R.E[1726]++;try {
+                                            __CLR2_2_1111111fglxv45q.R.E[1727]++;thech = (char) bsStream.read();
+                                        } catch (IOException e) {
+                                            __CLR2_2_1111111fglxv45q.R.E[1728]++;compressedStreamEOF();
+                                        }
+                                        __CLR2_2_1111111fglxv45q.R.E[1729]++;if ((((thech == -1)&&(++__CLR2_2_1111111fglxv45q.R.E[1730]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1731]==0&false))) {{
+                                            __CLR2_2_1111111fglxv45q.R.E[1732]++;compressedStreamEOF();
+                                        }
+                                        }__CLR2_2_1111111fglxv45q.R.E[1733]++;zzi = thech;
+                                        __CLR2_2_1111111fglxv45q.R.E[1734]++;bsBuff = (bsBuff << 8) | (zzi & 0xff);
+                                        __CLR2_2_1111111fglxv45q.R.E[1735]++;bsLive += 8;
+                                    }
+                                }}
+                                __CLR2_2_1111111fglxv45q.R.E[1736]++;zj = (bsBuff >> (bsLive - 1)) & 1;
+                                __CLR2_2_1111111fglxv45q.R.E[1737]++;bsLive--;
+                            }
+                            __CLR2_2_1111111fglxv45q.R.E[1738]++;zvec = (zvec << 1) | zj;
+                        }
+                        }__CLR2_2_1111111fglxv45q.R.E[1739]++;nextSym = perm[zt][zvec - base[zt][zn]];
+                    }
+                } }while ((((nextSym == RUNA || nextSym == RUNB)&&(++__CLR2_2_1111111fglxv45q.R.E[1740]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1741]==0&false)));
+
+                __CLR2_2_1111111fglxv45q.R.E[1742]++;s++;
+                __CLR2_2_1111111fglxv45q.R.E[1743]++;ch = seqToUnseq[yy[0]];
+                __CLR2_2_1111111fglxv45q.R.E[1744]++;unzftab[ch] += s;
+
+                __CLR2_2_1111111fglxv45q.R.E[1745]++;while ((((s > 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1746]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1747]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1748]++;last++;
+                    __CLR2_2_1111111fglxv45q.R.E[1749]++;ll8[last] = ch;
+                    __CLR2_2_1111111fglxv45q.R.E[1750]++;s--;
+                }
+
+                }__CLR2_2_1111111fglxv45q.R.E[1751]++;if ((((last >= limitLast)&&(++__CLR2_2_1111111fglxv45q.R.E[1752]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1753]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1754]++;blockOverrun();
+                }
+                }__CLR2_2_1111111fglxv45q.R.E[1755]++;continue;
+            } }else {{
+                __CLR2_2_1111111fglxv45q.R.E[1756]++;char tmp;
+                __CLR2_2_1111111fglxv45q.R.E[1757]++;last++;
+                __CLR2_2_1111111fglxv45q.R.E[1758]++;if ((((last >= limitLast)&&(++__CLR2_2_1111111fglxv45q.R.E[1759]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1760]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1761]++;blockOverrun();
+                }
+
+                }__CLR2_2_1111111fglxv45q.R.E[1762]++;tmp = yy[nextSym - 1];
+                __CLR2_2_1111111fglxv45q.R.E[1763]++;unzftab[seqToUnseq[tmp]]++;
+                __CLR2_2_1111111fglxv45q.R.E[1764]++;ll8[last] = seqToUnseq[tmp];
+
+                /*
+                  This loop is hammered during decompression,
+                  hence the unrolling.
+
+                  for (j = nextSym-1; j > 0; j--) yy[j] = yy[j-1];
+                */
+
+                __CLR2_2_1111111fglxv45q.R.E[1765]++;j = nextSym - 1;
+                __CLR2_2_1111111fglxv45q.R.E[1766]++;for (; (((j > 3)&&(++__CLR2_2_1111111fglxv45q.R.E[1767]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1768]==0&false)); j -= 4) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1769]++;yy[j]     = yy[j - 1];
+                    __CLR2_2_1111111fglxv45q.R.E[1770]++;yy[j - 1] = yy[j - 2];
+                    __CLR2_2_1111111fglxv45q.R.E[1771]++;yy[j - 2] = yy[j - 3];
+                    __CLR2_2_1111111fglxv45q.R.E[1772]++;yy[j - 3] = yy[j - 4];
+                }
+                }__CLR2_2_1111111fglxv45q.R.E[1773]++;for (; (((j > 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1774]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1775]==0&false)); j--) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1776]++;yy[j] = yy[j - 1];
+                }
+
+                }__CLR2_2_1111111fglxv45q.R.E[1777]++;yy[0] = tmp;
+                {
+                    __CLR2_2_1111111fglxv45q.R.E[1778]++;int zt, zn, zvec, zj;
+                    __CLR2_2_1111111fglxv45q.R.E[1779]++;if ((((groupPos == 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1780]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1781]==0&false))) {{
+                        __CLR2_2_1111111fglxv45q.R.E[1782]++;groupNo++;
+                        __CLR2_2_1111111fglxv45q.R.E[1783]++;groupPos = G_SIZE;
+                    }
+                    }__CLR2_2_1111111fglxv45q.R.E[1784]++;groupPos--;
+                    __CLR2_2_1111111fglxv45q.R.E[1785]++;zt = selector[groupNo];
+                    __CLR2_2_1111111fglxv45q.R.E[1786]++;zn = minLens[zt];
+                    __CLR2_2_1111111fglxv45q.R.E[1787]++;zvec = bsR(zn);
+                    __CLR2_2_1111111fglxv45q.R.E[1788]++;while ((((zvec > limit[zt][zn])&&(++__CLR2_2_1111111fglxv45q.R.E[1789]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1790]==0&false))) {{
+                        __CLR2_2_1111111fglxv45q.R.E[1791]++;zn++;
+                        {
+                            {
+                                __CLR2_2_1111111fglxv45q.R.E[1792]++;while ((((bsLive < 1)&&(++__CLR2_2_1111111fglxv45q.R.E[1793]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1794]==0&false))) {{
+                                    __CLR2_2_1111111fglxv45q.R.E[1795]++;int zzi;
+                                    __CLR2_2_1111111fglxv45q.R.E[1796]++;char thech = 0;
+                                    __CLR2_2_1111111fglxv45q.R.E[1797]++;try {
+                                        __CLR2_2_1111111fglxv45q.R.E[1798]++;thech = (char) bsStream.read();
+                                    } catch (IOException e) {
+                                        __CLR2_2_1111111fglxv45q.R.E[1799]++;compressedStreamEOF();
+                                    }
+                                    __CLR2_2_1111111fglxv45q.R.E[1800]++;zzi = thech;
+                                    __CLR2_2_1111111fglxv45q.R.E[1801]++;bsBuff = (bsBuff << 8) | (zzi & 0xff);
+                                    __CLR2_2_1111111fglxv45q.R.E[1802]++;bsLive += 8;
+                                }
+                            }}
+                            __CLR2_2_1111111fglxv45q.R.E[1803]++;zj = (bsBuff >> (bsLive - 1)) & 1;
+                            __CLR2_2_1111111fglxv45q.R.E[1804]++;bsLive--;
+                        }
+                        __CLR2_2_1111111fglxv45q.R.E[1805]++;zvec = (zvec << 1) | zj;
+                    }
+                    }__CLR2_2_1111111fglxv45q.R.E[1806]++;nextSym = perm[zt][zvec - base[zt][zn]];
+                }
+                __CLR2_2_1111111fglxv45q.R.E[1807]++;continue;
+            }
+        }}
+    }}
+
+    private void setupBlock() {__CLR2_2_1111111fglxv45q.R.E[1808]++;
+        __CLR2_2_1111111fglxv45q.R.E[1809]++;int[] cftab = new int[257];
+        __CLR2_2_1111111fglxv45q.R.E[1810]++;char ch;
+
+        __CLR2_2_1111111fglxv45q.R.E[1811]++;cftab[0] = 0;
+        __CLR2_2_1111111fglxv45q.R.E[1812]++;for (i = 1; (((i <= 256)&&(++__CLR2_2_1111111fglxv45q.R.E[1813]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1814]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1815]++;cftab[i] = unzftab[i - 1];
+        }
+        }__CLR2_2_1111111fglxv45q.R.E[1816]++;for (i = 1; (((i <= 256)&&(++__CLR2_2_1111111fglxv45q.R.E[1817]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1818]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1819]++;cftab[i] += cftab[i - 1];
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1820]++;for (i = 0; (((i <= last)&&(++__CLR2_2_1111111fglxv45q.R.E[1821]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1822]==0&false)); i++) {{
+            __CLR2_2_1111111fglxv45q.R.E[1823]++;ch = (char) ll8[i];
+            __CLR2_2_1111111fglxv45q.R.E[1824]++;tt[cftab[ch]] = i;
+            __CLR2_2_1111111fglxv45q.R.E[1825]++;cftab[ch]++;
+        }
+        }__CLR2_2_1111111fglxv45q.R.E[1826]++;cftab = null;
+
+        __CLR2_2_1111111fglxv45q.R.E[1827]++;tPos = tt[origPtr];
+
+        __CLR2_2_1111111fglxv45q.R.E[1828]++;count = 0;
+        __CLR2_2_1111111fglxv45q.R.E[1829]++;i2 = 0;
+        __CLR2_2_1111111fglxv45q.R.E[1830]++;ch2 = 256;   /* not a char and not EOF */
+
+        __CLR2_2_1111111fglxv45q.R.E[1831]++;if ((((blockRandomised)&&(++__CLR2_2_1111111fglxv45q.R.E[1832]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1833]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1834]++;rNToGo = 0;
+            __CLR2_2_1111111fglxv45q.R.E[1835]++;rTPos = 0;
+            __CLR2_2_1111111fglxv45q.R.E[1836]++;setupRandPartA();
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1837]++;setupNoRandPartA();
+        }
+    }}
+
+    private void setupRandPartA() {__CLR2_2_1111111fglxv45q.R.E[1838]++;
+        __CLR2_2_1111111fglxv45q.R.E[1839]++;if ((((i2 <= last)&&(++__CLR2_2_1111111fglxv45q.R.E[1840]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1841]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1842]++;chPrev = ch2;
+            __CLR2_2_1111111fglxv45q.R.E[1843]++;ch2 = ll8[tPos];
+            __CLR2_2_1111111fglxv45q.R.E[1844]++;tPos = tt[tPos];
+            __CLR2_2_1111111fglxv45q.R.E[1845]++;if ((((rNToGo == 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1846]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1847]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1848]++;rNToGo = rNums[rTPos];
+                __CLR2_2_1111111fglxv45q.R.E[1849]++;rTPos++;
+                __CLR2_2_1111111fglxv45q.R.E[1850]++;if ((((rTPos == 512)&&(++__CLR2_2_1111111fglxv45q.R.E[1851]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1852]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1853]++;rTPos = 0;
+                }
+            }}
+            }__CLR2_2_1111111fglxv45q.R.E[1854]++;rNToGo--;
+            __CLR2_2_1111111fglxv45q.R.E[1855]++;ch2 ^= (int) (((((rNToGo == 1) )&&(++__CLR2_2_1111111fglxv45q.R.E[1856]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1857]==0&false))? 1 : 0);
+            __CLR2_2_1111111fglxv45q.R.E[1858]++;i2++;
+
+            __CLR2_2_1111111fglxv45q.R.E[1859]++;currentChar = ch2;
+            __CLR2_2_1111111fglxv45q.R.E[1860]++;currentState = RAND_PART_B_STATE;
+            __CLR2_2_1111111fglxv45q.R.E[1861]++;mCrc.updateCRC(ch2);
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1862]++;endBlock();
+            __CLR2_2_1111111fglxv45q.R.E[1863]++;initBlock();
+            __CLR2_2_1111111fglxv45q.R.E[1864]++;setupBlock();
+        }
+    }}
+
+    private void setupNoRandPartA() {__CLR2_2_1111111fglxv45q.R.E[1865]++;
+        __CLR2_2_1111111fglxv45q.R.E[1866]++;if ((((i2 <= last)&&(++__CLR2_2_1111111fglxv45q.R.E[1867]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1868]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1869]++;chPrev = ch2;
+            __CLR2_2_1111111fglxv45q.R.E[1870]++;ch2 = ll8[tPos];
+            __CLR2_2_1111111fglxv45q.R.E[1871]++;tPos = tt[tPos];
+            __CLR2_2_1111111fglxv45q.R.E[1872]++;i2++;
+
+            __CLR2_2_1111111fglxv45q.R.E[1873]++;currentChar = ch2;
+            __CLR2_2_1111111fglxv45q.R.E[1874]++;currentState = NO_RAND_PART_B_STATE;
+            __CLR2_2_1111111fglxv45q.R.E[1875]++;mCrc.updateCRC(ch2);
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1876]++;endBlock();
+            __CLR2_2_1111111fglxv45q.R.E[1877]++;initBlock();
+            __CLR2_2_1111111fglxv45q.R.E[1878]++;setupBlock();
+        }
+    }}
+
+    private void setupRandPartB() {__CLR2_2_1111111fglxv45q.R.E[1879]++;
+        __CLR2_2_1111111fglxv45q.R.E[1880]++;if ((((ch2 != chPrev)&&(++__CLR2_2_1111111fglxv45q.R.E[1881]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1882]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1883]++;currentState = RAND_PART_A_STATE;
+            __CLR2_2_1111111fglxv45q.R.E[1884]++;count = 1;
+            __CLR2_2_1111111fglxv45q.R.E[1885]++;setupRandPartA();
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1886]++;count++;
+            __CLR2_2_1111111fglxv45q.R.E[1887]++;if ((((count >= 4)&&(++__CLR2_2_1111111fglxv45q.R.E[1888]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1889]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1890]++;z = ll8[tPos];
+                __CLR2_2_1111111fglxv45q.R.E[1891]++;tPos = tt[tPos];
+                __CLR2_2_1111111fglxv45q.R.E[1892]++;if ((((rNToGo == 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1893]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1894]==0&false))) {{
+                    __CLR2_2_1111111fglxv45q.R.E[1895]++;rNToGo = rNums[rTPos];
+                    __CLR2_2_1111111fglxv45q.R.E[1896]++;rTPos++;
+                    __CLR2_2_1111111fglxv45q.R.E[1897]++;if ((((rTPos == 512)&&(++__CLR2_2_1111111fglxv45q.R.E[1898]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1899]==0&false))) {{
+                        __CLR2_2_1111111fglxv45q.R.E[1900]++;rTPos = 0;
+                    }
+                }}
+                }__CLR2_2_1111111fglxv45q.R.E[1901]++;rNToGo--;
+                __CLR2_2_1111111fglxv45q.R.E[1902]++;z ^= (((((rNToGo == 1) )&&(++__CLR2_2_1111111fglxv45q.R.E[1903]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1904]==0&false))? 1 : 0);
+                __CLR2_2_1111111fglxv45q.R.E[1905]++;j2 = 0;
+                __CLR2_2_1111111fglxv45q.R.E[1906]++;currentState = RAND_PART_C_STATE;
+                __CLR2_2_1111111fglxv45q.R.E[1907]++;setupRandPartC();
+            } }else {{
+                __CLR2_2_1111111fglxv45q.R.E[1908]++;currentState = RAND_PART_A_STATE;
+                __CLR2_2_1111111fglxv45q.R.E[1909]++;setupRandPartA();
+            }
+        }}
+    }}
+
+    private void setupRandPartC() {__CLR2_2_1111111fglxv45q.R.E[1910]++;
+        __CLR2_2_1111111fglxv45q.R.E[1911]++;if ((((j2 < (int) z)&&(++__CLR2_2_1111111fglxv45q.R.E[1912]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1913]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1914]++;currentChar = ch2;
+            __CLR2_2_1111111fglxv45q.R.E[1915]++;mCrc.updateCRC(ch2);
+            __CLR2_2_1111111fglxv45q.R.E[1916]++;j2++;
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1917]++;currentState = RAND_PART_A_STATE;
+            __CLR2_2_1111111fglxv45q.R.E[1918]++;i2++;
+            __CLR2_2_1111111fglxv45q.R.E[1919]++;count = 0;
+            __CLR2_2_1111111fglxv45q.R.E[1920]++;setupRandPartA();
+        }
+    }}
+
+    private void setupNoRandPartB() {__CLR2_2_1111111fglxv45q.R.E[1921]++;
+        __CLR2_2_1111111fglxv45q.R.E[1922]++;if ((((ch2 != chPrev)&&(++__CLR2_2_1111111fglxv45q.R.E[1923]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1924]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1925]++;currentState = NO_RAND_PART_A_STATE;
+            __CLR2_2_1111111fglxv45q.R.E[1926]++;count = 1;
+            __CLR2_2_1111111fglxv45q.R.E[1927]++;setupNoRandPartA();
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1928]++;count++;
+            __CLR2_2_1111111fglxv45q.R.E[1929]++;if ((((count >= 4)&&(++__CLR2_2_1111111fglxv45q.R.E[1930]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1931]==0&false))) {{
+                __CLR2_2_1111111fglxv45q.R.E[1932]++;z = ll8[tPos];
+                __CLR2_2_1111111fglxv45q.R.E[1933]++;tPos = tt[tPos];
+                __CLR2_2_1111111fglxv45q.R.E[1934]++;currentState = NO_RAND_PART_C_STATE;
+                __CLR2_2_1111111fglxv45q.R.E[1935]++;j2 = 0;
+                __CLR2_2_1111111fglxv45q.R.E[1936]++;setupNoRandPartC();
+            } }else {{
+                __CLR2_2_1111111fglxv45q.R.E[1937]++;currentState = NO_RAND_PART_A_STATE;
+                __CLR2_2_1111111fglxv45q.R.E[1938]++;setupNoRandPartA();
+            }
+        }}
+    }}
+
+    private void setupNoRandPartC() {__CLR2_2_1111111fglxv45q.R.E[1939]++;
+        __CLR2_2_1111111fglxv45q.R.E[1940]++;if ((((j2 < (int) z)&&(++__CLR2_2_1111111fglxv45q.R.E[1941]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1942]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1943]++;currentChar = ch2;
+            __CLR2_2_1111111fglxv45q.R.E[1944]++;mCrc.updateCRC(ch2);
+            __CLR2_2_1111111fglxv45q.R.E[1945]++;j2++;
+        } }else {{
+            __CLR2_2_1111111fglxv45q.R.E[1946]++;currentState = NO_RAND_PART_A_STATE;
+            __CLR2_2_1111111fglxv45q.R.E[1947]++;i2++;
+            __CLR2_2_1111111fglxv45q.R.E[1948]++;count = 0;
+            __CLR2_2_1111111fglxv45q.R.E[1949]++;setupNoRandPartA();
+        }
+    }}
+
+    private void setDecompressStructureSizes(int newSize100k) {__CLR2_2_1111111fglxv45q.R.E[1950]++;
+        __CLR2_2_1111111fglxv45q.R.E[1951]++;if ((((!(0 <= newSize100k && newSize100k <= 9 && 0 <= blockSize100k
+               && blockSize100k <= 9))&&(++__CLR2_2_1111111fglxv45q.R.E[1952]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1953]==0&false))) {{
+            // throw new IOException("Invalid block size");
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1954]++;blockSize100k = newSize100k;
+
+        __CLR2_2_1111111fglxv45q.R.E[1955]++;if ((((newSize100k == 0)&&(++__CLR2_2_1111111fglxv45q.R.E[1956]!=0|true))||(++__CLR2_2_1111111fglxv45q.R.E[1957]==0&false))) {{
+            __CLR2_2_1111111fglxv45q.R.E[1958]++;return;
+        }
+
+        }__CLR2_2_1111111fglxv45q.R.E[1959]++;int n = baseBlockSize * newSize100k;
+        __CLR2_2_1111111fglxv45q.R.E[1960]++;ll8 = new char[n];
+        __CLR2_2_1111111fglxv45q.R.E[1961]++;tt = new int[n];
+    }
+}
+

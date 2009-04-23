@@ -1,0 +1,7 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ */package com.mdimension.woinstaller;
+
+public interface IProgressMonitor {
+  public void progress(long amount, long totalSize);
+  
+  public void done();
+}

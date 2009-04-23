@@ -1,0 +1,108 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ */package com.mdimension.archiver;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+public class XarEntry extends HashMap<String, Object> {public static class __CLR2_2_11vy1vyfglxv4ih{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,2446);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+	private static final XPath xpath = XPathFactory.newInstance().newXPath();
+	private final Node data;
+	private MessageDigest digest;
+	
+	public XarEntry(Node node) {__CLR2_2_11vy1vyfglxv4ih.R.E[2446]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2447]++;data = node;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2448]++;try {
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2449]++;this.put("name", xpath.evaluate("./name", data));
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2450]++;this.put("offset", Long.valueOf(xpath.evaluate("./data/offset/text()", data)));
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2451]++;this.put("length", Long.valueOf(xpath.evaluate("./data/length/text()", data)));
+		} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2452]++;e.printStackTrace();
+		}
+	}
+	
+	public static Map<String, XarEntry> getEntries(Document doc) {__CLR2_2_11vy1vyfglxv4ih.R.E[2453]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2454]++;Map<String, XarEntry> result = new HashMap<String, XarEntry>();
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2455]++;try {
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2456]++;Object nodelist = xpath.evaluate("//file", doc, XPathConstants.NODESET);
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2457]++;NodeList nodes = (NodeList) nodelist;
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2458]++;for (int i = 0; (((i < nodes.getLength())&&(++__CLR2_2_11vy1vyfglxv4ih.R.E[2459]!=0|true))||(++__CLR2_2_11vy1vyfglxv4ih.R.E[2460]==0&false)); i++) {{
+				__CLR2_2_11vy1vyfglxv4ih.R.E[2461]++;Node node = nodes.item(i);
+				__CLR2_2_11vy1vyfglxv4ih.R.E[2462]++;XarEntry entry = new XarEntry(node);
+				__CLR2_2_11vy1vyfglxv4ih.R.E[2463]++;result.put(entry.getName(), entry);
+			}
+		}} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2464]++;e.printStackTrace();
+		}
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2465]++;return result;
+	}
+	
+	public String getName() {__CLR2_2_11vy1vyfglxv4ih.R.E[2466]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2467]++;return (String) this.get("name");
+	}
+
+	public Long getOffset() {__CLR2_2_11vy1vyfglxv4ih.R.E[2468]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2469]++;return (Long) this.get("offset");
+	}
+	
+	public Long getLength() {__CLR2_2_11vy1vyfglxv4ih.R.E[2470]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2471]++;return (Long) this.get("length");
+	}
+	
+	public String getCompression() {__CLR2_2_11vy1vyfglxv4ih.R.E[2472]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2473]++;String compression = (String)getValue("data.encoding.@style");
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2474]++;if ((((compression == null)&&(++__CLR2_2_11vy1vyfglxv4ih.R.E[2475]!=0|true))||(++__CLR2_2_11vy1vyfglxv4ih.R.E[2476]==0&false)))
+			{__CLR2_2_11vy1vyfglxv4ih.R.E[2477]++;return null;
+		}__CLR2_2_11vy1vyfglxv4ih.R.E[2478]++;if (((("application/x-bzip2".equals(compression))&&(++__CLR2_2_11vy1vyfglxv4ih.R.E[2479]!=0|true))||(++__CLR2_2_11vy1vyfglxv4ih.R.E[2480]==0&false)))
+			{__CLR2_2_11vy1vyfglxv4ih.R.E[2481]++;return "bzip2";
+		}__CLR2_2_11vy1vyfglxv4ih.R.E[2482]++;if (((("application/x-gzip".equals(compression))&&(++__CLR2_2_11vy1vyfglxv4ih.R.E[2483]!=0|true))||(++__CLR2_2_11vy1vyfglxv4ih.R.E[2484]==0&false)))
+			{__CLR2_2_11vy1vyfglxv4ih.R.E[2485]++;return "gzip";
+		}__CLR2_2_11vy1vyfglxv4ih.R.E[2486]++;return compression;
+	}
+	
+	public String getExtractedChecksum() {__CLR2_2_11vy1vyfglxv4ih.R.E[2487]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2488]++;return (String)getValue("data.extracted-checksum");
+	}
+
+	public long getSize() {__CLR2_2_11vy1vyfglxv4ih.R.E[2489]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2490]++;return Long.valueOf((String) getValue("data.size"));
+	}
+	
+	public boolean hasChecksum() {__CLR2_2_11vy1vyfglxv4ih.R.E[2491]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2492]++;String checksum = getExtractedChecksum();
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2493]++;return checksum != null && !"".equals(checksum);
+	}
+
+	private Object getValue(String key) {__CLR2_2_11vy1vyfglxv4ih.R.E[2494]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2495]++;try {
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2496]++;return xpath.evaluate("./" + key.replace(".", "/"), data);
+		} catch (XPathExpressionException e) {
+			// TODO Auto-generated catch block
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2497]++;e.printStackTrace();
+		}
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2498]++;return null;
+	}
+
+	public MessageDigest getMessageDigest(String checksumAlg) {__CLR2_2_11vy1vyfglxv4ih.R.E[2499]++;
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2500]++;if ((((checksumAlg == null)&&(++__CLR2_2_11vy1vyfglxv4ih.R.E[2501]!=0|true))||(++__CLR2_2_11vy1vyfglxv4ih.R.E[2502]==0&false)))
+			{__CLR2_2_11vy1vyfglxv4ih.R.E[2503]++;return digest;
+		}__CLR2_2_11vy1vyfglxv4ih.R.E[2504]++;try {
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2505]++;digest = MessageDigest.getInstance(checksumAlg);
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			__CLR2_2_11vy1vyfglxv4ih.R.E[2506]++;e.printStackTrace();
+		}
+		__CLR2_2_11vy1vyfglxv4ih.R.E[2507]++;return digest;
+	}
+}

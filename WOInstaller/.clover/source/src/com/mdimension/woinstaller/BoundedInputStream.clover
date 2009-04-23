@@ -1,0 +1,58 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ */package com.mdimension.woinstaller;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * InputStream that delegates requests to the underlying
+ * RandomAccessFile, making sure that only bytes from a certain
+ * range can be read.
+ */
+public class BoundedInputStream extends InputStream {public static class __CLR2_2_11pd1pdfglxv4gq{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,2209);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+  private InputStream _inputStream;
+  private long _remaining;
+  private long _loc;
+
+  public BoundedInputStream(InputStream inputStream, long start, long remaining) throws IOException {__CLR2_2_11pd1pdfglxv4gq.R.E[2209]++;
+    __CLR2_2_11pd1pdfglxv4gq.R.E[2210]++;_inputStream = inputStream;
+    __CLR2_2_11pd1pdfglxv4gq.R.E[2211]++;long skip = start;
+    __CLR2_2_11pd1pdfglxv4gq.R.E[2212]++;while ((((skip > 0)&&(++__CLR2_2_11pd1pdfglxv4gq.R.E[2213]!=0|true))||(++__CLR2_2_11pd1pdfglxv4gq.R.E[2214]==0&false))) {{
+    	__CLR2_2_11pd1pdfglxv4gq.R.E[2215]++;skip -= _inputStream.skip(skip);
+    }
+    }__CLR2_2_11pd1pdfglxv4gq.R.E[2216]++;_remaining = remaining;
+    __CLR2_2_11pd1pdfglxv4gq.R.E[2217]++;_loc = start;
+  }
+
+  @Override
+  public int read() throws IOException {__CLR2_2_11pd1pdfglxv4gq.R.E[2218]++;
+    //_inputStream.skip(_loc++);
+	__CLR2_2_11pd1pdfglxv4gq.R.E[2219]++;_loc++;
+    __CLR2_2_11pd1pdfglxv4gq.R.E[2220]++;if ((((_remaining-- <= 0)&&(++__CLR2_2_11pd1pdfglxv4gq.R.E[2221]!=0|true))||(++__CLR2_2_11pd1pdfglxv4gq.R.E[2222]==0&false))) {{
+      __CLR2_2_11pd1pdfglxv4gq.R.E[2223]++;return -1;
+    }
+    }__CLR2_2_11pd1pdfglxv4gq.R.E[2224]++;return _inputStream.read();
+  }
+
+  @Override
+  public int read(byte[] b, int off, int len) throws IOException {__CLR2_2_11pd1pdfglxv4gq.R.E[2225]++;
+    __CLR2_2_11pd1pdfglxv4gq.R.E[2226]++;if ((((_remaining <= 0)&&(++__CLR2_2_11pd1pdfglxv4gq.R.E[2227]!=0|true))||(++__CLR2_2_11pd1pdfglxv4gq.R.E[2228]==0&false))) {{
+      __CLR2_2_11pd1pdfglxv4gq.R.E[2229]++;return -1;
+    }
+
+    }__CLR2_2_11pd1pdfglxv4gq.R.E[2230]++;if ((((len <= 0)&&(++__CLR2_2_11pd1pdfglxv4gq.R.E[2231]!=0|true))||(++__CLR2_2_11pd1pdfglxv4gq.R.E[2232]==0&false))) {{
+      __CLR2_2_11pd1pdfglxv4gq.R.E[2233]++;return 0;
+    }
+
+    }__CLR2_2_11pd1pdfglxv4gq.R.E[2234]++;if ((((len > _remaining)&&(++__CLR2_2_11pd1pdfglxv4gq.R.E[2235]!=0|true))||(++__CLR2_2_11pd1pdfglxv4gq.R.E[2236]==0&false))) {{
+      __CLR2_2_11pd1pdfglxv4gq.R.E[2237]++;len = (int) _remaining;
+    }
+    }__CLR2_2_11pd1pdfglxv4gq.R.E[2238]++;int ret = -1;
+    __CLR2_2_11pd1pdfglxv4gq.R.E[2239]++;ret = _inputStream.read(b, off, len);
+    __CLR2_2_11pd1pdfglxv4gq.R.E[2240]++;if ((((ret > 0)&&(++__CLR2_2_11pd1pdfglxv4gq.R.E[2241]!=0|true))||(++__CLR2_2_11pd1pdfglxv4gq.R.E[2242]==0&false))) {{
+      __CLR2_2_11pd1pdfglxv4gq.R.E[2243]++;_loc += ret;
+      __CLR2_2_11pd1pdfglxv4gq.R.E[2244]++;_remaining -= ret;
+    }
+    }__CLR2_2_11pd1pdfglxv4gq.R.E[2245]++;return ret;
+  }
+
+}

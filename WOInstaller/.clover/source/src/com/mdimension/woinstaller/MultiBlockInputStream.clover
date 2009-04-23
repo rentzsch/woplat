@@ -1,0 +1,78 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ */package com.mdimension.woinstaller;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+public class MultiBlockInputStream extends InputStream {public static class __CLR2_2_11jn1jnfglxv4f9{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,2003);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+	private final InputStream _inputSource;
+	private final LinkedList<BlockEntry> _blockList;
+	private InputStream _delegate;
+	
+	public MultiBlockInputStream(InputStream input, List<BlockEntry> blockList) {__CLR2_2_11jn1jnfglxv4f9.R.E[2003]++;
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2004]++;_inputSource = input;
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2005]++;LinkedList<BlockEntry> newList = new LinkedList<BlockEntry>();
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2006]++;newList.addAll(blockList);
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2007]++;Collections.sort(newList);
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2008]++;_blockList = newList;
+	}
+	
+	@Override
+	public int read() throws IOException {__CLR2_2_11jn1jnfglxv4f9.R.E[2009]++;
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2010]++;if ((((_delegate == null)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2011]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2012]==0&false))) {{
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2013]++;_delegate = getNextDelegate();
+		}
+		}__CLR2_2_11jn1jnfglxv4f9.R.E[2014]++;if ((((_delegate == null && _blockList.isEmpty())&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2015]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2016]==0&false)))
+			{__CLR2_2_11jn1jnfglxv4f9.R.E[2017]++;return -1;
+		}__CLR2_2_11jn1jnfglxv4f9.R.E[2018]++;int result = _delegate.read();
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2019]++;if ((((result == -1)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2020]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2021]==0&false))) {{
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2022]++;_delegate = getNextDelegate();
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2023]++;if ((((_delegate == null)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2024]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2025]==0&false))) {{
+				__CLR2_2_11jn1jnfglxv4f9.R.E[2026]++;return result;
+			}
+			}__CLR2_2_11jn1jnfglxv4f9.R.E[2027]++;return _delegate.read();
+		}
+		}__CLR2_2_11jn1jnfglxv4f9.R.E[2028]++;return result;
+	}
+	
+	@Override
+	public int read(byte[] b, int off, int len) throws IOException {__CLR2_2_11jn1jnfglxv4f9.R.E[2029]++;
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2030]++;if ((((_delegate == null)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2031]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2032]==0&false))) {{
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2033]++;_delegate = getNextDelegate();
+		}
+		}__CLR2_2_11jn1jnfglxv4f9.R.E[2034]++;if ((((_delegate == null && _blockList.isEmpty())&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2035]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2036]==0&false)))
+			{__CLR2_2_11jn1jnfglxv4f9.R.E[2037]++;return -1;
+
+		}__CLR2_2_11jn1jnfglxv4f9.R.E[2038]++;int result = _delegate.read(b, off, len);
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2039]++;if ((((result < len)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2040]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2041]==0&false))) {{
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2042]++;_delegate = getNextDelegate();
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2043]++;if ((((_delegate == null)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2044]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2045]==0&false))) {{
+				__CLR2_2_11jn1jnfglxv4f9.R.E[2046]++;return result;
+			}
+			}__CLR2_2_11jn1jnfglxv4f9.R.E[2047]++;int result2 = _delegate.read(b, off+result, len-result);
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2048]++;if ((((result2 != -1)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2049]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2050]==0&false))) {{
+				__CLR2_2_11jn1jnfglxv4f9.R.E[2051]++;return result + result2;
+			}
+		}}
+		}__CLR2_2_11jn1jnfglxv4f9.R.E[2052]++;return result;
+	}
+
+	private InputStream getNextDelegate() throws IOException {__CLR2_2_11jn1jnfglxv4f9.R.E[2053]++;
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2054]++;BlockEntry currentBlock = _blockList.element();
+		__CLR2_2_11jn1jnfglxv4f9.R.E[2055]++;if ((((_delegate != null)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2056]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2057]==0&false))) {{
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2058]++;_delegate = null;
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2059]++;_blockList.remove();
+		}
+		}__CLR2_2_11jn1jnfglxv4f9.R.E[2060]++;if ((((!_blockList.isEmpty())&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2061]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2062]==0&false))) {{
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2063]++;BlockEntry newBlock = _blockList.element();
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2064]++;long newOffset = newBlock.offset;
+			__CLR2_2_11jn1jnfglxv4f9.R.E[2065]++;if ((((currentBlock != newBlock)&&(++__CLR2_2_11jn1jnfglxv4f9.R.E[2066]!=0|true))||(++__CLR2_2_11jn1jnfglxv4f9.R.E[2067]==0&false))) {{
+				__CLR2_2_11jn1jnfglxv4f9.R.E[2068]++;newOffset -= (currentBlock.offset + currentBlock.length);
+			}
+			}__CLR2_2_11jn1jnfglxv4f9.R.E[2069]++;_delegate = new BoundedInputStream(_inputSource, newOffset, newBlock.length);
+		}
+		}__CLR2_2_11jn1jnfglxv4f9.R.E[2070]++;return _delegate;
+	}
+}

@@ -1,0 +1,235 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ */package com.mdimension.archiver;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.mdimension.woinstaller.BoundedInputStream;
+import com.mdimension.woinstaller.IProgressMonitor;
+import com.mdimension.woinstaller.NullProgressMonitor;
+
+import er.extensions.ERXFileUtilities;
+
+public class CPIO {public static class __CLR2_2_11xo1xofglxv4j9{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,2508);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+
+  public static final int S_IFDIR = 16384;
+  public static final int S_IFREG = 32768;
+  public static final int S_IFLNK = 40960;
+
+  private File _cpioFile;
+  InputStream paxStream;
+  long fileLength = 0;
+
+  public CPIO(File cpioFile) throws FileNotFoundException {
+	this(new BufferedInputStream(new FileInputStream(cpioFile)));__CLR2_2_11xo1xofglxv4j9.R.E[2509]++;__CLR2_2_11xo1xofglxv4j9.R.E[2508]++;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2510]++;_cpioFile = cpioFile;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2511]++;fileLength = _cpioFile.length();
+
+  }
+
+  public CPIO(InputStream input) {__CLR2_2_11xo1xofglxv4j9.R.E[2512]++;
+	__CLR2_2_11xo1xofglxv4j9.R.E[2513]++;paxStream = input;
+  }
+
+  public void setLength(long length) {__CLR2_2_11xo1xofglxv4j9.R.E[2514]++;
+	  __CLR2_2_11xo1xofglxv4j9.R.E[2515]++;this.fileLength = length;
+  }
+  
+  public void extractTo(File destinationFolder, boolean symbolicLinksSupported, IProgressMonitor progressMonitor) throws IOException, InterruptedException {__CLR2_2_11xo1xofglxv4j9.R.E[2516]++;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2517]++;long amount = 0;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2518]++;List<Link> links = new LinkedList<Link>();
+
+    __CLR2_2_11xo1xofglxv4j9.R.E[2519]++;try {
+      __CLR2_2_11xo1xofglxv4j9.R.E[2520]++;byte[] sixBuffer = new byte[6];
+      __CLR2_2_11xo1xofglxv4j9.R.E[2521]++;byte[] elevenBuffer = new byte[11];
+      __CLR2_2_11xo1xofglxv4j9.R.E[2522]++;boolean done = false;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2523]++;do {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2524]++;String magic = readString(paxStream, sixBuffer);
+        __CLR2_2_11xo1xofglxv4j9.R.E[2525]++;if ((((!"070707".equals(magic))&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2526]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2527]==0&false))) {{
+          __CLR2_2_11xo1xofglxv4j9.R.E[2528]++;throw new IOException("Expected magic '070707' but got '" + magic + "' (next = " + readString(paxStream, new byte[50]) + ").");
+        }
+        }else {{
+          __CLR2_2_11xo1xofglxv4j9.R.E[2529]++;String dev = readString(paxStream, sixBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2530]++;String ino = readString(paxStream, sixBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2531]++;String modeStr = readString(paxStream, sixBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2532]++;String uid = readString(paxStream, sixBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2533]++;String gid = readString(paxStream, sixBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2534]++;String nlink = readString(paxStream, sixBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2535]++;String rdev = readString(paxStream, sixBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2536]++;String mtime = readString(paxStream, elevenBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2537]++;String nameSizeStr = readString(paxStream, sixBuffer);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2538]++;String fileSizeStr = readString(paxStream, elevenBuffer);
+
+          __CLR2_2_11xo1xofglxv4j9.R.E[2539]++;int nameSize = Integer.parseInt(nameSizeStr, 8);
+          __CLR2_2_11xo1xofglxv4j9.R.E[2540]++;String name = readString(paxStream, new byte[nameSize]);
+
+          __CLR2_2_11xo1xofglxv4j9.R.E[2541]++;int fileSize = Integer.parseInt(fileSizeStr, 8);
+
+          __CLR2_2_11xo1xofglxv4j9.R.E[2542]++;if (((("TRAILER!!!".equals(name))&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2543]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2544]==0&false))) {{
+            __CLR2_2_11xo1xofglxv4j9.R.E[2545]++;done = true;
+          }
+          }else {{
+            __CLR2_2_11xo1xofglxv4j9.R.E[2546]++;File destinationFile = toFile(destinationFolder, name);
+            __CLR2_2_11xo1xofglxv4j9.R.E[2547]++;int mode = Integer.parseInt(modeStr, 8);
+            __CLR2_2_11xo1xofglxv4j9.R.E[2548]++;if (((((mode & S_IFDIR) == S_IFDIR)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2549]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2550]==0&false))) {{
+              __CLR2_2_11xo1xofglxv4j9.R.E[2551]++;if ((((".".equals(name))&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2552]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2553]==0&false))) {{
+                // skip
+              }
+              }else {__CLR2_2_11xo1xofglxv4j9.R.E[2554]++;if ((((destinationFile.exists())&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2555]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2556]==0&false))) {{
+                __CLR2_2_11xo1xofglxv4j9.R.E[2557]++;throw new IOException("The directory '" + destinationFile + "' already exists.");
+              }
+              }else {__CLR2_2_11xo1xofglxv4j9.R.E[2558]++;if ((((!destinationFile.mkdirs())&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2559]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2560]==0&false))) {{
+                __CLR2_2_11xo1xofglxv4j9.R.E[2561]++;throw new IOException("Failed to create directory '" + destinationFile + "'.");
+              }
+              }}}__CLR2_2_11xo1xofglxv4j9.R.E[2562]++;paxStream.skip(fileSize);
+            }
+            }else {__CLR2_2_11xo1xofglxv4j9.R.E[2563]++;if (((((mode & S_IFLNK) == S_IFLNK)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2564]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2565]==0&false))) {{
+              __CLR2_2_11xo1xofglxv4j9.R.E[2566]++;String realName = readString(paxStream, new byte[fileSize]);
+              __CLR2_2_11xo1xofglxv4j9.R.E[2567]++;File realFile = toFile(destinationFile.getParentFile(), realName);
+              __CLR2_2_11xo1xofglxv4j9.R.E[2568]++;links.add(new Link(realFile, destinationFile));
+            }
+            }else {__CLR2_2_11xo1xofglxv4j9.R.E[2569]++;if (((((mode & S_IFREG) == S_IFREG)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2570]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2571]==0&false))) {{
+              __CLR2_2_11xo1xofglxv4j9.R.E[2572]++;if ((((destinationFile.exists())&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2573]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2574]==0&false))) {{
+                __CLR2_2_11xo1xofglxv4j9.R.E[2575]++;throw new IOException("The file '" + destinationFile + "' already exists.");
+              }
+              }__CLR2_2_11xo1xofglxv4j9.R.E[2576]++;InputStream is = new BoundedInputStream(paxStream, 0, fileSize);
+              __CLR2_2_11xo1xofglxv4j9.R.E[2577]++;FileOutputStream fos = new FileOutputStream(destinationFile);
+              __CLR2_2_11xo1xofglxv4j9.R.E[2578]++;ERXFileUtilities.writeInputStreamToOutputStream(is, fos, fileSize, new NullProgressMonitor());
+            }
+            }else {{
+              __CLR2_2_11xo1xofglxv4j9.R.E[2579]++;throw new IOException("Unknown mode " + modeStr + " for " + name + ".");
+            }
+
+            }}}__CLR2_2_11xo1xofglxv4j9.R.E[2580]++;amount += 70 + nameSize + fileSize;
+            __CLR2_2_11xo1xofglxv4j9.R.E[2581]++;progressMonitor.progress(amount, fileLength);
+          }
+        }}
+      }} }while ((((!done)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2582]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2583]==0&false)));
+    }
+    finally {
+//      System.out.println(amount + ":" + fileLength);
+  	  __CLR2_2_11xo1xofglxv4j9.R.E[2584]++;paxStream.close();
+    }
+
+    __CLR2_2_11xo1xofglxv4j9.R.E[2585]++;Collections.sort(links, new LinkNameLengthComparator());
+    __CLR2_2_11xo1xofglxv4j9.R.E[2586]++;int linkNum = 0;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2587]++;for (Link link : links) {{
+      __CLR2_2_11xo1xofglxv4j9.R.E[2588]++;link.create(symbolicLinksSupported);
+      __CLR2_2_11xo1xofglxv4j9.R.E[2589]++;progressMonitor.progress(linkNum++, links.size());
+    }
+    }__CLR2_2_11xo1xofglxv4j9.R.E[2590]++;progressMonitor.done();
+  }
+
+  protected File toFile(File workingDir, String path) {__CLR2_2_11xo1xofglxv4j9.R.E[2591]++;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2592]++;String localPath = path.replaceFirst("^./", "");
+    __CLR2_2_11xo1xofglxv4j9.R.E[2593]++;localPath = localPath.replace("/", File.separator);
+    __CLR2_2_11xo1xofglxv4j9.R.E[2594]++;File file = new File(localPath);
+    __CLR2_2_11xo1xofglxv4j9.R.E[2595]++;if ((((!file.isAbsolute())&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2596]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2597]==0&false))) {{
+      __CLR2_2_11xo1xofglxv4j9.R.E[2598]++;file = new File(workingDir, localPath);
+    }
+    }__CLR2_2_11xo1xofglxv4j9.R.E[2599]++;return file;
+  }
+
+  protected String readString(InputStream is, byte[] b) throws IOException {__CLR2_2_11xo1xofglxv4j9.R.E[2600]++;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2601]++;readFully(is, b);
+    __CLR2_2_11xo1xofglxv4j9.R.E[2602]++;int length;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2603]++;for (length = b.length - 1; (((length >= 0 && b[length] == 0)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2604]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2605]==0&false)); length--) {{
+      // skip
+    }
+    }__CLR2_2_11xo1xofglxv4j9.R.E[2606]++;return new String(b, 0, length + 1);
+  }
+
+  protected byte[] readFully(InputStream is, byte[] b) throws IOException {__CLR2_2_11xo1xofglxv4j9.R.E[2607]++;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2608]++;return readFully(is, b, 0, b.length);
+  }
+
+  protected byte[] readFully(InputStream is, byte[] b, int offset, int length) throws IOException {__CLR2_2_11xo1xofglxv4j9.R.E[2609]++;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2610]++;int totalAmountRead = 0;
+    __CLR2_2_11xo1xofglxv4j9.R.E[2611]++;while ((((totalAmountRead < length)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2612]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2613]==0&false))) {{
+      __CLR2_2_11xo1xofglxv4j9.R.E[2614]++;int amountRead = is.read(b, offset + totalAmountRead, length - totalAmountRead);
+      __CLR2_2_11xo1xofglxv4j9.R.E[2615]++;if ((((amountRead == -1)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2616]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2617]==0&false))) {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2618]++;throw new IOException("Stream ended before " + length + " bytes (read " + totalAmountRead + ")");
+      }
+      }__CLR2_2_11xo1xofglxv4j9.R.E[2619]++;totalAmountRead += amountRead;
+    }
+    }__CLR2_2_11xo1xofglxv4j9.R.E[2620]++;return b;
+  }
+
+  protected static class Link {
+    private File _realFile;
+    private File _linkFile;
+
+    public Link(File realFile, File linkFile) {__CLR2_2_11xo1xofglxv4j9.R.E[2621]++;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2622]++;_realFile = realFile;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2623]++;_linkFile = linkFile;
+    }
+
+    public File getRealFile() {__CLR2_2_11xo1xofglxv4j9.R.E[2624]++;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2625]++;return _realFile;
+    }
+
+    public File getLinkFile() {__CLR2_2_11xo1xofglxv4j9.R.E[2626]++;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2627]++;return _linkFile;
+    }
+
+    public void create(boolean symbolicLinksSupported) throws IOException, InterruptedException {__CLR2_2_11xo1xofglxv4j9.R.E[2628]++;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2629]++;if ((((symbolicLinksSupported)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2630]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2631]==0&false))) {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2632]++;Process p = Runtime.getRuntime().exec(new String[] { "/bin/ln", "-s", _realFile.getCanonicalPath(), _linkFile.getCanonicalPath() });
+        __CLR2_2_11xo1xofglxv4j9.R.E[2633]++;int retval = p.waitFor();
+        __CLR2_2_11xo1xofglxv4j9.R.E[2634]++;if ((((retval != 0)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2635]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2636]==0&false))) {{
+          __CLR2_2_11xo1xofglxv4j9.R.E[2637]++;throw new IOException("Failed to create link from " + _realFile + " to " + _linkFile);
+        }
+      }}
+      }else {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2638]++;copyFileToFile(_realFile, _linkFile);
+      }
+    }}
+
+    protected void copyFileToFile(File source, File destination) throws IOException {__CLR2_2_11xo1xofglxv4j9.R.E[2639]++;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2640]++;if ((((!source.exists())&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2641]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2642]==0&false))) {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2643]++;throw new IOException("The file '" + source + "' does not exist (tried to link to '" + destination + "').");
+      }
+      }__CLR2_2_11xo1xofglxv4j9.R.E[2644]++;if ((((destination.exists())&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2645]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2646]==0&false))) {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2647]++;throw new IOException("The file '" + destination + "' already exists.");
+      }
+      }__CLR2_2_11xo1xofglxv4j9.R.E[2648]++;if ((((source.isDirectory())&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2649]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2650]==0&false))) {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2651]++;if ((((!destination.mkdirs())&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2652]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2653]==0&false))) {{
+          __CLR2_2_11xo1xofglxv4j9.R.E[2654]++;throw new IOException("Failed to create the directory '" + destination + "'.");
+        }
+        }__CLR2_2_11xo1xofglxv4j9.R.E[2655]++;for (File child : source.listFiles()) {{
+          __CLR2_2_11xo1xofglxv4j9.R.E[2656]++;copyFileToFile(child, new File(destination, child.getName()));
+        }
+      }}
+      }else {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2657]++;FileInputStream fis = new FileInputStream(source);
+        __CLR2_2_11xo1xofglxv4j9.R.E[2658]++;ERXFileUtilities.writeInputStreamToFile(fis, destination, (int) source.length(), new NullProgressMonitor());
+      }
+    }}
+  }
+
+  protected static class LinkNameLengthComparator implements Comparator<Link> {
+    public int compare(Link s1, Link s2) {__CLR2_2_11xo1xofglxv4j9.R.E[2659]++;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2660]++;int length1 = s1.getRealFile().toString().length();
+      __CLR2_2_11xo1xofglxv4j9.R.E[2661]++;int length2 = s2.getRealFile().toString().length();
+      __CLR2_2_11xo1xofglxv4j9.R.E[2662]++;int comparison;
+      __CLR2_2_11xo1xofglxv4j9.R.E[2663]++;if ((((length1 > length2)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2664]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2665]==0&false))) {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2666]++;comparison = 1;
+      }
+      }else {__CLR2_2_11xo1xofglxv4j9.R.E[2667]++;if ((((length1 < length2)&&(++__CLR2_2_11xo1xofglxv4j9.R.E[2668]!=0|true))||(++__CLR2_2_11xo1xofglxv4j9.R.E[2669]==0&false))) {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2670]++;comparison = -1;
+      }
+      }else {{
+        __CLR2_2_11xo1xofglxv4j9.R.E[2671]++;comparison = 0;
+      }
+      }}__CLR2_2_11xo1xofglxv4j9.R.E[2672]++;return comparison;
+    }
+  }
+}

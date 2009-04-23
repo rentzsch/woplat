@@ -1,0 +1,299 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ */package com.mdimension.archiver;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.tools.bzip2.CBZip2InputStream;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import com.mdimension.woinstaller.BoundedInputStream;
+
+public class XarFile {public static class __CLR2_2_11qi1qifglxv4ho{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,2250);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+	private static final long XAR_HEADER_MAGIC = 0x78617221;
+	private static final String[] XAR_CKSUM = new String[] { "NONE", "SHA1", "MD5" };
+	private static final int BUFFER_SIZE = 255;
+	
+	private final byte[] byte2 = new byte[2];
+	private final byte[] byte4 = new byte[4];
+	private final byte[] byte8 = new byte[8];
+
+	private File file;
+
+	private XarHeader header;
+	private XarToc toc;
+	private InputStream inputStream;
+	private InputStream lastInputStream;
+	private Map<String, XarEntry> entries = new HashMap<String, XarEntry>();
+	private long currentOffset = 0;
+	
+	private class XarHeader {
+		public long magic;
+		public int size;
+		public int version;
+		public BigInteger tocLengthCompressed;
+		public BigInteger tocLengthUncompressed;
+		public long checksumAlgorithm;
+		
+		public XarHeader() throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2250]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2251]++;magic = readUint32();
+			__CLR2_2_11qi1qifglxv4ho.R.E[2252]++;size = readUint16();
+			__CLR2_2_11qi1qifglxv4ho.R.E[2253]++;version = readUint16();
+			__CLR2_2_11qi1qifglxv4ho.R.E[2254]++;tocLengthCompressed = readUint64();
+			__CLR2_2_11qi1qifglxv4ho.R.E[2255]++;tocLengthUncompressed = readUint64();
+			__CLR2_2_11qi1qifglxv4ho.R.E[2256]++;checksumAlgorithm = readUint32();
+		}
+		
+		public void dumpHeader() {__CLR2_2_11qi1qifglxv4ho.R.E[2257]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2258]++;System.out.println("");
+			__CLR2_2_11qi1qifglxv4ho.R.E[2259]++;System.out.println("magic:\t\t\t 0x"+ Long.toHexString((magic >> 16 & 0xffff)) +  Long.toHexString(magic & 0xffff)
+					+ " " + (((((magic == XAR_HEADER_MAGIC))&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2260]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2261]==0&false))?"(OK)":"(BAD)"));
+			__CLR2_2_11qi1qifglxv4ho.R.E[2262]++;System.out.println("size:\t\t\t "+size);
+			__CLR2_2_11qi1qifglxv4ho.R.E[2263]++;System.out.println("version:\t\t "+version);
+			__CLR2_2_11qi1qifglxv4ho.R.E[2264]++;System.out.println("Compressed TOC length:\t "+tocLengthCompressed);
+			__CLR2_2_11qi1qifglxv4ho.R.E[2265]++;System.out.println("Uncompressed TOC length: "+tocLengthUncompressed);
+			__CLR2_2_11qi1qifglxv4ho.R.E[2266]++;System.out.println("Checksum algorithm:\t "+checksumAlgorithm + " ("+getCksumName()+")");
+		}
+	}
+	
+	private class XarToc {
+		private final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		private DocumentBuilder builder;
+		
+		private Document doc;
+		private String data;
+
+		public XarToc() throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2267]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2268]++;try {
+				__CLR2_2_11qi1qifglxv4ho.R.E[2269]++;data = readToc();				
+				__CLR2_2_11qi1qifglxv4ho.R.E[2270]++;builder = factory.newDocumentBuilder();
+				__CLR2_2_11qi1qifglxv4ho.R.E[2271]++;doc = builder.parse(new InputSource(new StringReader(data)));
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				__CLR2_2_11qi1qifglxv4ho.R.E[2272]++;e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				__CLR2_2_11qi1qifglxv4ho.R.E[2273]++;e.printStackTrace();
+			}
+		}
+	
+		private String readToc() throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2274]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2275]++;InputStream inflate = new InflaterInputStream(new BoundedInputStream(inputStream, 0, header.tocLengthCompressed.longValue()));
+			__CLR2_2_11qi1qifglxv4ho.R.E[2276]++;byte[] buffer = new byte[BUFFER_SIZE];
+			__CLR2_2_11qi1qifglxv4ho.R.E[2277]++;BigInteger length = new BigInteger(header.tocLengthUncompressed.toByteArray());
+			__CLR2_2_11qi1qifglxv4ho.R.E[2278]++;int read = 0;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2279]++;StringBuffer tocFile = new StringBuffer();
+			__CLR2_2_11qi1qifglxv4ho.R.E[2280]++;while (((((read = inflate.read(buffer, 0, (((length.intValue() > BUFFER_SIZE)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2281]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2282]==0&false))?BUFFER_SIZE:length.intValue())) > 0)))) {{
+				__CLR2_2_11qi1qifglxv4ho.R.E[2285]++;tocFile.append(new String(buffer, 0, read));
+				__CLR2_2_11qi1qifglxv4ho.R.E[2286]++;length.subtract(BigInteger.valueOf(read));
+			}
+			}__CLR2_2_11qi1qifglxv4ho.R.E[2287]++;return tocFile.toString();
+		}
+		
+		public String toString() {__CLR2_2_11qi1qifglxv4ho.R.E[2288]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2289]++;return data;
+		}
+
+		public Map<String, XarEntry> getEntries() {__CLR2_2_11qi1qifglxv4ho.R.E[2290]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2291]++;return XarEntry.getEntries(doc);
+		}
+	}
+		
+	public class XarInputStream extends InputStream {
+		private final InputStream _delegate;
+		private final XarEntry _entry;
+		private MessageDigest _digest;
+		
+		public XarInputStream(XarEntry entry, InputStream input) {__CLR2_2_11qi1qifglxv4ho.R.E[2292]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2293]++;_entry = entry;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2294]++;_delegate = input;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2295]++;if ((((_entry.hasChecksum())&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2296]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2297]==0&false))) {{
+				__CLR2_2_11qi1qifglxv4ho.R.E[2298]++;_digest = _entry.getMessageDigest(getCksumName());
+			}
+			}__CLR2_2_11qi1qifglxv4ho.R.E[2299]++;_digest.reset();
+		}
+		
+		@Override
+		public int read() throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2300]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2301]++;int result = _delegate.read();
+			__CLR2_2_11qi1qifglxv4ho.R.E[2302]++;if ((((result == -1)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2303]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2304]==0&false))) {{
+				__CLR2_2_11qi1qifglxv4ho.R.E[2305]++;String checksum = toChecksum(_digest.digest());
+				__CLR2_2_11qi1qifglxv4ho.R.E[2306]++;if ((((_entry.hasChecksum() && !checksum.equals(_entry.getExtractedChecksum()))&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2307]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2308]==0&false))) {{
+					__CLR2_2_11qi1qifglxv4ho.R.E[2309]++;throw new XarException("invalid checksum");
+				}
+				}__CLR2_2_11qi1qifglxv4ho.R.E[2310]++;return result;
+			}
+			}__CLR2_2_11qi1qifglxv4ho.R.E[2311]++;if ((((_digest != null)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2312]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2313]==0&false))) {{
+				__CLR2_2_11qi1qifglxv4ho.R.E[2314]++;_digest.update((byte)(result & 0xff));
+			}
+			}__CLR2_2_11qi1qifglxv4ho.R.E[2315]++;return result;
+		}
+		
+		@Override
+		public int read(byte[] b, int off, int len) throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2316]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2317]++;int result = _delegate.read(b, off, len);
+			__CLR2_2_11qi1qifglxv4ho.R.E[2318]++;if ((((result == -1)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2319]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2320]==0&false))) {{
+				__CLR2_2_11qi1qifglxv4ho.R.E[2321]++;String checksum = toChecksum(_digest.digest());
+				__CLR2_2_11qi1qifglxv4ho.R.E[2322]++;if ((((_entry.hasChecksum() && !checksum.equals(_entry.getExtractedChecksum()))&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2323]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2324]==0&false))) {{
+					__CLR2_2_11qi1qifglxv4ho.R.E[2325]++;throw new XarException("invalid checksum");
+				}
+				}__CLR2_2_11qi1qifglxv4ho.R.E[2326]++;return result;
+			}
+			}__CLR2_2_11qi1qifglxv4ho.R.E[2327]++;if ((((_digest != null)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2328]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2329]==0&false))) {{
+				__CLR2_2_11qi1qifglxv4ho.R.E[2330]++;_digest.update(b, off, result);
+			}
+			}__CLR2_2_11qi1qifglxv4ho.R.E[2331]++;return result;				
+		}
+		
+		private String toChecksum(byte[] data) {__CLR2_2_11qi1qifglxv4ho.R.E[2332]++;
+			__CLR2_2_11qi1qifglxv4ho.R.E[2333]++;StringBuffer checksum = new StringBuffer();
+			__CLR2_2_11qi1qifglxv4ho.R.E[2334]++;for (int j = 0; (((j < data.length)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2335]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2336]==0&false)); j++) {{
+				__CLR2_2_11qi1qifglxv4ho.R.E[2337]++;String hexString = Integer.toHexString(data[j] & 0xff);
+				__CLR2_2_11qi1qifglxv4ho.R.E[2338]++;if ((((hexString.length() == 1)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2339]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2340]==0&false))) 
+					{__CLR2_2_11qi1qifglxv4ho.R.E[2341]++;hexString = "0" + hexString;
+				}__CLR2_2_11qi1qifglxv4ho.R.E[2342]++;checksum.append(hexString);
+			}
+			}__CLR2_2_11qi1qifglxv4ho.R.E[2343]++;return checksum.toString();
+		}
+	}
+	
+//	public static void main(String[] args) throws IOException, NoSuchAlgorithmException {
+//	}
+	
+	public XarFile(String name) throws IOException {
+		this(new File(name));__CLR2_2_11qi1qifglxv4ho.R.E[2345]++;__CLR2_2_11qi1qifglxv4ho.R.E[2344]++;
+	}
+	
+	public XarFile(File file) throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2346]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2347]++;if ((((!file.exists() || file.length() < 28)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2348]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2349]==0&false))) {{
+			__CLR2_2_11qi1qifglxv4ho.R.E[2350]++;throw new IOException("error reading header");
+		}
+		}__CLR2_2_11qi1qifglxv4ho.R.E[2351]++;this.file = file; 
+		__CLR2_2_11qi1qifglxv4ho.R.E[2352]++;setInputStream(new BufferedInputStream(new FileInputStream(file)));
+	}
+	
+	public XarFile(InputStream stream) throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2353]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2354]++;setInputStream(stream);
+	}
+	
+	private void setInputStream(InputStream stream) throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2355]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2356]++;inputStream = stream;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2357]++;header = new XarHeader();
+		__CLR2_2_11qi1qifglxv4ho.R.E[2358]++;if ((((header.magic != XAR_HEADER_MAGIC)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2359]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2360]==0&false))) {{
+			__CLR2_2_11qi1qifglxv4ho.R.E[2361]++;throw new XarException("invalid magic header");
+		}
+		}__CLR2_2_11qi1qifglxv4ho.R.E[2362]++;toc = new XarToc();
+		__CLR2_2_11qi1qifglxv4ho.R.E[2363]++;entries.putAll(toc.getEntries());
+	}
+	
+	public void run() throws IOException, NoSuchAlgorithmException {__CLR2_2_11qi1qifglxv4ho.R.E[2364]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2365]++;System.out.println(toc);
+//		XarEntry entry = getEntry("PackageInfo");
+//		InputStream in = getInputStream(entry);
+//		Writer writer = new StringWriter();
+//		int i;
+//		while ((i = in.read()) >= 0) {
+//			writer.write(i);
+//		}
+//		System.out.print(writer.toString());
+	}	
+	
+	public XarEntry getEntry(String name) {__CLR2_2_11qi1qifglxv4ho.R.E[2366]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2367]++;if ((((name == null)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2368]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2369]==0&false))) {{
+			__CLR2_2_11qi1qifglxv4ho.R.E[2370]++;throw new NullPointerException("name");
+		}
+		}__CLR2_2_11qi1qifglxv4ho.R.E[2371]++;return entries.get(name);
+	}
+	
+	public InputStream getInputStream(String name) throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2372]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2373]++;return getInputStream(getEntry(name));
+	}
+	
+	public InputStream getInputStream(XarEntry entry) throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2374]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2375]++;if ((((entry == null)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2376]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2377]==0&false))) {{
+			__CLR2_2_11qi1qifglxv4ho.R.E[2378]++;throw new NullPointerException("entry");
+		}
+		}__CLR2_2_11qi1qifglxv4ho.R.E[2379]++;synchronized (this) {
+			__CLR2_2_11qi1qifglxv4ho.R.E[2380]++;try {
+				__CLR2_2_11qi1qifglxv4ho.R.E[2381]++;String compression = entry.getCompression();
+				__CLR2_2_11qi1qifglxv4ho.R.E[2382]++;long newOffset;
+				__CLR2_2_11qi1qifglxv4ho.R.E[2383]++;if ((((lastInputStream != null)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2384]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2385]==0&false))) {{
+					__CLR2_2_11qi1qifglxv4ho.R.E[2386]++;while((((lastInputStream.read() != -1)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2387]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2388]==0&false))) {{}}__CLR2_2_11qi1qifglxv4ho.R.E[2389]++;;
+				}
+				}__CLR2_2_11qi1qifglxv4ho.R.E[2390]++;if ((((entry.getOffset()  <= currentOffset)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2391]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2392]==0&false))) {{
+					__CLR2_2_11qi1qifglxv4ho.R.E[2393]++;if ((((file == null)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2394]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2395]==0&false))) {{
+						__CLR2_2_11qi1qifglxv4ho.R.E[2396]++;throw new XarException("Cannot seek backwards through stream");
+					}
+					}__CLR2_2_11qi1qifglxv4ho.R.E[2397]++;inputStream = new BufferedInputStream(new FileInputStream(file));
+					__CLR2_2_11qi1qifglxv4ho.R.E[2398]++;inputStream.skip(header.size + header.tocLengthCompressed.longValue());
+					__CLR2_2_11qi1qifglxv4ho.R.E[2399]++;currentOffset = 0;
+				}
+				}__CLR2_2_11qi1qifglxv4ho.R.E[2400]++;newOffset = entry.getOffset() - currentOffset; 
+				__CLR2_2_11qi1qifglxv4ho.R.E[2401]++;currentOffset = entry.getOffset() + entry.getLength();
+				__CLR2_2_11qi1qifglxv4ho.R.E[2402]++;InputStream input = new BoundedInputStream(inputStream, newOffset, entry.getLength());
+				__CLR2_2_11qi1qifglxv4ho.R.E[2403]++;if ((((compression == null)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2404]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2405]==0&false))) {{
+					// Do nothing
+				} }else
+				{__CLR2_2_11qi1qifglxv4ho.R.E[2406]++;if ((((compression.equals("bzip2"))&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2407]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2408]==0&false))) {{
+					__CLR2_2_11qi1qifglxv4ho.R.E[2409]++;input.skip(2);
+					__CLR2_2_11qi1qifglxv4ho.R.E[2410]++;input = new CBZip2InputStream(input);
+				} }else
+				{__CLR2_2_11qi1qifglxv4ho.R.E[2411]++;if ((((compression.equals("gzip"))&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2412]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2413]==0&false))) {{
+					__CLR2_2_11qi1qifglxv4ho.R.E[2414]++;input = new GZIPInputStream(input);
+				}
+				}}}__CLR2_2_11qi1qifglxv4ho.R.E[2415]++;lastInputStream = new XarInputStream(entry, input);
+				__CLR2_2_11qi1qifglxv4ho.R.E[2416]++;return lastInputStream;
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				__CLR2_2_11qi1qifglxv4ho.R.E[2417]++;e.printStackTrace();
+			}
+			__CLR2_2_11qi1qifglxv4ho.R.E[2418]++;throw new XarException("something unexpected happened");
+		}
+	}
+	
+	private String getCksumName() {__CLR2_2_11qi1qifglxv4ho.R.E[2419]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2420]++;if ((((header.checksumAlgorithm < 0 || header.checksumAlgorithm > XAR_CKSUM.length - 1)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2421]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2422]==0&false)))
+			{__CLR2_2_11qi1qifglxv4ho.R.E[2423]++;return "unknown";
+		}__CLR2_2_11qi1qifglxv4ho.R.E[2424]++;return XAR_CKSUM[(int)header.checksumAlgorithm];
+	}
+	
+	private int readUint16() throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2425]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2426]++;inputStream.read(byte2);
+		__CLR2_2_11qi1qifglxv4ho.R.E[2427]++;return ((byte2[0] & 0xff) << 8) | byte2[1] & 0xff;
+	}
+
+	private long readUint32() throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2428]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2429]++;inputStream.read(byte4);
+		__CLR2_2_11qi1qifglxv4ho.R.E[2430]++;long result = 0;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2431]++;for (int i = 0; (((i < byte4.length)&&(++__CLR2_2_11qi1qifglxv4ho.R.E[2432]!=0|true))||(++__CLR2_2_11qi1qifglxv4ho.R.E[2433]==0&false)); i++) {{
+			__CLR2_2_11qi1qifglxv4ho.R.E[2434]++;result |= (byte4[i] & 0xff) << (byte4.length - (i+1))*8;
+		}
+		}__CLR2_2_11qi1qifglxv4ho.R.E[2435]++;return result;
+	}
+
+	private byte[] readByte8() throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2436]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2437]++;inputStream.read(byte8);
+		__CLR2_2_11qi1qifglxv4ho.R.E[2438]++;return byte8.clone();
+	}
+
+	private BigInteger readUint64() throws IOException {__CLR2_2_11qi1qifglxv4ho.R.E[2439]++;
+		__CLR2_2_11qi1qifglxv4ho.R.E[2440]++;BigInteger result = new BigInteger(readByte8());
+		__CLR2_2_11qi1qifglxv4ho.R.E[2441]++;return result;
+	}
+}

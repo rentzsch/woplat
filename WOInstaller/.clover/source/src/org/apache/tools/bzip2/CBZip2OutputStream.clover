@@ -1,0 +1,1670 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ *//*
+ * The Apache Software License, Version 1.1
+ *
+ * Copyright (c) 2001-2003 The Apache Software Foundation.  All rights
+ * reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in
+ *    the documentation and/or other materials provided with the
+ *    distribution.
+ *
+ * 3. The end-user documentation included with the redistribution, if
+ *    any, must include the following acknowlegement:
+ *       "This product includes software developed by the
+ *        Apache Software Foundation (http://www.apache.org/)."
+ *    Alternately, this acknowlegement may appear in the software itself,
+ *    if and wherever such third-party acknowlegements normally appear.
+ *
+ * 4. The names "Ant" and "Apache Software
+ *    Foundation" must not be used to endorse or promote products derived
+ *    from this software without prior written permission. For written
+ *    permission, please contact apache@apache.org.
+ *
+ * 5. Products derived from this software may not be called "Apache"
+ *    nor may "Apache" appear in their names without prior written
+ *    permission of the Apache Group.
+ *
+ * THIS SOFTWARE IS PROVIDED ``AS IS'' AND ANY EXPRESSED OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED.  IN NO EVENT SHALL THE APACHE SOFTWARE FOUNDATION OR
+ * ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF
+ * USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT
+ * OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ * ====================================================================
+ *
+ * This software consists of voluntary contributions made by many
+ * individuals on behalf of the Apache Software Foundation.  For more
+ * information on the Apache Software Foundation, please see
+ * <http://www.apache.org/>.
+ */
+
+/*
+ * This package is based on the work done by Keiron Liddle, Aftex Software
+ * <keiron@aftexsw.com> to whom the Ant project is very grateful for his
+ * great code.
+ */
+
+package org.apache.tools.bzip2;
+
+import java.io.OutputStream;
+import java.io.IOException;
+
+/**
+ * An output stream that compresses into the BZip2 format (without the file
+ * header chars) into another stream.
+ *
+ * @author <a href="mailto:keiron@aftexsw.com">Keiron Liddle</a>
+ *
+ * TODO:    Update to BZip2 1.0.1
+ */
+@SuppressWarnings({"fallthrough"}) public class CBZip2OutputStream extends OutputStream implements BZip2Constants {public static class __CLR2_2_1hhfglxv3w0{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,17);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+    protected static final int SETMASK = (1 << 21);
+    protected static final int CLEARMASK = (~SETMASK);
+    protected static final int GREATER_ICOST = 15;
+    protected static final int LESSER_ICOST = 0;
+    protected static final int SMALL_THRESH = 20;
+    protected static final int DEPTH_THRESH = 10;
+
+    /*
+      If you are ever unlucky/improbable enough
+      to get a stack overflow whilst sorting,
+      increase the following constant and try
+      again.  In practice I have never seen the
+      stack go above 27 elems, so the following
+      limit seems very generous.
+    */
+    protected static final int QSORT_STACK_SIZE = 1000;
+
+    private static void panic() {__CLR2_2_1hhfglxv3w0.R.E[17]++;
+        __CLR2_2_1hhfglxv3w0.R.E[18]++;System.out.println("panic");
+        //throw new CError();
+    }
+
+    private void makeMaps() {__CLR2_2_1hhfglxv3w0.R.E[19]++;
+        __CLR2_2_1hhfglxv3w0.R.E[20]++;int i;
+        __CLR2_2_1hhfglxv3w0.R.E[21]++;nInUse = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[22]++;for (i = 0; (((i < 256)&&(++__CLR2_2_1hhfglxv3w0.R.E[23]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[24]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[25]++;if ((((inUse[i])&&(++__CLR2_2_1hhfglxv3w0.R.E[26]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[27]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[28]++;seqToUnseq[nInUse] = (char) i;
+                __CLR2_2_1hhfglxv3w0.R.E[29]++;unseqToSeq[i] = (char) nInUse;
+                __CLR2_2_1hhfglxv3w0.R.E[30]++;nInUse++;
+            }
+        }}
+    }}
+
+    protected static void hbMakeCodeLengths(char[] len, int[] freq,
+                                            int alphaSize, int maxLen) {__CLR2_2_1hhfglxv3w0.R.E[31]++;
+        /*
+          Nodes and heap entries run from 1.  Entry 0
+          for both the heap and nodes is a sentinel.
+        */
+        __CLR2_2_1hhfglxv3w0.R.E[32]++;int nNodes, nHeap, n1, n2, i, j, k;
+        __CLR2_2_1hhfglxv3w0.R.E[33]++;boolean  tooLong;
+
+        __CLR2_2_1hhfglxv3w0.R.E[34]++;int[] heap = new int[MAX_ALPHA_SIZE + 2];
+        __CLR2_2_1hhfglxv3w0.R.E[35]++;int[] weight = new int[MAX_ALPHA_SIZE * 2];
+        __CLR2_2_1hhfglxv3w0.R.E[36]++;int[] parent = new int[MAX_ALPHA_SIZE * 2];
+
+        __CLR2_2_1hhfglxv3w0.R.E[37]++;for (i = 0; (((i < alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[38]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[39]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[40]++;weight[i + 1] = ((((freq[i] == 0 )&&(++__CLR2_2_1hhfglxv3w0.R.E[41]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[42]==0&false))? 1 : freq[i]) << 8;
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[43]++;while (true) {{
+            __CLR2_2_1hhfglxv3w0.R.E[44]++;nNodes = alphaSize;
+            __CLR2_2_1hhfglxv3w0.R.E[45]++;nHeap = 0;
+
+            __CLR2_2_1hhfglxv3w0.R.E[46]++;heap[0] = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[47]++;weight[0] = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[48]++;parent[0] = -2;
+
+            __CLR2_2_1hhfglxv3w0.R.E[49]++;for (i = 1; (((i <= alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[50]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[51]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[52]++;parent[i] = -1;
+                __CLR2_2_1hhfglxv3w0.R.E[53]++;nHeap++;
+                __CLR2_2_1hhfglxv3w0.R.E[54]++;heap[nHeap] = i;
+                {
+                    __CLR2_2_1hhfglxv3w0.R.E[55]++;int zz, tmp;
+                    __CLR2_2_1hhfglxv3w0.R.E[56]++;zz = nHeap;
+                    __CLR2_2_1hhfglxv3w0.R.E[57]++;tmp = heap[zz];
+                    __CLR2_2_1hhfglxv3w0.R.E[58]++;while ((((weight[tmp] < weight[heap[zz >> 1]])&&(++__CLR2_2_1hhfglxv3w0.R.E[59]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[60]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[61]++;heap[zz] = heap[zz >> 1];
+                        __CLR2_2_1hhfglxv3w0.R.E[62]++;zz >>= 1;
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[63]++;heap[zz] = tmp;
+                }
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[64]++;if ((((!(nHeap < (MAX_ALPHA_SIZE + 2)))&&(++__CLR2_2_1hhfglxv3w0.R.E[65]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[66]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[67]++;panic();
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[68]++;while ((((nHeap > 1)&&(++__CLR2_2_1hhfglxv3w0.R.E[69]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[70]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[71]++;n1 = heap[1];
+                __CLR2_2_1hhfglxv3w0.R.E[72]++;heap[1] = heap[nHeap];
+                __CLR2_2_1hhfglxv3w0.R.E[73]++;nHeap--;
+                {
+                    __CLR2_2_1hhfglxv3w0.R.E[74]++;int zz = 0, yy = 0, tmp = 0;
+                    __CLR2_2_1hhfglxv3w0.R.E[75]++;zz = 1;
+                    __CLR2_2_1hhfglxv3w0.R.E[76]++;tmp = heap[zz];
+                    __CLR2_2_1hhfglxv3w0.R.E[77]++;while (true) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[78]++;yy = zz << 1;
+                        __CLR2_2_1hhfglxv3w0.R.E[79]++;if ((((yy > nHeap)&&(++__CLR2_2_1hhfglxv3w0.R.E[80]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[81]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[82]++;break;
+                        }
+                        }__CLR2_2_1hhfglxv3w0.R.E[83]++;if ((((yy < nHeap
+                            && weight[heap[yy + 1]] < weight[heap[yy]])&&(++__CLR2_2_1hhfglxv3w0.R.E[84]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[85]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[86]++;yy++;
+                        }
+                        }__CLR2_2_1hhfglxv3w0.R.E[87]++;if ((((weight[tmp] < weight[heap[yy]])&&(++__CLR2_2_1hhfglxv3w0.R.E[88]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[89]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[90]++;break;
+                        }
+                        }__CLR2_2_1hhfglxv3w0.R.E[91]++;heap[zz] = heap[yy];
+                        __CLR2_2_1hhfglxv3w0.R.E[92]++;zz = yy;
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[93]++;heap[zz] = tmp;
+                }
+                __CLR2_2_1hhfglxv3w0.R.E[94]++;n2 = heap[1];
+                __CLR2_2_1hhfglxv3w0.R.E[95]++;heap[1] = heap[nHeap];
+                __CLR2_2_1hhfglxv3w0.R.E[96]++;nHeap--;
+                {
+                    __CLR2_2_1hhfglxv3w0.R.E[97]++;int zz = 0, yy = 0, tmp = 0;
+                    __CLR2_2_1hhfglxv3w0.R.E[98]++;zz = 1;
+                    __CLR2_2_1hhfglxv3w0.R.E[99]++;tmp = heap[zz];
+                    __CLR2_2_1hhfglxv3w0.R.E[100]++;while (true) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[101]++;yy = zz << 1;
+                        __CLR2_2_1hhfglxv3w0.R.E[102]++;if ((((yy > nHeap)&&(++__CLR2_2_1hhfglxv3w0.R.E[103]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[104]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[105]++;break;
+                        }
+                        }__CLR2_2_1hhfglxv3w0.R.E[106]++;if ((((yy < nHeap
+                            && weight[heap[yy + 1]] < weight[heap[yy]])&&(++__CLR2_2_1hhfglxv3w0.R.E[107]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[108]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[109]++;yy++;
+                        }
+                        }__CLR2_2_1hhfglxv3w0.R.E[110]++;if ((((weight[tmp] < weight[heap[yy]])&&(++__CLR2_2_1hhfglxv3w0.R.E[111]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[112]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[113]++;break;
+                        }
+                        }__CLR2_2_1hhfglxv3w0.R.E[114]++;heap[zz] = heap[yy];
+                        __CLR2_2_1hhfglxv3w0.R.E[115]++;zz = yy;
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[116]++;heap[zz] = tmp;
+                }
+                __CLR2_2_1hhfglxv3w0.R.E[117]++;nNodes++;
+                __CLR2_2_1hhfglxv3w0.R.E[118]++;parent[n1] = parent[n2] = nNodes;
+
+                __CLR2_2_1hhfglxv3w0.R.E[119]++;weight[nNodes] = ((weight[n1] & 0xffffff00)
+                                  + (weight[n2] & 0xffffff00))
+                    | (1 + ((((((weight[n1] & 0x000000ff) >
+                             (weight[n2] & 0x000000ff)) )&&(++__CLR2_2_1hhfglxv3w0.R.E[120]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[121]==0&false))?
+                            (weight[n1] & 0x000000ff) :
+                            (weight[n2] & 0x000000ff)));
+
+                __CLR2_2_1hhfglxv3w0.R.E[122]++;parent[nNodes] = -1;
+                __CLR2_2_1hhfglxv3w0.R.E[123]++;nHeap++;
+                __CLR2_2_1hhfglxv3w0.R.E[124]++;heap[nHeap] = nNodes;
+                {
+                    __CLR2_2_1hhfglxv3w0.R.E[125]++;int zz = 0, tmp = 0;
+                    __CLR2_2_1hhfglxv3w0.R.E[126]++;zz = nHeap;
+                    __CLR2_2_1hhfglxv3w0.R.E[127]++;tmp = heap[zz];
+                    __CLR2_2_1hhfglxv3w0.R.E[128]++;while ((((weight[tmp] < weight[heap[zz >> 1]])&&(++__CLR2_2_1hhfglxv3w0.R.E[129]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[130]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[131]++;heap[zz] = heap[zz >> 1];
+                        __CLR2_2_1hhfglxv3w0.R.E[132]++;zz >>= 1;
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[133]++;heap[zz] = tmp;
+                }
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[134]++;if ((((!(nNodes < (MAX_ALPHA_SIZE * 2)))&&(++__CLR2_2_1hhfglxv3w0.R.E[135]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[136]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[137]++;panic();
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[138]++;tooLong = false;
+            __CLR2_2_1hhfglxv3w0.R.E[139]++;for (i = 1; (((i <= alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[140]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[141]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[142]++;j = 0;
+                __CLR2_2_1hhfglxv3w0.R.E[143]++;k = i;
+                __CLR2_2_1hhfglxv3w0.R.E[144]++;while ((((parent[k] >= 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[145]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[146]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[147]++;k = parent[k];
+                    __CLR2_2_1hhfglxv3w0.R.E[148]++;j++;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[149]++;len[i - 1] = (char) j;
+                __CLR2_2_1hhfglxv3w0.R.E[150]++;if ((((j > maxLen)&&(++__CLR2_2_1hhfglxv3w0.R.E[151]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[152]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[153]++;tooLong = true;
+                }
+            }}
+
+            }__CLR2_2_1hhfglxv3w0.R.E[154]++;if ((((!tooLong)&&(++__CLR2_2_1hhfglxv3w0.R.E[155]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[156]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[157]++;break;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[158]++;for (i = 1; (((i < alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[159]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[160]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[161]++;j = weight[i] >> 8;
+                __CLR2_2_1hhfglxv3w0.R.E[162]++;j = 1 + (j / 2);
+                __CLR2_2_1hhfglxv3w0.R.E[163]++;weight[i] = j << 8;
+            }
+        }}
+    }}
+
+    /*
+      index of the last char in the block, so
+      the block size == last + 1.
+    */
+    int last;
+
+    /*
+      index in zptr[] of original string after sorting.
+    */
+    int origPtr;
+
+    /*
+      always: in the range 0 .. 9.
+      The current block size is 100000 * this number.
+    */
+    int blockSize100k;
+
+    boolean blockRandomised;
+
+    int bytesOut;
+    int bsBuff;
+    int bsLive;
+    CRC mCrc = new CRC();
+
+    private boolean[] inUse = new boolean[256];
+    private int nInUse;
+
+    private char[] seqToUnseq = new char[256];
+    private char[] unseqToSeq = new char[256];
+
+    private char[] selector = new char[MAX_SELECTORS];
+    private char[] selectorMtf = new char[MAX_SELECTORS];
+
+    private char[] block;
+    private int[] quadrant;
+    private int[] zptr;
+    private short[] szptr;
+    private int[] ftab;
+
+    private int nMTF;
+
+    private int[] mtfFreq = new int[MAX_ALPHA_SIZE];
+
+    /*
+     * Used when sorting.  If too many long comparisons
+     * happen, we stop sorting, randomise the block
+     * slightly, and try again.
+     */
+    private int workFactor;
+    private int workDone;
+    private int workLimit;
+    private boolean firstAttempt;
+    private int nBlocksRandomised;
+
+    private int currentChar = -1;
+    private int runLength = 0;
+
+    public CBZip2OutputStream(OutputStream inStream) throws IOException {
+        this(inStream, 9);__CLR2_2_1hhfglxv3w0.R.E[165]++;__CLR2_2_1hhfglxv3w0.R.E[164]++;
+    }
+
+    public CBZip2OutputStream(OutputStream inStream, int inBlockSize)
+        throws IOException {__CLR2_2_1hhfglxv3w0.R.E[166]++;
+        __CLR2_2_1hhfglxv3w0.R.E[167]++;block = null;
+        __CLR2_2_1hhfglxv3w0.R.E[168]++;quadrant = null;
+        __CLR2_2_1hhfglxv3w0.R.E[169]++;zptr = null;
+        __CLR2_2_1hhfglxv3w0.R.E[170]++;ftab = null;
+
+        __CLR2_2_1hhfglxv3w0.R.E[171]++;bsSetStream(inStream);
+
+        __CLR2_2_1hhfglxv3w0.R.E[172]++;workFactor = 50;
+        __CLR2_2_1hhfglxv3w0.R.E[173]++;if ((((inBlockSize > 9)&&(++__CLR2_2_1hhfglxv3w0.R.E[174]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[175]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[176]++;inBlockSize = 9;
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[177]++;if ((((inBlockSize < 1)&&(++__CLR2_2_1hhfglxv3w0.R.E[178]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[179]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[180]++;inBlockSize = 1;
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[181]++;blockSize100k = inBlockSize;
+        __CLR2_2_1hhfglxv3w0.R.E[182]++;allocateCompressStructures();
+        __CLR2_2_1hhfglxv3w0.R.E[183]++;initialize();
+        __CLR2_2_1hhfglxv3w0.R.E[184]++;initBlock();
+    }
+
+    /**
+     *
+     * modified by Oliver Merkel, 010128
+     *
+     */
+    public void write(int bv) throws IOException {__CLR2_2_1hhfglxv3w0.R.E[185]++;
+        __CLR2_2_1hhfglxv3w0.R.E[186]++;int b = (256 + bv) % 256;
+        __CLR2_2_1hhfglxv3w0.R.E[187]++;if ((((currentChar != -1)&&(++__CLR2_2_1hhfglxv3w0.R.E[188]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[189]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[190]++;if ((((currentChar == b)&&(++__CLR2_2_1hhfglxv3w0.R.E[191]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[192]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[193]++;runLength++;
+                __CLR2_2_1hhfglxv3w0.R.E[194]++;if ((((runLength > 254)&&(++__CLR2_2_1hhfglxv3w0.R.E[195]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[196]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[197]++;writeRun();
+                    __CLR2_2_1hhfglxv3w0.R.E[198]++;currentChar = -1;
+                    __CLR2_2_1hhfglxv3w0.R.E[199]++;runLength = 0;
+                }
+            }} }else {{
+                __CLR2_2_1hhfglxv3w0.R.E[200]++;writeRun();
+                __CLR2_2_1hhfglxv3w0.R.E[201]++;runLength = 1;
+                __CLR2_2_1hhfglxv3w0.R.E[202]++;currentChar = b;
+            }
+        }} }else {{
+            __CLR2_2_1hhfglxv3w0.R.E[203]++;currentChar = b;
+            __CLR2_2_1hhfglxv3w0.R.E[204]++;runLength++;
+        }
+    }}
+
+    private void writeRun() throws IOException {__CLR2_2_1hhfglxv3w0.R.E[205]++;
+        __CLR2_2_1hhfglxv3w0.R.E[206]++;if ((((last < allowableBlockSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[207]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[208]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[209]++;inUse[currentChar] = true;
+            __CLR2_2_1hhfglxv3w0.R.E[210]++;for (int i = 0; (((i < runLength)&&(++__CLR2_2_1hhfglxv3w0.R.E[211]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[212]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[213]++;mCrc.updateCRC((char) currentChar);
+            }
+            }boolean __CLB2_2_1_bool0=false;__CLR2_2_1hhfglxv3w0.R.E[214]++;switch (runLength) {
+            case 1:if (!__CLB2_2_1_bool0) {__CLR2_2_1hhfglxv3w0.R.E[215]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1hhfglxv3w0.R.E[216]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[217]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[218]++;break;
+            case 2:if (!__CLB2_2_1_bool0) {__CLR2_2_1hhfglxv3w0.R.E[219]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1hhfglxv3w0.R.E[220]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[221]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[222]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[223]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[224]++;break;
+            case 3:if (!__CLB2_2_1_bool0) {__CLR2_2_1hhfglxv3w0.R.E[225]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1hhfglxv3w0.R.E[226]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[227]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[228]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[229]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[230]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[231]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[232]++;break;
+            default:if (!__CLB2_2_1_bool0) {__CLR2_2_1hhfglxv3w0.R.E[233]++;__CLB2_2_1_bool0=true;}
+                __CLR2_2_1hhfglxv3w0.R.E[234]++;inUse[runLength - 4] = true;
+                __CLR2_2_1hhfglxv3w0.R.E[235]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[236]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[237]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[238]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[239]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[240]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[241]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[242]++;block[last + 1] = (char) currentChar;
+                __CLR2_2_1hhfglxv3w0.R.E[243]++;last++;
+                __CLR2_2_1hhfglxv3w0.R.E[244]++;block[last + 1] = (char) (runLength - 4);
+                __CLR2_2_1hhfglxv3w0.R.E[245]++;break;
+            }
+        } }else {{
+            __CLR2_2_1hhfglxv3w0.R.E[246]++;endBlock();
+            __CLR2_2_1hhfglxv3w0.R.E[247]++;initBlock();
+            __CLR2_2_1hhfglxv3w0.R.E[248]++;writeRun();
+        }
+    }}
+
+    boolean closed = false;
+
+    protected void finalize() throws Throwable {__CLR2_2_1hhfglxv3w0.R.E[249]++;
+        __CLR2_2_1hhfglxv3w0.R.E[250]++;close();
+        __CLR2_2_1hhfglxv3w0.R.E[251]++;super.finalize();
+    }
+
+    public void close() throws IOException {__CLR2_2_1hhfglxv3w0.R.E[252]++;
+        __CLR2_2_1hhfglxv3w0.R.E[253]++;if ((((closed)&&(++__CLR2_2_1hhfglxv3w0.R.E[254]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[255]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[256]++;return;
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[257]++;if ((((runLength > 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[258]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[259]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[260]++;writeRun();
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[261]++;currentChar = -1;
+        __CLR2_2_1hhfglxv3w0.R.E[262]++;endBlock();
+        __CLR2_2_1hhfglxv3w0.R.E[263]++;endCompression();
+        __CLR2_2_1hhfglxv3w0.R.E[264]++;closed = true;
+        __CLR2_2_1hhfglxv3w0.R.E[265]++;super.close();
+        __CLR2_2_1hhfglxv3w0.R.E[266]++;bsStream.close();
+    }
+
+    public void flush() throws IOException {__CLR2_2_1hhfglxv3w0.R.E[267]++;
+        __CLR2_2_1hhfglxv3w0.R.E[268]++;super.flush();
+        __CLR2_2_1hhfglxv3w0.R.E[269]++;bsStream.flush();
+    }
+
+    private int blockCRC, combinedCRC;
+
+    private void initialize() throws IOException {__CLR2_2_1hhfglxv3w0.R.E[270]++;
+        __CLR2_2_1hhfglxv3w0.R.E[271]++;bytesOut = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[272]++;nBlocksRandomised = 0;
+
+        /* Write `magic' bytes h indicating file-format == huffmanised,
+           followed by a digit indicating blockSize100k.
+        */
+        __CLR2_2_1hhfglxv3w0.R.E[273]++;bsPutUChar('h');
+        __CLR2_2_1hhfglxv3w0.R.E[274]++;bsPutUChar('0' + blockSize100k);
+
+        __CLR2_2_1hhfglxv3w0.R.E[275]++;combinedCRC = 0;
+    }
+
+    private int allowableBlockSize;
+
+    private void initBlock() {__CLR2_2_1hhfglxv3w0.R.E[276]++;
+        //        blockNo++;
+        __CLR2_2_1hhfglxv3w0.R.E[277]++;mCrc.initialiseCRC();
+        __CLR2_2_1hhfglxv3w0.R.E[278]++;last = -1;
+        //        ch = 0;
+
+        __CLR2_2_1hhfglxv3w0.R.E[279]++;for (int i = 0; (((i < 256)&&(++__CLR2_2_1hhfglxv3w0.R.E[280]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[281]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[282]++;inUse[i] = false;
+        }
+
+        /* 20 is just a paranoia constant */
+        }__CLR2_2_1hhfglxv3w0.R.E[283]++;allowableBlockSize = baseBlockSize * blockSize100k - 20;
+    }
+
+    private void endBlock() throws IOException {__CLR2_2_1hhfglxv3w0.R.E[284]++;
+        __CLR2_2_1hhfglxv3w0.R.E[285]++;blockCRC = mCrc.getFinalCRC();
+        __CLR2_2_1hhfglxv3w0.R.E[286]++;combinedCRC = (combinedCRC << 1) | (combinedCRC >>> 31);
+        __CLR2_2_1hhfglxv3w0.R.E[287]++;combinedCRC ^= blockCRC;
+
+        /* sort the block and establish posn of original string */
+        __CLR2_2_1hhfglxv3w0.R.E[288]++;doReversibleTransformation();
+
+        /*
+          A 6-byte block header, the value chosen arbitrarily
+          as 0x314159265359 :-).  A 32 bit value does not really
+          give a strong enough guarantee that the value will not
+          appear by chance in the compressed datastream.  Worst-case
+          probability of this event, for a 900k block, is about
+          2.0e-3 for 32 bits, 1.0e-5 for 40 bits and 4.0e-8 for 48 bits.
+          For a compressed file of size 100Gb -- about 100000 blocks --
+          only a 48-bit marker will do.  NB: normal compression/
+          decompression do *not* rely on these statistical properties.
+          They are only important when trying to recover blocks from
+          damaged files.
+        */
+        __CLR2_2_1hhfglxv3w0.R.E[289]++;bsPutUChar(0x31);
+        __CLR2_2_1hhfglxv3w0.R.E[290]++;bsPutUChar(0x41);
+        __CLR2_2_1hhfglxv3w0.R.E[291]++;bsPutUChar(0x59);
+        __CLR2_2_1hhfglxv3w0.R.E[292]++;bsPutUChar(0x26);
+        __CLR2_2_1hhfglxv3w0.R.E[293]++;bsPutUChar(0x53);
+        __CLR2_2_1hhfglxv3w0.R.E[294]++;bsPutUChar(0x59);
+
+        /* Now the block's CRC, so it is in a known place. */
+        __CLR2_2_1hhfglxv3w0.R.E[295]++;bsPutint(blockCRC);
+
+        /* Now a single bit indicating randomisation. */
+        __CLR2_2_1hhfglxv3w0.R.E[296]++;if ((((blockRandomised)&&(++__CLR2_2_1hhfglxv3w0.R.E[297]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[298]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[299]++;bsW(1, 1);
+            __CLR2_2_1hhfglxv3w0.R.E[300]++;nBlocksRandomised++;
+        } }else {{
+            __CLR2_2_1hhfglxv3w0.R.E[301]++;bsW(1, 0);
+        }
+
+        /* Finally, block's contents proper. */
+        }__CLR2_2_1hhfglxv3w0.R.E[302]++;moveToFrontCodeAndSend();
+    }
+
+    private void endCompression() throws IOException {__CLR2_2_1hhfglxv3w0.R.E[303]++;
+        /*
+          Now another magic 48-bit number, 0x177245385090, to
+          indicate the end of the last block.  (sqrt(pi), if
+          you want to know.  I did want to use e, but it contains
+          too much repetition -- 27 18 28 18 28 46 -- for me
+          to feel statistically comfortable.  Call me paranoid.)
+        */
+        __CLR2_2_1hhfglxv3w0.R.E[304]++;bsPutUChar(0x17);
+        __CLR2_2_1hhfglxv3w0.R.E[305]++;bsPutUChar(0x72);
+        __CLR2_2_1hhfglxv3w0.R.E[306]++;bsPutUChar(0x45);
+        __CLR2_2_1hhfglxv3w0.R.E[307]++;bsPutUChar(0x38);
+        __CLR2_2_1hhfglxv3w0.R.E[308]++;bsPutUChar(0x50);
+        __CLR2_2_1hhfglxv3w0.R.E[309]++;bsPutUChar(0x90);
+
+        __CLR2_2_1hhfglxv3w0.R.E[310]++;bsPutint(combinedCRC);
+
+        __CLR2_2_1hhfglxv3w0.R.E[311]++;bsFinishedWithStream();
+    }
+
+    private void hbAssignCodes (int[] code, char[] length, int minLen,
+                                int maxLen, int alphaSize) {__CLR2_2_1hhfglxv3w0.R.E[312]++;
+        __CLR2_2_1hhfglxv3w0.R.E[313]++;int n, vec, i;
+
+        __CLR2_2_1hhfglxv3w0.R.E[314]++;vec = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[315]++;for (n = minLen; (((n <= maxLen)&&(++__CLR2_2_1hhfglxv3w0.R.E[316]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[317]==0&false)); n++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[318]++;for (i = 0; (((i < alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[319]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[320]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[321]++;if ((((length[i] == n)&&(++__CLR2_2_1hhfglxv3w0.R.E[322]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[323]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[324]++;code[i] = vec;
+                    __CLR2_2_1hhfglxv3w0.R.E[325]++;vec++;
+                }
+            }}}__CLR2_2_1hhfglxv3w0.R.E[326]++;;
+            __CLR2_2_1hhfglxv3w0.R.E[327]++;vec <<= 1;
+        }
+    }}
+
+    private void bsSetStream(OutputStream f) {__CLR2_2_1hhfglxv3w0.R.E[328]++;
+        __CLR2_2_1hhfglxv3w0.R.E[329]++;bsStream = f;
+        __CLR2_2_1hhfglxv3w0.R.E[330]++;bsLive = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[331]++;bsBuff = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[332]++;bytesOut = 0;
+    }
+
+    private void bsFinishedWithStream() throws IOException {__CLR2_2_1hhfglxv3w0.R.E[333]++;
+        __CLR2_2_1hhfglxv3w0.R.E[334]++;while ((((bsLive > 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[335]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[336]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[337]++;int ch = (bsBuff >> 24);
+            __CLR2_2_1hhfglxv3w0.R.E[338]++;try {
+                __CLR2_2_1hhfglxv3w0.R.E[339]++;bsStream.write(ch); // write 8-bit
+            } catch (IOException e) {
+                __CLR2_2_1hhfglxv3w0.R.E[340]++;throw  e;
+            }
+            __CLR2_2_1hhfglxv3w0.R.E[341]++;bsBuff <<= 8;
+            __CLR2_2_1hhfglxv3w0.R.E[342]++;bsLive -= 8;
+            __CLR2_2_1hhfglxv3w0.R.E[343]++;bytesOut++;
+        }
+    }}
+
+    private void bsW(int n, int v) throws IOException {__CLR2_2_1hhfglxv3w0.R.E[344]++;
+        __CLR2_2_1hhfglxv3w0.R.E[345]++;while ((((bsLive >= 8)&&(++__CLR2_2_1hhfglxv3w0.R.E[346]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[347]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[348]++;int ch = (bsBuff >> 24);
+            __CLR2_2_1hhfglxv3w0.R.E[349]++;try {
+                __CLR2_2_1hhfglxv3w0.R.E[350]++;bsStream.write(ch); // write 8-bit
+            } catch (IOException e) {
+                __CLR2_2_1hhfglxv3w0.R.E[351]++;throw e;
+            }
+            __CLR2_2_1hhfglxv3w0.R.E[352]++;bsBuff <<= 8;
+            __CLR2_2_1hhfglxv3w0.R.E[353]++;bsLive -= 8;
+            __CLR2_2_1hhfglxv3w0.R.E[354]++;bytesOut++;
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[355]++;bsBuff |= (v << (32 - bsLive - n));
+        __CLR2_2_1hhfglxv3w0.R.E[356]++;bsLive += n;
+    }
+
+    private void bsPutUChar(int c) throws IOException {__CLR2_2_1hhfglxv3w0.R.E[357]++;
+        __CLR2_2_1hhfglxv3w0.R.E[358]++;bsW(8, c);
+    }
+
+    private void bsPutint(int u) throws IOException {__CLR2_2_1hhfglxv3w0.R.E[359]++;
+        __CLR2_2_1hhfglxv3w0.R.E[360]++;bsW(8, (u >> 24) & 0xff);
+        __CLR2_2_1hhfglxv3w0.R.E[361]++;bsW(8, (u >> 16) & 0xff);
+        __CLR2_2_1hhfglxv3w0.R.E[362]++;bsW(8, (u >>  8) & 0xff);
+        __CLR2_2_1hhfglxv3w0.R.E[363]++;bsW(8,  u        & 0xff);
+    }
+
+    private void bsPutIntVS(int numBits, int c) throws IOException {__CLR2_2_1hhfglxv3w0.R.E[364]++;
+        __CLR2_2_1hhfglxv3w0.R.E[365]++;bsW(numBits, c);
+    }
+
+    private void sendMTFValues() throws IOException {__CLR2_2_1hhfglxv3w0.R.E[366]++;
+        __CLR2_2_1hhfglxv3w0.R.E[367]++;char len[][] = new char[N_GROUPS][MAX_ALPHA_SIZE];
+
+        __CLR2_2_1hhfglxv3w0.R.E[368]++;int v, t, i, j, gs, ge, totc, bt, bc, iter;
+        __CLR2_2_1hhfglxv3w0.R.E[369]++;int nSelectors = 0, alphaSize, minLen, maxLen, selCtr;
+        __CLR2_2_1hhfglxv3w0.R.E[370]++;int nGroups, nBytes;
+
+        __CLR2_2_1hhfglxv3w0.R.E[371]++;alphaSize = nInUse + 2;
+        __CLR2_2_1hhfglxv3w0.R.E[372]++;for (t = 0; (((t < N_GROUPS)&&(++__CLR2_2_1hhfglxv3w0.R.E[373]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[374]==0&false)); t++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[375]++;for (v = 0; (((v < alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[376]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[377]==0&false)); v++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[378]++;len[t][v] = (char) GREATER_ICOST;
+            }
+        }}
+
+        /* Decide how many coding tables to use */
+        }__CLR2_2_1hhfglxv3w0.R.E[379]++;if ((((nMTF <= 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[380]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[381]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[382]++;panic();
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[383]++;if ((((nMTF < 200)&&(++__CLR2_2_1hhfglxv3w0.R.E[384]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[385]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[386]++;nGroups = 2;
+        } }else {__CLR2_2_1hhfglxv3w0.R.E[387]++;if ((((nMTF < 600)&&(++__CLR2_2_1hhfglxv3w0.R.E[388]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[389]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[390]++;nGroups = 3;
+        } }else {__CLR2_2_1hhfglxv3w0.R.E[391]++;if ((((nMTF < 1200)&&(++__CLR2_2_1hhfglxv3w0.R.E[392]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[393]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[394]++;nGroups = 4;
+        } }else {__CLR2_2_1hhfglxv3w0.R.E[395]++;if ((((nMTF < 2400)&&(++__CLR2_2_1hhfglxv3w0.R.E[396]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[397]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[398]++;nGroups = 5;
+        } }else {{
+            __CLR2_2_1hhfglxv3w0.R.E[399]++;nGroups = 6;
+        }
+
+        /* Generate an initial set of coding tables */ }}}}{
+            __CLR2_2_1hhfglxv3w0.R.E[400]++;int nPart, remF, tFreq, aFreq;
+
+            __CLR2_2_1hhfglxv3w0.R.E[401]++;nPart = nGroups;
+            __CLR2_2_1hhfglxv3w0.R.E[402]++;remF  = nMTF;
+            __CLR2_2_1hhfglxv3w0.R.E[403]++;gs = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[404]++;while ((((nPart > 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[405]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[406]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[407]++;tFreq = remF / nPart;
+                __CLR2_2_1hhfglxv3w0.R.E[408]++;ge = gs - 1;
+                __CLR2_2_1hhfglxv3w0.R.E[409]++;aFreq = 0;
+                __CLR2_2_1hhfglxv3w0.R.E[410]++;while ((((aFreq < tFreq && ge < alphaSize - 1)&&(++__CLR2_2_1hhfglxv3w0.R.E[411]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[412]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[413]++;ge++;
+                    __CLR2_2_1hhfglxv3w0.R.E[414]++;aFreq += mtfFreq[ge];
+                }
+
+                }__CLR2_2_1hhfglxv3w0.R.E[415]++;if ((((ge > gs && nPart != nGroups && nPart != 1
+                    && ((nGroups - nPart) % 2 == 1))&&(++__CLR2_2_1hhfglxv3w0.R.E[416]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[417]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[418]++;aFreq -= mtfFreq[ge];
+                    __CLR2_2_1hhfglxv3w0.R.E[419]++;ge--;
+                }
+
+                }__CLR2_2_1hhfglxv3w0.R.E[420]++;for (v = 0; (((v < alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[421]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[422]==0&false)); v++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[423]++;if ((((v >= gs && v <= ge)&&(++__CLR2_2_1hhfglxv3w0.R.E[424]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[425]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[426]++;len[nPart - 1][v] = (char) LESSER_ICOST;
+                    } }else {{
+                        __CLR2_2_1hhfglxv3w0.R.E[427]++;len[nPart - 1][v] = (char) GREATER_ICOST;
+                    }
+                }}
+
+                }__CLR2_2_1hhfglxv3w0.R.E[428]++;nPart--;
+                __CLR2_2_1hhfglxv3w0.R.E[429]++;gs = ge + 1;
+                __CLR2_2_1hhfglxv3w0.R.E[430]++;remF -= aFreq;
+            }
+        }}
+
+        __CLR2_2_1hhfglxv3w0.R.E[431]++;int[][] rfreq = new int[N_GROUPS][MAX_ALPHA_SIZE];
+        __CLR2_2_1hhfglxv3w0.R.E[432]++;int[] fave = new int[N_GROUPS];
+        __CLR2_2_1hhfglxv3w0.R.E[433]++;short[] cost = new short[N_GROUPS];
+        /*
+          Iterate up to N_ITERS times to improve the tables.
+        */
+        __CLR2_2_1hhfglxv3w0.R.E[434]++;for (iter = 0; (((iter < N_ITERS)&&(++__CLR2_2_1hhfglxv3w0.R.E[435]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[436]==0&false)); iter++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[437]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[438]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[439]==0&false)); t++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[440]++;fave[t] = 0;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[441]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[442]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[443]==0&false)); t++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[444]++;for (v = 0; (((v < alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[445]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[446]==0&false)); v++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[447]++;rfreq[t][v] = 0;
+                }
+            }}
+
+            }__CLR2_2_1hhfglxv3w0.R.E[448]++;nSelectors = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[449]++;totc = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[450]++;gs = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[451]++;while (true) {{
+
+                /* Set group start & end marks. */
+                __CLR2_2_1hhfglxv3w0.R.E[452]++;if ((((gs >= nMTF)&&(++__CLR2_2_1hhfglxv3w0.R.E[453]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[454]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[455]++;break;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[456]++;ge = gs + G_SIZE - 1;
+                __CLR2_2_1hhfglxv3w0.R.E[457]++;if ((((ge >= nMTF)&&(++__CLR2_2_1hhfglxv3w0.R.E[458]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[459]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[460]++;ge = nMTF - 1;
+                }
+
+                /*
+                  Calculate the cost of this group as coded
+                  by each of the coding tables.
+                */
+                }__CLR2_2_1hhfglxv3w0.R.E[461]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[462]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[463]==0&false)); t++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[464]++;cost[t] = 0;
+                }
+
+                }__CLR2_2_1hhfglxv3w0.R.E[465]++;if ((((nGroups == 6)&&(++__CLR2_2_1hhfglxv3w0.R.E[466]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[467]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[468]++;short cost0, cost1, cost2, cost3, cost4, cost5;
+                    __CLR2_2_1hhfglxv3w0.R.E[469]++;cost0 = cost1 = cost2 = cost3 = cost4 = cost5 = 0;
+                    __CLR2_2_1hhfglxv3w0.R.E[470]++;for (i = gs; (((i <= ge)&&(++__CLR2_2_1hhfglxv3w0.R.E[471]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[472]==0&false)); i++) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[473]++;short icv = szptr[i];
+                        __CLR2_2_1hhfglxv3w0.R.E[474]++;cost0 += len[0][icv];
+                        __CLR2_2_1hhfglxv3w0.R.E[475]++;cost1 += len[1][icv];
+                        __CLR2_2_1hhfglxv3w0.R.E[476]++;cost2 += len[2][icv];
+                        __CLR2_2_1hhfglxv3w0.R.E[477]++;cost3 += len[3][icv];
+                        __CLR2_2_1hhfglxv3w0.R.E[478]++;cost4 += len[4][icv];
+                        __CLR2_2_1hhfglxv3w0.R.E[479]++;cost5 += len[5][icv];
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[480]++;cost[0] = cost0;
+                    __CLR2_2_1hhfglxv3w0.R.E[481]++;cost[1] = cost1;
+                    __CLR2_2_1hhfglxv3w0.R.E[482]++;cost[2] = cost2;
+                    __CLR2_2_1hhfglxv3w0.R.E[483]++;cost[3] = cost3;
+                    __CLR2_2_1hhfglxv3w0.R.E[484]++;cost[4] = cost4;
+                    __CLR2_2_1hhfglxv3w0.R.E[485]++;cost[5] = cost5;
+                } }else {{
+                    __CLR2_2_1hhfglxv3w0.R.E[486]++;for (i = gs; (((i <= ge)&&(++__CLR2_2_1hhfglxv3w0.R.E[487]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[488]==0&false)); i++) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[489]++;short icv = szptr[i];
+                        __CLR2_2_1hhfglxv3w0.R.E[490]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[491]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[492]==0&false)); t++) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[493]++;cost[t] += len[t][icv];
+                        }
+                    }}
+                }}
+
+                /*
+                  Find the coding table which is best for this group,
+                  and record its identity in the selector table.
+                */
+                }__CLR2_2_1hhfglxv3w0.R.E[494]++;bc = 999999999;
+                __CLR2_2_1hhfglxv3w0.R.E[495]++;bt = -1;
+                __CLR2_2_1hhfglxv3w0.R.E[496]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[497]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[498]==0&false)); t++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[499]++;if ((((cost[t] < bc)&&(++__CLR2_2_1hhfglxv3w0.R.E[500]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[501]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[502]++;bc = cost[t];
+                        __CLR2_2_1hhfglxv3w0.R.E[503]++;bt = t;
+                    }
+                }}}__CLR2_2_1hhfglxv3w0.R.E[504]++;;
+                __CLR2_2_1hhfglxv3w0.R.E[505]++;totc += bc;
+                __CLR2_2_1hhfglxv3w0.R.E[506]++;fave[bt]++;
+                __CLR2_2_1hhfglxv3w0.R.E[507]++;selector[nSelectors] = (char) bt;
+                __CLR2_2_1hhfglxv3w0.R.E[508]++;nSelectors++;
+
+                /*
+                  Increment the symbol frequencies for the selected table.
+                */
+                __CLR2_2_1hhfglxv3w0.R.E[509]++;for (i = gs; (((i <= ge)&&(++__CLR2_2_1hhfglxv3w0.R.E[510]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[511]==0&false)); i++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[512]++;rfreq[bt][szptr[i]]++;
+                }
+
+                }__CLR2_2_1hhfglxv3w0.R.E[513]++;gs = ge + 1;
+            }
+
+            /*
+              Recompute the tables based on the accumulated frequencies.
+            */
+            }__CLR2_2_1hhfglxv3w0.R.E[514]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[515]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[516]==0&false)); t++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[517]++;hbMakeCodeLengths(len[t], rfreq[t], alphaSize, 20);
+            }
+        }}
+
+        }__CLR2_2_1hhfglxv3w0.R.E[518]++;rfreq = null;
+        __CLR2_2_1hhfglxv3w0.R.E[519]++;fave = null;
+        __CLR2_2_1hhfglxv3w0.R.E[520]++;cost = null;
+
+        __CLR2_2_1hhfglxv3w0.R.E[521]++;if ((((!(nGroups < 8))&&(++__CLR2_2_1hhfglxv3w0.R.E[522]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[523]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[524]++;panic();
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[525]++;if ((((!(nSelectors < 32768 && nSelectors <= (2 + (900000 / G_SIZE))))&&(++__CLR2_2_1hhfglxv3w0.R.E[526]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[527]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[528]++;panic();
+        }
+
+
+        /* Compute MTF values for the selectors. */
+        }{
+            __CLR2_2_1hhfglxv3w0.R.E[529]++;char[] pos = new char[N_GROUPS];
+            __CLR2_2_1hhfglxv3w0.R.E[530]++;char ll_i, tmp2, tmp;
+            __CLR2_2_1hhfglxv3w0.R.E[531]++;for (i = 0; (((i < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[532]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[533]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[534]++;pos[i] = (char) i;
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[535]++;for (i = 0; (((i < nSelectors)&&(++__CLR2_2_1hhfglxv3w0.R.E[536]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[537]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[538]++;ll_i = selector[i];
+                __CLR2_2_1hhfglxv3w0.R.E[539]++;j = 0;
+                __CLR2_2_1hhfglxv3w0.R.E[540]++;tmp = pos[j];
+                __CLR2_2_1hhfglxv3w0.R.E[541]++;while ((((ll_i != tmp)&&(++__CLR2_2_1hhfglxv3w0.R.E[542]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[543]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[544]++;j++;
+                    __CLR2_2_1hhfglxv3w0.R.E[545]++;tmp2 = tmp;
+                    __CLR2_2_1hhfglxv3w0.R.E[546]++;tmp = pos[j];
+                    __CLR2_2_1hhfglxv3w0.R.E[547]++;pos[j] = tmp2;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[548]++;pos[0] = tmp;
+                __CLR2_2_1hhfglxv3w0.R.E[549]++;selectorMtf[i] = (char) j;
+            }
+        }}
+
+        __CLR2_2_1hhfglxv3w0.R.E[550]++;int[][] code = new int[N_GROUPS][MAX_ALPHA_SIZE];
+
+        /* Assign actual codes for the tables. */
+        __CLR2_2_1hhfglxv3w0.R.E[551]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[552]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[553]==0&false)); t++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[554]++;minLen = 32;
+            __CLR2_2_1hhfglxv3w0.R.E[555]++;maxLen = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[556]++;for (i = 0; (((i < alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[557]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[558]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[559]++;if ((((len[t][i] > maxLen)&&(++__CLR2_2_1hhfglxv3w0.R.E[560]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[561]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[562]++;maxLen = len[t][i];
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[563]++;if ((((len[t][i] < minLen)&&(++__CLR2_2_1hhfglxv3w0.R.E[564]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[565]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[566]++;minLen = len[t][i];
+                }
+            }}
+            }__CLR2_2_1hhfglxv3w0.R.E[567]++;if ((((maxLen > 20)&&(++__CLR2_2_1hhfglxv3w0.R.E[568]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[569]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[570]++;panic();
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[571]++;if ((((minLen < 1)&&(++__CLR2_2_1hhfglxv3w0.R.E[572]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[573]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[574]++;panic();
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[575]++;hbAssignCodes(code[t], len[t], minLen, maxLen, alphaSize);
+        }
+
+        /* Transmit the mapping table. */
+        }{
+            __CLR2_2_1hhfglxv3w0.R.E[576]++;boolean[] inUse16 = new boolean[16];
+            __CLR2_2_1hhfglxv3w0.R.E[577]++;for (i = 0; (((i < 16)&&(++__CLR2_2_1hhfglxv3w0.R.E[578]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[579]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[580]++;inUse16[i] = false;
+                __CLR2_2_1hhfglxv3w0.R.E[581]++;for (j = 0; (((j < 16)&&(++__CLR2_2_1hhfglxv3w0.R.E[582]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[583]==0&false)); j++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[584]++;if ((((inUse[i * 16 + j])&&(++__CLR2_2_1hhfglxv3w0.R.E[585]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[586]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[587]++;inUse16[i] = true;
+                    }
+                }}
+            }}
+
+            }__CLR2_2_1hhfglxv3w0.R.E[588]++;nBytes = bytesOut;
+            __CLR2_2_1hhfglxv3w0.R.E[589]++;for (i = 0; (((i < 16)&&(++__CLR2_2_1hhfglxv3w0.R.E[590]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[591]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[592]++;if ((((inUse16[i])&&(++__CLR2_2_1hhfglxv3w0.R.E[593]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[594]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[595]++;bsW(1, 1);
+                } }else {{
+                    __CLR2_2_1hhfglxv3w0.R.E[596]++;bsW(1, 0);
+                }
+            }}
+
+            }__CLR2_2_1hhfglxv3w0.R.E[597]++;for (i = 0; (((i < 16)&&(++__CLR2_2_1hhfglxv3w0.R.E[598]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[599]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[600]++;if ((((inUse16[i])&&(++__CLR2_2_1hhfglxv3w0.R.E[601]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[602]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[603]++;for (j = 0; (((j < 16)&&(++__CLR2_2_1hhfglxv3w0.R.E[604]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[605]==0&false)); j++) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[606]++;if ((((inUse[i * 16 + j])&&(++__CLR2_2_1hhfglxv3w0.R.E[607]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[608]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[609]++;bsW(1, 1);
+                        } }else {{
+                            __CLR2_2_1hhfglxv3w0.R.E[610]++;bsW(1, 0);
+                        }
+                    }}
+                }}
+            }}
+
+        }}
+
+        /* Now the selectors. */
+        __CLR2_2_1hhfglxv3w0.R.E[611]++;nBytes = bytesOut;
+        __CLR2_2_1hhfglxv3w0.R.E[612]++;bsW (3, nGroups);
+        __CLR2_2_1hhfglxv3w0.R.E[613]++;bsW (15, nSelectors);
+        __CLR2_2_1hhfglxv3w0.R.E[614]++;for (i = 0; (((i < nSelectors)&&(++__CLR2_2_1hhfglxv3w0.R.E[615]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[616]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[617]++;for (j = 0; (((j < selectorMtf[i])&&(++__CLR2_2_1hhfglxv3w0.R.E[618]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[619]==0&false)); j++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[620]++;bsW(1, 1);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[621]++;bsW(1, 0);
+        }
+
+        /* Now the coding tables. */
+        }__CLR2_2_1hhfglxv3w0.R.E[622]++;nBytes = bytesOut;
+
+        __CLR2_2_1hhfglxv3w0.R.E[623]++;for (t = 0; (((t < nGroups)&&(++__CLR2_2_1hhfglxv3w0.R.E[624]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[625]==0&false)); t++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[626]++;int curr = len[t][0];
+            __CLR2_2_1hhfglxv3w0.R.E[627]++;bsW(5, curr);
+            __CLR2_2_1hhfglxv3w0.R.E[628]++;for (i = 0; (((i < alphaSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[629]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[630]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[631]++;while ((((curr < len[t][i])&&(++__CLR2_2_1hhfglxv3w0.R.E[632]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[633]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[634]++;bsW(2, 2);
+                    __CLR2_2_1hhfglxv3w0.R.E[635]++;curr++; /* 10 */
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[636]++;while ((((curr > len[t][i])&&(++__CLR2_2_1hhfglxv3w0.R.E[637]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[638]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[639]++;bsW(2, 3);
+                    __CLR2_2_1hhfglxv3w0.R.E[640]++;curr--; /* 11 */
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[641]++;bsW (1, 0);
+            }
+        }}
+
+        /* And finally, the block data proper */
+        }__CLR2_2_1hhfglxv3w0.R.E[642]++;nBytes = bytesOut;
+        __CLR2_2_1hhfglxv3w0.R.E[643]++;selCtr = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[644]++;gs = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[645]++;while (true) {{
+            __CLR2_2_1hhfglxv3w0.R.E[646]++;if ((((gs >= nMTF)&&(++__CLR2_2_1hhfglxv3w0.R.E[647]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[648]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[649]++;break;
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[650]++;ge = gs + G_SIZE - 1;
+            __CLR2_2_1hhfglxv3w0.R.E[651]++;if ((((ge >= nMTF)&&(++__CLR2_2_1hhfglxv3w0.R.E[652]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[653]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[654]++;ge = nMTF - 1;
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[655]++;for (i = gs; (((i <= ge)&&(++__CLR2_2_1hhfglxv3w0.R.E[656]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[657]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[658]++;bsW(len[selector[selCtr]][szptr[i]],
+                    code[selector[selCtr]][szptr[i]]);
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[659]++;gs = ge + 1;
+            __CLR2_2_1hhfglxv3w0.R.E[660]++;selCtr++;
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[661]++;if ((((!(selCtr == nSelectors))&&(++__CLR2_2_1hhfglxv3w0.R.E[662]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[663]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[664]++;panic();
+        }
+    }}
+
+    private void moveToFrontCodeAndSend () throws IOException {__CLR2_2_1hhfglxv3w0.R.E[665]++;
+        __CLR2_2_1hhfglxv3w0.R.E[666]++;bsPutIntVS(24, origPtr);
+        __CLR2_2_1hhfglxv3w0.R.E[667]++;generateMTFValues();
+        __CLR2_2_1hhfglxv3w0.R.E[668]++;sendMTFValues();
+    }
+
+    private OutputStream bsStream;
+
+    private void simpleSort(int lo, int hi, int d) {__CLR2_2_1hhfglxv3w0.R.E[669]++;
+        __CLR2_2_1hhfglxv3w0.R.E[670]++;int i, j, h, bigN, hp;
+        __CLR2_2_1hhfglxv3w0.R.E[671]++;int v;
+
+        __CLR2_2_1hhfglxv3w0.R.E[672]++;bigN = hi - lo + 1;
+        __CLR2_2_1hhfglxv3w0.R.E[673]++;if ((((bigN < 2)&&(++__CLR2_2_1hhfglxv3w0.R.E[674]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[675]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[676]++;return;
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[677]++;hp = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[678]++;while ((((incs[hp] < bigN)&&(++__CLR2_2_1hhfglxv3w0.R.E[679]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[680]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[681]++;hp++;
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[682]++;hp--;
+
+        __CLR2_2_1hhfglxv3w0.R.E[683]++;for (; (((hp >= 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[684]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[685]==0&false)); hp--) {{
+            __CLR2_2_1hhfglxv3w0.R.E[686]++;h = incs[hp];
+
+            __CLR2_2_1hhfglxv3w0.R.E[687]++;i = lo + h;
+            __CLR2_2_1hhfglxv3w0.R.E[688]++;while (true) {{
+                /* copy 1 */
+                __CLR2_2_1hhfglxv3w0.R.E[689]++;if ((((i > hi)&&(++__CLR2_2_1hhfglxv3w0.R.E[690]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[691]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[692]++;break;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[693]++;v = zptr[i];
+                __CLR2_2_1hhfglxv3w0.R.E[694]++;j = i;
+                __CLR2_2_1hhfglxv3w0.R.E[695]++;while ((((fullGtU(zptr[j - h] + d, v + d))&&(++__CLR2_2_1hhfglxv3w0.R.E[696]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[697]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[698]++;zptr[j] = zptr[j - h];
+                    __CLR2_2_1hhfglxv3w0.R.E[699]++;j = j - h;
+                    __CLR2_2_1hhfglxv3w0.R.E[700]++;if ((((j <= (lo + h - 1))&&(++__CLR2_2_1hhfglxv3w0.R.E[701]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[702]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[703]++;break;
+                    }
+                }}
+                }__CLR2_2_1hhfglxv3w0.R.E[704]++;zptr[j] = v;
+                __CLR2_2_1hhfglxv3w0.R.E[705]++;i++;
+
+                /* copy 2 */
+                __CLR2_2_1hhfglxv3w0.R.E[706]++;if ((((i > hi)&&(++__CLR2_2_1hhfglxv3w0.R.E[707]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[708]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[709]++;break;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[710]++;v = zptr[i];
+                __CLR2_2_1hhfglxv3w0.R.E[711]++;j = i;
+                __CLR2_2_1hhfglxv3w0.R.E[712]++;while ((((fullGtU(zptr[j - h] + d, v + d))&&(++__CLR2_2_1hhfglxv3w0.R.E[713]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[714]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[715]++;zptr[j] = zptr[j - h];
+                    __CLR2_2_1hhfglxv3w0.R.E[716]++;j = j - h;
+                    __CLR2_2_1hhfglxv3w0.R.E[717]++;if ((((j <= (lo + h - 1))&&(++__CLR2_2_1hhfglxv3w0.R.E[718]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[719]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[720]++;break;
+                    }
+                }}
+                }__CLR2_2_1hhfglxv3w0.R.E[721]++;zptr[j] = v;
+                __CLR2_2_1hhfglxv3w0.R.E[722]++;i++;
+
+                /* copy 3 */
+                __CLR2_2_1hhfglxv3w0.R.E[723]++;if ((((i > hi)&&(++__CLR2_2_1hhfglxv3w0.R.E[724]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[725]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[726]++;break;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[727]++;v = zptr[i];
+                __CLR2_2_1hhfglxv3w0.R.E[728]++;j = i;
+                __CLR2_2_1hhfglxv3w0.R.E[729]++;while ((((fullGtU(zptr[j - h] + d, v + d))&&(++__CLR2_2_1hhfglxv3w0.R.E[730]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[731]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[732]++;zptr[j] = zptr[j - h];
+                    __CLR2_2_1hhfglxv3w0.R.E[733]++;j = j - h;
+                    __CLR2_2_1hhfglxv3w0.R.E[734]++;if ((((j <= (lo + h - 1))&&(++__CLR2_2_1hhfglxv3w0.R.E[735]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[736]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[737]++;break;
+                    }
+                }}
+                }__CLR2_2_1hhfglxv3w0.R.E[738]++;zptr[j] = v;
+                __CLR2_2_1hhfglxv3w0.R.E[739]++;i++;
+
+                __CLR2_2_1hhfglxv3w0.R.E[740]++;if ((((workDone > workLimit && firstAttempt)&&(++__CLR2_2_1hhfglxv3w0.R.E[741]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[742]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[743]++;return;
+                }
+            }}
+        }}
+    }}
+
+    private void vswap(int p1, int p2, int n) {__CLR2_2_1hhfglxv3w0.R.E[744]++;
+        __CLR2_2_1hhfglxv3w0.R.E[745]++;int temp = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[746]++;while ((((n > 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[747]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[748]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[749]++;temp = zptr[p1];
+            __CLR2_2_1hhfglxv3w0.R.E[750]++;zptr[p1] = zptr[p2];
+            __CLR2_2_1hhfglxv3w0.R.E[751]++;zptr[p2] = temp;
+            __CLR2_2_1hhfglxv3w0.R.E[752]++;p1++;
+            __CLR2_2_1hhfglxv3w0.R.E[753]++;p2++;
+            __CLR2_2_1hhfglxv3w0.R.E[754]++;n--;
+        }
+    }}
+
+    private char med3(char a, char b, char c) {__CLR2_2_1hhfglxv3w0.R.E[755]++;
+        __CLR2_2_1hhfglxv3w0.R.E[756]++;char t;
+        __CLR2_2_1hhfglxv3w0.R.E[757]++;if ((((a > b)&&(++__CLR2_2_1hhfglxv3w0.R.E[758]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[759]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[760]++;t = a;
+            __CLR2_2_1hhfglxv3w0.R.E[761]++;a = b;
+            __CLR2_2_1hhfglxv3w0.R.E[762]++;b = t;
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[763]++;if ((((b > c)&&(++__CLR2_2_1hhfglxv3w0.R.E[764]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[765]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[766]++;t = b;
+            __CLR2_2_1hhfglxv3w0.R.E[767]++;b = c;
+            __CLR2_2_1hhfglxv3w0.R.E[768]++;c = t;
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[769]++;if ((((a > b)&&(++__CLR2_2_1hhfglxv3w0.R.E[770]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[771]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[772]++;b = a;
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[773]++;return b;
+    }
+
+    private static class StackElem {
+        int ll;
+        int hh;
+        int dd;
+    }
+
+    private void qSort3(int loSt, int hiSt, int dSt) {__CLR2_2_1hhfglxv3w0.R.E[774]++;
+        __CLR2_2_1hhfglxv3w0.R.E[775]++;int unLo, unHi, ltLo, gtHi, med, n, m;
+        __CLR2_2_1hhfglxv3w0.R.E[776]++;int sp, lo, hi, d;
+        __CLR2_2_1hhfglxv3w0.R.E[777]++;StackElem[] stack = new StackElem[QSORT_STACK_SIZE];
+        __CLR2_2_1hhfglxv3w0.R.E[778]++;for (int count = 0; (((count < QSORT_STACK_SIZE)&&(++__CLR2_2_1hhfglxv3w0.R.E[779]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[780]==0&false)); count++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[781]++;stack[count] = new StackElem();
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[782]++;sp = 0;
+
+        __CLR2_2_1hhfglxv3w0.R.E[783]++;stack[sp].ll = loSt;
+        __CLR2_2_1hhfglxv3w0.R.E[784]++;stack[sp].hh = hiSt;
+        __CLR2_2_1hhfglxv3w0.R.E[785]++;stack[sp].dd = dSt;
+        __CLR2_2_1hhfglxv3w0.R.E[786]++;sp++;
+
+        __CLR2_2_1hhfglxv3w0.R.E[787]++;while ((((sp > 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[788]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[789]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[790]++;if ((((sp >= QSORT_STACK_SIZE)&&(++__CLR2_2_1hhfglxv3w0.R.E[791]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[792]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[793]++;panic();
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[794]++;sp--;
+            __CLR2_2_1hhfglxv3w0.R.E[795]++;lo = stack[sp].ll;
+            __CLR2_2_1hhfglxv3w0.R.E[796]++;hi = stack[sp].hh;
+            __CLR2_2_1hhfglxv3w0.R.E[797]++;d = stack[sp].dd;
+
+            __CLR2_2_1hhfglxv3w0.R.E[798]++;if ((((hi - lo < SMALL_THRESH || d > DEPTH_THRESH)&&(++__CLR2_2_1hhfglxv3w0.R.E[799]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[800]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[801]++;simpleSort(lo, hi, d);
+                __CLR2_2_1hhfglxv3w0.R.E[802]++;if ((((workDone > workLimit && firstAttempt)&&(++__CLR2_2_1hhfglxv3w0.R.E[803]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[804]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[805]++;return;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[806]++;continue;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[807]++;med = med3(block[zptr[lo] + d + 1],
+                       block[zptr[hi            ] + d  + 1],
+                       block[zptr[(lo + hi) >> 1] + d + 1]);
+
+            __CLR2_2_1hhfglxv3w0.R.E[808]++;unLo = ltLo = lo;
+            __CLR2_2_1hhfglxv3w0.R.E[809]++;unHi = gtHi = hi;
+
+            __CLR2_2_1hhfglxv3w0.R.E[810]++;while (true) {{
+                __CLR2_2_1hhfglxv3w0.R.E[811]++;while (true) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[812]++;if ((((unLo > unHi)&&(++__CLR2_2_1hhfglxv3w0.R.E[813]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[814]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[815]++;break;
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[816]++;n = ((int) block[zptr[unLo] + d + 1]) - med;
+                    __CLR2_2_1hhfglxv3w0.R.E[817]++;if ((((n == 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[818]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[819]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[820]++;int temp = 0;
+                        __CLR2_2_1hhfglxv3w0.R.E[821]++;temp = zptr[unLo];
+                        __CLR2_2_1hhfglxv3w0.R.E[822]++;zptr[unLo] = zptr[ltLo];
+                        __CLR2_2_1hhfglxv3w0.R.E[823]++;zptr[ltLo] = temp;
+                        __CLR2_2_1hhfglxv3w0.R.E[824]++;ltLo++;
+                        __CLR2_2_1hhfglxv3w0.R.E[825]++;unLo++;
+                        __CLR2_2_1hhfglxv3w0.R.E[826]++;continue;
+                    }}__CLR2_2_1hhfglxv3w0.R.E[827]++;;
+                    __CLR2_2_1hhfglxv3w0.R.E[828]++;if ((((n >  0)&&(++__CLR2_2_1hhfglxv3w0.R.E[829]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[830]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[831]++;break;
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[832]++;unLo++;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[833]++;while (true) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[834]++;if ((((unLo > unHi)&&(++__CLR2_2_1hhfglxv3w0.R.E[835]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[836]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[837]++;break;
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[838]++;n = ((int) block[zptr[unHi] + d + 1]) - med;
+                    __CLR2_2_1hhfglxv3w0.R.E[839]++;if ((((n == 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[840]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[841]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[842]++;int temp = 0;
+                        __CLR2_2_1hhfglxv3w0.R.E[843]++;temp = zptr[unHi];
+                        __CLR2_2_1hhfglxv3w0.R.E[844]++;zptr[unHi] = zptr[gtHi];
+                        __CLR2_2_1hhfglxv3w0.R.E[845]++;zptr[gtHi] = temp;
+                        __CLR2_2_1hhfglxv3w0.R.E[846]++;gtHi--;
+                        __CLR2_2_1hhfglxv3w0.R.E[847]++;unHi--;
+                        __CLR2_2_1hhfglxv3w0.R.E[848]++;continue;
+                    }}__CLR2_2_1hhfglxv3w0.R.E[849]++;;
+                    __CLR2_2_1hhfglxv3w0.R.E[850]++;if ((((n <  0)&&(++__CLR2_2_1hhfglxv3w0.R.E[851]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[852]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[853]++;break;
+                    }
+                    }__CLR2_2_1hhfglxv3w0.R.E[854]++;unHi--;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[855]++;if ((((unLo > unHi)&&(++__CLR2_2_1hhfglxv3w0.R.E[856]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[857]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[858]++;break;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[859]++;int temp = 0;
+                __CLR2_2_1hhfglxv3w0.R.E[860]++;temp = zptr[unLo];
+                __CLR2_2_1hhfglxv3w0.R.E[861]++;zptr[unLo] = zptr[unHi];
+                __CLR2_2_1hhfglxv3w0.R.E[862]++;zptr[unHi] = temp;
+                __CLR2_2_1hhfglxv3w0.R.E[863]++;unLo++;
+                __CLR2_2_1hhfglxv3w0.R.E[864]++;unHi--;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[865]++;if ((((gtHi < ltLo)&&(++__CLR2_2_1hhfglxv3w0.R.E[866]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[867]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[868]++;stack[sp].ll = lo;
+                __CLR2_2_1hhfglxv3w0.R.E[869]++;stack[sp].hh = hi;
+                __CLR2_2_1hhfglxv3w0.R.E[870]++;stack[sp].dd = d + 1;
+                __CLR2_2_1hhfglxv3w0.R.E[871]++;sp++;
+                __CLR2_2_1hhfglxv3w0.R.E[872]++;continue;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[873]++;n = (((((ltLo - lo) < (unLo - ltLo)) )&&(++__CLR2_2_1hhfglxv3w0.R.E[874]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[875]==0&false))? (ltLo - lo) : (unLo - ltLo);
+            __CLR2_2_1hhfglxv3w0.R.E[876]++;vswap(lo, unLo - n, n);
+            __CLR2_2_1hhfglxv3w0.R.E[877]++;m = (((((hi - gtHi) < (gtHi - unHi)) )&&(++__CLR2_2_1hhfglxv3w0.R.E[878]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[879]==0&false))? (hi - gtHi) : (gtHi - unHi);
+            __CLR2_2_1hhfglxv3w0.R.E[880]++;vswap(unLo, hi - m + 1, m);
+
+            __CLR2_2_1hhfglxv3w0.R.E[881]++;n = lo + unLo - ltLo - 1;
+            __CLR2_2_1hhfglxv3w0.R.E[882]++;m = hi - (gtHi - unHi) + 1;
+
+            __CLR2_2_1hhfglxv3w0.R.E[883]++;stack[sp].ll = lo;
+            __CLR2_2_1hhfglxv3w0.R.E[884]++;stack[sp].hh = n;
+            __CLR2_2_1hhfglxv3w0.R.E[885]++;stack[sp].dd = d;
+            __CLR2_2_1hhfglxv3w0.R.E[886]++;sp++;
+
+            __CLR2_2_1hhfglxv3w0.R.E[887]++;stack[sp].ll = n + 1;
+            __CLR2_2_1hhfglxv3w0.R.E[888]++;stack[sp].hh = m - 1;
+            __CLR2_2_1hhfglxv3w0.R.E[889]++;stack[sp].dd = d + 1;
+            __CLR2_2_1hhfglxv3w0.R.E[890]++;sp++;
+
+            __CLR2_2_1hhfglxv3w0.R.E[891]++;stack[sp].ll = m;
+            __CLR2_2_1hhfglxv3w0.R.E[892]++;stack[sp].hh = hi;
+            __CLR2_2_1hhfglxv3w0.R.E[893]++;stack[sp].dd = d;
+            __CLR2_2_1hhfglxv3w0.R.E[894]++;sp++;
+        }
+    }}
+
+    private void mainSort() {__CLR2_2_1hhfglxv3w0.R.E[895]++;
+        __CLR2_2_1hhfglxv3w0.R.E[896]++;int i, j, ss, sb;
+        __CLR2_2_1hhfglxv3w0.R.E[897]++;int[] runningOrder = new int[256];
+        __CLR2_2_1hhfglxv3w0.R.E[898]++;int[] copy = new int[256];
+        __CLR2_2_1hhfglxv3w0.R.E[899]++;boolean[] bigDone = new boolean[256];
+        __CLR2_2_1hhfglxv3w0.R.E[900]++;int c1, c2;
+        __CLR2_2_1hhfglxv3w0.R.E[901]++;int numQSorted;
+
+        /*
+          In the various block-sized structures, live data runs
+          from 0 to last+NUM_OVERSHOOT_BYTES inclusive.  First,
+          set up the overshoot area for block.
+        */
+
+        //   if (verbosity >= 4) fprintf ( stderr, "   sort initialise ...\n" );
+        __CLR2_2_1hhfglxv3w0.R.E[902]++;for (i = 0; (((i < NUM_OVERSHOOT_BYTES)&&(++__CLR2_2_1hhfglxv3w0.R.E[903]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[904]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[905]++;block[last + i + 2] = block[(i % (last + 1)) + 1];
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[906]++;for (i = 0; (((i <= last + NUM_OVERSHOOT_BYTES)&&(++__CLR2_2_1hhfglxv3w0.R.E[907]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[908]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[909]++;quadrant[i] = 0;
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[910]++;block[0] = (char) (block[last + 1]);
+
+        __CLR2_2_1hhfglxv3w0.R.E[911]++;if ((((last < 4000)&&(++__CLR2_2_1hhfglxv3w0.R.E[912]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[913]==0&false))) {{
+            /*
+              Use simpleSort(), since the full sorting mechanism
+              has quite a large constant overhead.
+            */
+            __CLR2_2_1hhfglxv3w0.R.E[914]++;for (i = 0; (((i <= last)&&(++__CLR2_2_1hhfglxv3w0.R.E[915]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[916]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[917]++;zptr[i] = i;
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[918]++;firstAttempt = false;
+            __CLR2_2_1hhfglxv3w0.R.E[919]++;workDone = workLimit = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[920]++;simpleSort(0, last, 0);
+        } }else {{
+            __CLR2_2_1hhfglxv3w0.R.E[921]++;numQSorted = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[922]++;for (i = 0; (((i <= 255)&&(++__CLR2_2_1hhfglxv3w0.R.E[923]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[924]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[925]++;bigDone[i] = false;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[926]++;for (i = 0; (((i <= 65536)&&(++__CLR2_2_1hhfglxv3w0.R.E[927]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[928]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[929]++;ftab[i] = 0;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[930]++;c1 = block[0];
+            __CLR2_2_1hhfglxv3w0.R.E[931]++;for (i = 0; (((i <= last)&&(++__CLR2_2_1hhfglxv3w0.R.E[932]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[933]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[934]++;c2 = block[i + 1];
+                __CLR2_2_1hhfglxv3w0.R.E[935]++;ftab[(c1 << 8) + c2]++;
+                __CLR2_2_1hhfglxv3w0.R.E[936]++;c1 = c2;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[937]++;for (i = 1; (((i <= 65536)&&(++__CLR2_2_1hhfglxv3w0.R.E[938]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[939]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[940]++;ftab[i] += ftab[i - 1];
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[941]++;c1 = block[1];
+            __CLR2_2_1hhfglxv3w0.R.E[942]++;for (i = 0; (((i < last)&&(++__CLR2_2_1hhfglxv3w0.R.E[943]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[944]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[945]++;c2 = block[i + 2];
+                __CLR2_2_1hhfglxv3w0.R.E[946]++;j = (c1 << 8) + c2;
+                __CLR2_2_1hhfglxv3w0.R.E[947]++;c1 = c2;
+                __CLR2_2_1hhfglxv3w0.R.E[948]++;ftab[j]--;
+                __CLR2_2_1hhfglxv3w0.R.E[949]++;zptr[ftab[j]] = i;
+            }
+
+            }__CLR2_2_1hhfglxv3w0.R.E[950]++;j = ((block[last + 1]) << 8) + (block[1]);
+            __CLR2_2_1hhfglxv3w0.R.E[951]++;ftab[j]--;
+            __CLR2_2_1hhfglxv3w0.R.E[952]++;zptr[ftab[j]] = last;
+
+            /*
+              Now ftab contains the first loc of every small bucket.
+              Calculate the running order, from smallest to largest
+              big bucket.
+            */
+
+            __CLR2_2_1hhfglxv3w0.R.E[953]++;for (i = 0; (((i <= 255)&&(++__CLR2_2_1hhfglxv3w0.R.E[954]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[955]==0&false)); i++) {{
+                __CLR2_2_1hhfglxv3w0.R.E[956]++;runningOrder[i] = i;
+            }
+
+            }{
+                __CLR2_2_1hhfglxv3w0.R.E[957]++;int vv;
+                __CLR2_2_1hhfglxv3w0.R.E[958]++;int h = 1;
+                __CLR2_2_1hhfglxv3w0.R.E[959]++;do {{
+                    __CLR2_2_1hhfglxv3w0.R.E[960]++;h = 3 * h + 1;
+                }
+                }while ((((h <= 256)&&(++__CLR2_2_1hhfglxv3w0.R.E[961]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[962]==0&false)));
+                __CLR2_2_1hhfglxv3w0.R.E[963]++;do {{
+                    __CLR2_2_1hhfglxv3w0.R.E[964]++;h = h / 3;
+                    __CLR2_2_1hhfglxv3w0.R.E[965]++;for (i = h; (((i <= 255)&&(++__CLR2_2_1hhfglxv3w0.R.E[966]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[967]==0&false)); i++) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[968]++;vv = runningOrder[i];
+                        __CLR2_2_1hhfglxv3w0.R.E[969]++;j = i;
+                        __CLR2_2_1hhfglxv3w0.R.E[970]++;while (((((ftab[((runningOrder[j - h]) + 1) << 8]
+                                - ftab[(runningOrder[j - h]) << 8]) >
+                               (ftab[((vv) + 1) << 8] - ftab[(vv) << 8]))&&(++__CLR2_2_1hhfglxv3w0.R.E[971]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[972]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[973]++;runningOrder[j] = runningOrder[j - h];
+                            __CLR2_2_1hhfglxv3w0.R.E[974]++;j = j - h;
+                            __CLR2_2_1hhfglxv3w0.R.E[975]++;if ((((j <= (h - 1))&&(++__CLR2_2_1hhfglxv3w0.R.E[976]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[977]==0&false))) {{
+                                __CLR2_2_1hhfglxv3w0.R.E[978]++;break;
+                            }
+                        }}
+                        }__CLR2_2_1hhfglxv3w0.R.E[979]++;runningOrder[j] = vv;
+                    }
+                }} }while ((((h != 1)&&(++__CLR2_2_1hhfglxv3w0.R.E[980]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[981]==0&false)));
+            }
+
+            /*
+              The main sorting loop.
+            */
+            __CLR2_2_1hhfglxv3w0.R.E[982]++;for (i = 0; (((i <= 255)&&(++__CLR2_2_1hhfglxv3w0.R.E[983]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[984]==0&false)); i++) {{
+
+                /*
+                  Process big buckets, starting with the least full.
+                */
+                __CLR2_2_1hhfglxv3w0.R.E[985]++;ss = runningOrder[i];
+
+                /*
+                  Complete the big bucket [ss] by quicksorting
+                  any unsorted small buckets [ss, j].  Hopefully
+                  previous pointer-scanning phases have already
+                  completed many of the small buckets [ss, j], so
+                  we don't have to sort them at all.
+                */
+                __CLR2_2_1hhfglxv3w0.R.E[986]++;for (j = 0; (((j <= 255)&&(++__CLR2_2_1hhfglxv3w0.R.E[987]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[988]==0&false)); j++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[989]++;sb = (ss << 8) + j;
+                    __CLR2_2_1hhfglxv3w0.R.E[990]++;if ((((!((ftab[sb] & SETMASK) == SETMASK))&&(++__CLR2_2_1hhfglxv3w0.R.E[991]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[992]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[993]++;int lo = ftab[sb] & CLEARMASK;
+                        __CLR2_2_1hhfglxv3w0.R.E[994]++;int hi = (ftab[sb + 1] & CLEARMASK) - 1;
+                        __CLR2_2_1hhfglxv3w0.R.E[995]++;if ((((hi > lo)&&(++__CLR2_2_1hhfglxv3w0.R.E[996]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[997]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[998]++;qSort3(lo, hi, 2);
+                            __CLR2_2_1hhfglxv3w0.R.E[999]++;numQSorted += (hi - lo + 1);
+                            __CLR2_2_1hhfglxv3w0.R.E[1000]++;if ((((workDone > workLimit && firstAttempt)&&(++__CLR2_2_1hhfglxv3w0.R.E[1001]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1002]==0&false))) {{
+                                __CLR2_2_1hhfglxv3w0.R.E[1003]++;return;
+                            }
+                        }}
+                        }__CLR2_2_1hhfglxv3w0.R.E[1004]++;ftab[sb] |= SETMASK;
+                    }
+                }}
+
+                /*
+                  The ss big bucket is now done.  Record this fact,
+                  and update the quadrant descriptors.  Remember to
+                  update quadrants in the overshoot area too, if
+                  necessary.  The "if (i < 255)" test merely skips
+                  this updating for the last bucket processed, since
+                  updating for the last bucket is pointless.
+                */
+                }__CLR2_2_1hhfglxv3w0.R.E[1005]++;bigDone[ss] = true;
+
+                __CLR2_2_1hhfglxv3w0.R.E[1006]++;if ((((i < 255)&&(++__CLR2_2_1hhfglxv3w0.R.E[1007]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1008]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[1009]++;int bbStart  = ftab[ss << 8] & CLEARMASK;
+                    __CLR2_2_1hhfglxv3w0.R.E[1010]++;int bbSize   = (ftab[(ss + 1) << 8] & CLEARMASK) - bbStart;
+                    __CLR2_2_1hhfglxv3w0.R.E[1011]++;int shifts   = 0;
+
+                    __CLR2_2_1hhfglxv3w0.R.E[1012]++;while (((((bbSize >> shifts) > 65534)&&(++__CLR2_2_1hhfglxv3w0.R.E[1013]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1014]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[1015]++;shifts++;
+                    }
+
+                    }__CLR2_2_1hhfglxv3w0.R.E[1016]++;for (j = 0; (((j < bbSize)&&(++__CLR2_2_1hhfglxv3w0.R.E[1017]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1018]==0&false)); j++) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[1019]++;int a2update = zptr[bbStart + j];
+                        __CLR2_2_1hhfglxv3w0.R.E[1020]++;int qVal = (j >> shifts);
+                        __CLR2_2_1hhfglxv3w0.R.E[1021]++;quadrant[a2update] = qVal;
+                        __CLR2_2_1hhfglxv3w0.R.E[1022]++;if ((((a2update < NUM_OVERSHOOT_BYTES)&&(++__CLR2_2_1hhfglxv3w0.R.E[1023]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1024]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[1025]++;quadrant[a2update + last + 1] = qVal;
+                        }
+                    }}
+
+                    }__CLR2_2_1hhfglxv3w0.R.E[1026]++;if ((((!(((bbSize - 1) >> shifts) <= 65535))&&(++__CLR2_2_1hhfglxv3w0.R.E[1027]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1028]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[1029]++;panic();
+                    }
+                }}
+
+                /*
+                  Now scan this big bucket so as to synthesise the
+                  sorted order for small buckets [t, ss] for all t != ss.
+                */
+                }__CLR2_2_1hhfglxv3w0.R.E[1030]++;for (j = 0; (((j <= 255)&&(++__CLR2_2_1hhfglxv3w0.R.E[1031]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1032]==0&false)); j++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[1033]++;copy[j] = ftab[(j << 8) + ss] & CLEARMASK;
+                }
+
+                }__CLR2_2_1hhfglxv3w0.R.E[1034]++;for (j = ftab[ss << 8] & CLEARMASK;
+                     (((j < (ftab[(ss + 1) << 8] & CLEARMASK))&&(++__CLR2_2_1hhfglxv3w0.R.E[1035]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1036]==0&false)); j++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[1037]++;c1 = block[zptr[j]];
+                    __CLR2_2_1hhfglxv3w0.R.E[1038]++;if ((((!bigDone[c1])&&(++__CLR2_2_1hhfglxv3w0.R.E[1039]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1040]==0&false))) {{
+                        __CLR2_2_1hhfglxv3w0.R.E[1041]++;zptr[copy[c1]] = (((zptr[j] == 0 )&&(++__CLR2_2_1hhfglxv3w0.R.E[1042]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1043]==0&false))? last : zptr[j] - 1;
+                        __CLR2_2_1hhfglxv3w0.R.E[1044]++;copy[c1]++;
+                    }
+                }}
+
+                }__CLR2_2_1hhfglxv3w0.R.E[1045]++;for (j = 0; (((j <= 255)&&(++__CLR2_2_1hhfglxv3w0.R.E[1046]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1047]==0&false)); j++) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[1048]++;ftab[(j << 8) + ss] |= SETMASK;
+                }
+            }}
+        }}
+    }}
+
+    private void randomiseBlock() {__CLR2_2_1hhfglxv3w0.R.E[1049]++;
+        __CLR2_2_1hhfglxv3w0.R.E[1050]++;int i;
+        __CLR2_2_1hhfglxv3w0.R.E[1051]++;int rNToGo = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[1052]++;int rTPos  = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[1053]++;for (i = 0; (((i < 256)&&(++__CLR2_2_1hhfglxv3w0.R.E[1054]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1055]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1056]++;inUse[i] = false;
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[1057]++;for (i = 0; (((i <= last)&&(++__CLR2_2_1hhfglxv3w0.R.E[1058]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1059]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1060]++;if ((((rNToGo == 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[1061]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1062]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1063]++;rNToGo = (char) rNums[rTPos];
+                __CLR2_2_1hhfglxv3w0.R.E[1064]++;rTPos++;
+                __CLR2_2_1hhfglxv3w0.R.E[1065]++;if ((((rTPos == 512)&&(++__CLR2_2_1hhfglxv3w0.R.E[1066]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1067]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[1068]++;rTPos = 0;
+                }
+            }}
+            }__CLR2_2_1hhfglxv3w0.R.E[1069]++;rNToGo--;
+            __CLR2_2_1hhfglxv3w0.R.E[1070]++;block[i + 1] ^= (((((rNToGo == 1) )&&(++__CLR2_2_1hhfglxv3w0.R.E[1071]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1072]==0&false))? 1 : 0);
+            // handle 16 bit signed numbers
+            __CLR2_2_1hhfglxv3w0.R.E[1073]++;block[i + 1] &= 0xFF;
+
+            __CLR2_2_1hhfglxv3w0.R.E[1074]++;inUse[block[i + 1]] = true;
+        }
+    }}
+
+    private void doReversibleTransformation() {__CLR2_2_1hhfglxv3w0.R.E[1075]++;
+        __CLR2_2_1hhfglxv3w0.R.E[1076]++;int i;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1077]++;workLimit = workFactor * last;
+        __CLR2_2_1hhfglxv3w0.R.E[1078]++;workDone = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[1079]++;blockRandomised = false;
+        __CLR2_2_1hhfglxv3w0.R.E[1080]++;firstAttempt = true;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1081]++;mainSort();
+
+        __CLR2_2_1hhfglxv3w0.R.E[1082]++;if ((((workDone > workLimit && firstAttempt)&&(++__CLR2_2_1hhfglxv3w0.R.E[1083]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1084]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1085]++;randomiseBlock();
+            __CLR2_2_1hhfglxv3w0.R.E[1086]++;workLimit = workDone = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[1087]++;blockRandomised = true;
+            __CLR2_2_1hhfglxv3w0.R.E[1088]++;firstAttempt = false;
+            __CLR2_2_1hhfglxv3w0.R.E[1089]++;mainSort();
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[1090]++;origPtr = -1;
+        __CLR2_2_1hhfglxv3w0.R.E[1091]++;for (i = 0; (((i <= last)&&(++__CLR2_2_1hhfglxv3w0.R.E[1092]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1093]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1094]++;if ((((zptr[i] == 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[1095]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1096]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1097]++;origPtr = i;
+                __CLR2_2_1hhfglxv3w0.R.E[1098]++;break;
+            }
+        }}}__CLR2_2_1hhfglxv3w0.R.E[1099]++;;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1100]++;if ((((origPtr == -1)&&(++__CLR2_2_1hhfglxv3w0.R.E[1101]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1102]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1103]++;panic();
+        }
+    }}
+
+    private boolean fullGtU(int i1, int i2) {__CLR2_2_1hhfglxv3w0.R.E[1104]++;
+        __CLR2_2_1hhfglxv3w0.R.E[1105]++;int k;
+        __CLR2_2_1hhfglxv3w0.R.E[1106]++;char c1, c2;
+        __CLR2_2_1hhfglxv3w0.R.E[1107]++;int s1, s2;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1108]++;c1 = block[i1 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1109]++;c2 = block[i2 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1110]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1111]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1112]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1113]++;return (c1 > c2);
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[1114]++;i1++;
+        __CLR2_2_1hhfglxv3w0.R.E[1115]++;i2++;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1116]++;c1 = block[i1 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1117]++;c2 = block[i2 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1118]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1119]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1120]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1121]++;return (c1 > c2);
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[1122]++;i1++;
+        __CLR2_2_1hhfglxv3w0.R.E[1123]++;i2++;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1124]++;c1 = block[i1 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1125]++;c2 = block[i2 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1126]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1127]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1128]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1129]++;return (c1 > c2);
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[1130]++;i1++;
+        __CLR2_2_1hhfglxv3w0.R.E[1131]++;i2++;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1132]++;c1 = block[i1 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1133]++;c2 = block[i2 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1134]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1135]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1136]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1137]++;return (c1 > c2);
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[1138]++;i1++;
+        __CLR2_2_1hhfglxv3w0.R.E[1139]++;i2++;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1140]++;c1 = block[i1 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1141]++;c2 = block[i2 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1142]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1143]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1144]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1145]++;return (c1 > c2);
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[1146]++;i1++;
+        __CLR2_2_1hhfglxv3w0.R.E[1147]++;i2++;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1148]++;c1 = block[i1 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1149]++;c2 = block[i2 + 1];
+        __CLR2_2_1hhfglxv3w0.R.E[1150]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1151]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1152]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1153]++;return (c1 > c2);
+        }
+        }__CLR2_2_1hhfglxv3w0.R.E[1154]++;i1++;
+        __CLR2_2_1hhfglxv3w0.R.E[1155]++;i2++;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1156]++;k = last + 1;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1157]++;do {{
+            __CLR2_2_1hhfglxv3w0.R.E[1158]++;c1 = block[i1 + 1];
+            __CLR2_2_1hhfglxv3w0.R.E[1159]++;c2 = block[i2 + 1];
+            __CLR2_2_1hhfglxv3w0.R.E[1160]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1161]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1162]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1163]++;return (c1 > c2);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[1164]++;s1 = quadrant[i1];
+            __CLR2_2_1hhfglxv3w0.R.E[1165]++;s2 = quadrant[i2];
+            __CLR2_2_1hhfglxv3w0.R.E[1166]++;if ((((s1 != s2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1167]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1168]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1169]++;return (s1 > s2);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[1170]++;i1++;
+            __CLR2_2_1hhfglxv3w0.R.E[1171]++;i2++;
+
+            __CLR2_2_1hhfglxv3w0.R.E[1172]++;c1 = block[i1 + 1];
+            __CLR2_2_1hhfglxv3w0.R.E[1173]++;c2 = block[i2 + 1];
+            __CLR2_2_1hhfglxv3w0.R.E[1174]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1175]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1176]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1177]++;return (c1 > c2);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[1178]++;s1 = quadrant[i1];
+            __CLR2_2_1hhfglxv3w0.R.E[1179]++;s2 = quadrant[i2];
+            __CLR2_2_1hhfglxv3w0.R.E[1180]++;if ((((s1 != s2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1181]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1182]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1183]++;return (s1 > s2);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[1184]++;i1++;
+            __CLR2_2_1hhfglxv3w0.R.E[1185]++;i2++;
+
+            __CLR2_2_1hhfglxv3w0.R.E[1186]++;c1 = block[i1 + 1];
+            __CLR2_2_1hhfglxv3w0.R.E[1187]++;c2 = block[i2 + 1];
+            __CLR2_2_1hhfglxv3w0.R.E[1188]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1189]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1190]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1191]++;return (c1 > c2);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[1192]++;s1 = quadrant[i1];
+            __CLR2_2_1hhfglxv3w0.R.E[1193]++;s2 = quadrant[i2];
+            __CLR2_2_1hhfglxv3w0.R.E[1194]++;if ((((s1 != s2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1195]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1196]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1197]++;return (s1 > s2);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[1198]++;i1++;
+            __CLR2_2_1hhfglxv3w0.R.E[1199]++;i2++;
+
+            __CLR2_2_1hhfglxv3w0.R.E[1200]++;c1 = block[i1 + 1];
+            __CLR2_2_1hhfglxv3w0.R.E[1201]++;c2 = block[i2 + 1];
+            __CLR2_2_1hhfglxv3w0.R.E[1202]++;if ((((c1 != c2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1203]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1204]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1205]++;return (c1 > c2);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[1206]++;s1 = quadrant[i1];
+            __CLR2_2_1hhfglxv3w0.R.E[1207]++;s2 = quadrant[i2];
+            __CLR2_2_1hhfglxv3w0.R.E[1208]++;if ((((s1 != s2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1209]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1210]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1211]++;return (s1 > s2);
+            }
+            }__CLR2_2_1hhfglxv3w0.R.E[1212]++;i1++;
+            __CLR2_2_1hhfglxv3w0.R.E[1213]++;i2++;
+
+            __CLR2_2_1hhfglxv3w0.R.E[1214]++;if ((((i1 > last)&&(++__CLR2_2_1hhfglxv3w0.R.E[1215]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1216]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1217]++;i1 -= last;
+                __CLR2_2_1hhfglxv3w0.R.E[1218]++;i1--;
+            }}__CLR2_2_1hhfglxv3w0.R.E[1219]++;;
+            __CLR2_2_1hhfglxv3w0.R.E[1220]++;if ((((i2 > last)&&(++__CLR2_2_1hhfglxv3w0.R.E[1221]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1222]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1223]++;i2 -= last;
+                __CLR2_2_1hhfglxv3w0.R.E[1224]++;i2--;
+            }}__CLR2_2_1hhfglxv3w0.R.E[1225]++;;
+
+            __CLR2_2_1hhfglxv3w0.R.E[1226]++;k -= 4;
+            __CLR2_2_1hhfglxv3w0.R.E[1227]++;workDone++;
+        } }while ((((k >= 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[1228]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1229]==0&false)));
+
+        __CLR2_2_1hhfglxv3w0.R.E[1230]++;return false;
+    }
+
+    /*
+      Knuth's increments seem to work better
+      than Incerpi-Sedgewick here.  Possibly
+      because the number of elems to sort is
+      usually small, typically <= 20.
+    */
+    private int[] incs = { 1, 4, 13, 40, 121, 364, 1093, 3280,
+                           9841, 29524, 88573, 265720,
+                           797161, 2391484 };
+
+    private void allocateCompressStructures () {__CLR2_2_1hhfglxv3w0.R.E[1231]++;
+        __CLR2_2_1hhfglxv3w0.R.E[1232]++;int n = baseBlockSize * blockSize100k;
+        __CLR2_2_1hhfglxv3w0.R.E[1233]++;block = new char[(n + 1 + NUM_OVERSHOOT_BYTES)];
+        __CLR2_2_1hhfglxv3w0.R.E[1234]++;quadrant = new int[(n + NUM_OVERSHOOT_BYTES)];
+        __CLR2_2_1hhfglxv3w0.R.E[1235]++;zptr = new int[n];
+        __CLR2_2_1hhfglxv3w0.R.E[1236]++;ftab = new int[65537];
+
+        __CLR2_2_1hhfglxv3w0.R.E[1237]++;if ((((block == null || quadrant == null || zptr == null
+            || ftab == null)&&(++__CLR2_2_1hhfglxv3w0.R.E[1238]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1239]==0&false))) {{
+            //int totalDraw = (n + 1 + NUM_OVERSHOOT_BYTES) + (n + NUM_OVERSHOOT_BYTES) + n + 65537;
+            //compressOutOfMemory ( totalDraw, n );
+        }
+
+        /*
+          The back end needs a place to store the MTF values
+          whilst it calculates the coding tables.  We could
+          put them in the zptr array.  However, these values
+          will fit in a short, so we overlay szptr at the
+          start of zptr, in the hope of reducing the number
+          of cache misses induced by the multiple traversals
+          of the MTF values when calculating coding tables.
+          Seems to improve compression speed by about 1%.
+        */
+        //    szptr = zptr;
+
+
+        }__CLR2_2_1hhfglxv3w0.R.E[1240]++;szptr = new short[2 * n];
+    }
+
+    private void generateMTFValues() {__CLR2_2_1hhfglxv3w0.R.E[1241]++;
+        __CLR2_2_1hhfglxv3w0.R.E[1242]++;char[] yy = new char[256];
+        __CLR2_2_1hhfglxv3w0.R.E[1243]++;int  i, j;
+        __CLR2_2_1hhfglxv3w0.R.E[1244]++;char tmp;
+        __CLR2_2_1hhfglxv3w0.R.E[1245]++;char tmp2;
+        __CLR2_2_1hhfglxv3w0.R.E[1246]++;int zPend;
+        __CLR2_2_1hhfglxv3w0.R.E[1247]++;int wr;
+        __CLR2_2_1hhfglxv3w0.R.E[1248]++;int EOB;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1249]++;makeMaps();
+        __CLR2_2_1hhfglxv3w0.R.E[1250]++;EOB = nInUse + 1;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1251]++;for (i = 0; (((i <= EOB)&&(++__CLR2_2_1hhfglxv3w0.R.E[1252]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1253]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1254]++;mtfFreq[i] = 0;
+        }
+
+        }__CLR2_2_1hhfglxv3w0.R.E[1255]++;wr = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[1256]++;zPend = 0;
+        __CLR2_2_1hhfglxv3w0.R.E[1257]++;for (i = 0; (((i < nInUse)&&(++__CLR2_2_1hhfglxv3w0.R.E[1258]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1259]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1260]++;yy[i] = (char) i;
+        }
+
+
+        }__CLR2_2_1hhfglxv3w0.R.E[1261]++;for (i = 0; (((i <= last)&&(++__CLR2_2_1hhfglxv3w0.R.E[1262]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1263]==0&false)); i++) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1264]++;char ll_i;
+
+            __CLR2_2_1hhfglxv3w0.R.E[1265]++;ll_i = unseqToSeq[block[zptr[i]]];
+
+            __CLR2_2_1hhfglxv3w0.R.E[1266]++;j = 0;
+            __CLR2_2_1hhfglxv3w0.R.E[1267]++;tmp = yy[j];
+            __CLR2_2_1hhfglxv3w0.R.E[1268]++;while ((((ll_i != tmp)&&(++__CLR2_2_1hhfglxv3w0.R.E[1269]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1270]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1271]++;j++;
+                __CLR2_2_1hhfglxv3w0.R.E[1272]++;tmp2 = tmp;
+                __CLR2_2_1hhfglxv3w0.R.E[1273]++;tmp = yy[j];
+                __CLR2_2_1hhfglxv3w0.R.E[1274]++;yy[j] = tmp2;
+            }}__CLR2_2_1hhfglxv3w0.R.E[1275]++;;
+            __CLR2_2_1hhfglxv3w0.R.E[1276]++;yy[0] = tmp;
+
+            __CLR2_2_1hhfglxv3w0.R.E[1277]++;if ((((j == 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[1278]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1279]==0&false))) {{
+                __CLR2_2_1hhfglxv3w0.R.E[1280]++;zPend++;
+            } }else {{
+                __CLR2_2_1hhfglxv3w0.R.E[1281]++;if ((((zPend > 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[1282]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1283]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[1284]++;zPend--;
+                    __CLR2_2_1hhfglxv3w0.R.E[1285]++;while (true) {{
+                        boolean __CLB2_2_1_bool1=false;__CLR2_2_1hhfglxv3w0.R.E[1286]++;switch (zPend % 2) {
+                        case 0:if (!__CLB2_2_1_bool1) {__CLR2_2_1hhfglxv3w0.R.E[1287]++;__CLB2_2_1_bool1=true;}
+                            __CLR2_2_1hhfglxv3w0.R.E[1288]++;szptr[wr] = (short) RUNA;
+                            __CLR2_2_1hhfglxv3w0.R.E[1289]++;wr++;
+                            __CLR2_2_1hhfglxv3w0.R.E[1290]++;mtfFreq[RUNA]++;
+                            __CLR2_2_1hhfglxv3w0.R.E[1291]++;break;
+                        case 1:if (!__CLB2_2_1_bool1) {__CLR2_2_1hhfglxv3w0.R.E[1292]++;__CLB2_2_1_bool1=true;}
+                            __CLR2_2_1hhfglxv3w0.R.E[1293]++;szptr[wr] = (short) RUNB;
+                            __CLR2_2_1hhfglxv3w0.R.E[1294]++;wr++;
+                            __CLR2_2_1hhfglxv3w0.R.E[1295]++;mtfFreq[RUNB]++;
+                            __CLR2_2_1hhfglxv3w0.R.E[1296]++;break;
+                        }__CLR2_2_1hhfglxv3w0.R.E[1297]++;;
+                        __CLR2_2_1hhfglxv3w0.R.E[1298]++;if ((((zPend < 2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1299]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1300]==0&false))) {{
+                            __CLR2_2_1hhfglxv3w0.R.E[1301]++;break;
+                        }
+                        }__CLR2_2_1hhfglxv3w0.R.E[1302]++;zPend = (zPend - 2) / 2;
+                    }}__CLR2_2_1hhfglxv3w0.R.E[1303]++;;
+                    __CLR2_2_1hhfglxv3w0.R.E[1304]++;zPend = 0;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[1305]++;szptr[wr] = (short) (j + 1);
+                __CLR2_2_1hhfglxv3w0.R.E[1306]++;wr++;
+                __CLR2_2_1hhfglxv3w0.R.E[1307]++;mtfFreq[j + 1]++;
+            }
+        }}
+
+        }__CLR2_2_1hhfglxv3w0.R.E[1308]++;if ((((zPend > 0)&&(++__CLR2_2_1hhfglxv3w0.R.E[1309]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1310]==0&false))) {{
+            __CLR2_2_1hhfglxv3w0.R.E[1311]++;zPend--;
+            __CLR2_2_1hhfglxv3w0.R.E[1312]++;while (true) {{
+                boolean __CLB2_2_1_bool2=false;__CLR2_2_1hhfglxv3w0.R.E[1313]++;switch (zPend % 2) {
+                case 0:if (!__CLB2_2_1_bool2) {__CLR2_2_1hhfglxv3w0.R.E[1314]++;__CLB2_2_1_bool2=true;}
+                    __CLR2_2_1hhfglxv3w0.R.E[1315]++;szptr[wr] = (short) RUNA;
+                    __CLR2_2_1hhfglxv3w0.R.E[1316]++;wr++;
+                    __CLR2_2_1hhfglxv3w0.R.E[1317]++;mtfFreq[RUNA]++;
+                    __CLR2_2_1hhfglxv3w0.R.E[1318]++;break;
+                case 1:if (!__CLB2_2_1_bool2) {__CLR2_2_1hhfglxv3w0.R.E[1319]++;__CLB2_2_1_bool2=true;}
+                    __CLR2_2_1hhfglxv3w0.R.E[1320]++;szptr[wr] = (short) RUNB;
+                    __CLR2_2_1hhfglxv3w0.R.E[1321]++;wr++;
+                    __CLR2_2_1hhfglxv3w0.R.E[1322]++;mtfFreq[RUNB]++;
+                    __CLR2_2_1hhfglxv3w0.R.E[1323]++;break;
+                }
+                __CLR2_2_1hhfglxv3w0.R.E[1324]++;if ((((zPend < 2)&&(++__CLR2_2_1hhfglxv3w0.R.E[1325]!=0|true))||(++__CLR2_2_1hhfglxv3w0.R.E[1326]==0&false))) {{
+                    __CLR2_2_1hhfglxv3w0.R.E[1327]++;break;
+                }
+                }__CLR2_2_1hhfglxv3w0.R.E[1328]++;zPend = (zPend - 2) / 2;
+            }
+        }}
+
+        }__CLR2_2_1hhfglxv3w0.R.E[1329]++;szptr[wr] = (short) EOB;
+        __CLR2_2_1hhfglxv3w0.R.E[1330]++;wr++;
+        __CLR2_2_1hhfglxv3w0.R.E[1331]++;mtfFreq[EOB]++;
+
+        __CLR2_2_1hhfglxv3w0.R.E[1332]++;nMTF = wr;
+    }
+}
+
+

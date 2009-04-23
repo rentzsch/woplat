@@ -1,0 +1,156 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ */package com.mdimension.woinstaller;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.zip.GZIPInputStream;
+
+import com.mdimension.archiver.CPIO;
+import com.mdimension.archiver.XarFile;
+
+import er.extensions.ERXFileUtilities;
+
+public class Main {public static class __CLR2_2_11lj1ljfglxv4g9{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,2071);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+  public static void main(String[] args) throws Exception {__CLR2_2_11lj1ljfglxv4g9.R.E[2071]++;
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2072]++;if ((((args.length != 2)&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2073]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2074]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2075]++;System.out.println("usage: java -jar WOInstaller.jar [5.3.1|5.4.1] [destinationFolder]");
+      
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2076]++;System.out.println("\nExample:");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2077]++;System.out.println("WO 5.3.3 on Windows");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2078]++;System.out.println("       java -jar WOInstaller.jar 5.3.3 C:\\Apple");
+      
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2079]++;System.out.println();
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2080]++;System.out.println("WO 5.3.3 on OS X (in alternate folder)");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2081]++;System.out.println("       java -jar WOInstaller.jar 5.3.3 /opt");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2082]++;System.exit(1);
+    }
+
+    }__CLR2_2_11lj1ljfglxv4g9.R.E[2083]++;URL woDmgUrl;
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2084]++;int paxOffset;
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2085]++;int paxLength;
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2086]++;int woVersion;
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2087]++;long rawLength = 0;
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2088]++;String version = args[0];
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2089]++;List<BlockEntry> blockList = new ArrayList<BlockEntry>();
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2090]++;if (((("5.3.3".equals(version))&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2091]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2092]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2093]++;woDmgUrl = new URL("http://supportdownload.apple.com/download.info.apple.com/Apple_Support_Area/Apple_Software_Updates/Mac_OS_X/downloads/061-2998.20070215.33woU/WebObjects5.3.3Update.dmg");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2094]++;BlockEntry entry = new BlockEntry();
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2095]++;entry.offset = 11608064L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2096]++;entry.length = 29672581L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2097]++;blockList.add(entry);
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2098]++;rawLength = 51252394;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2099]++;woVersion = 53;
+    } }else
+    {__CLR2_2_11lj1ljfglxv4g9.R.E[2100]++;if (((("5.4.1".equals(version))&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2101]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2102]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2103]++;woDmgUrl = new URL("http://supportdownload.apple.com/download.info.apple.com/Apple_Support_Area/Apple_Software_Updates/Mac_OS_X/downloads/061-4181.20080211.wbjC5/WebObjects541for10.5.dmg");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2104]++;BlockEntry entry = new BlockEntry();
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2105]++;entry.offset = 15901184L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2106]++;entry.length = 3145728L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2107]++;blockList.add(entry);
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2108]++;entry = new BlockEntry();
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2109]++;entry.offset = 37016064L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2110]++;entry.length = 107197037L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2111]++;blockList.add(entry);
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2112]++;rawLength = 153364932L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2113]++;woVersion = 54;
+    }
+    }else {__CLR2_2_11lj1ljfglxv4g9.R.E[2114]++;if (((("dev".equals(version))&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2115]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2116]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2117]++;woDmgUrl = new URL("file:///tmp/WebObjectsUpdate.dmg");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2118]++;BlockEntry entry = new BlockEntry();
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2119]++;entry.offset = 11608064L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2120]++;entry.length = 29672581L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2121]++;blockList.add(entry);
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2122]++;rawLength = 51252394;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2123]++;woVersion = 53;
+    }
+    }else {__CLR2_2_11lj1ljfglxv4g9.R.E[2124]++;if (((("dev54".equals(version))&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2125]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2126]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2127]++;woDmgUrl = new URL("file:///tmp/WebObjects541for10.5.dmg");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2128]++;BlockEntry entry = new BlockEntry();
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2129]++;entry.offset = 15901184L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2130]++;entry.length = 3145728L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2131]++;blockList.add(entry);
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2132]++;entry = new BlockEntry();
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2133]++;entry.offset = 37016064L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2134]++;entry.length = 107197037L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2135]++;blockList.add(entry);
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2136]++;rawLength = 153364932L;
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2137]++;woVersion = 54;
+    }
+    }else {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2138]++;throw new IllegalArgumentException("Unknown WebObjects version '" + version + "'.");
+    }
+    
+    }}}}__CLR2_2_11lj1ljfglxv4g9.R.E[2139]++;File destinationFolder = new File(args[1]);
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2140]++;if ((((destinationFolder.exists())&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2141]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2142]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2143]++;if ((((!destinationFolder.canWrite())&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2144]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2145]==0&false))) {{
+        __CLR2_2_11lj1ljfglxv4g9.R.E[2146]++;throw new IOException("You do not have permission to write to the folder '" + destinationFolder + "'.");
+      }
+    }}
+    }else {__CLR2_2_11lj1ljfglxv4g9.R.E[2147]++;if ((((!destinationFolder.mkdirs())&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2148]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2149]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2150]++;throw new IOException("Failed to create the directory '" + destinationFolder + "'.");
+    }
+
+    }}__CLR2_2_11lj1ljfglxv4g9.R.E[2151]++;boolean windows = System.getProperty("os.name").toLowerCase().indexOf("windows") != -1;
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2152]++;boolean symbolicLinksSupported = !windows;
+    
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2153]++;File woDmgFile = File.createTempFile("WebObjects.", ".dmg");
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2154]++;woDmgFile.deleteOnExit();
+
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2155]++;ERXFileUtilities.writeUrlToFile(woDmgUrl, woDmgFile, new ConsoleProgressMonitor("Downloading WebObjects"));
+
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2156]++;InputStream woPaxGZIs;
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2157]++;if ((((woVersion == 53)&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2158]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2159]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2160]++;woPaxGZIs = new MultiBlockInputStream(new BufferedInputStream(new FileInputStream(woDmgFile)), blockList);
+    } }else {{
+      //woVersion = 54
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2161]++;InputStream woPkgIs = new MultiBlockInputStream(new BufferedInputStream(new FileInputStream(woDmgFile)), blockList);
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2162]++;woPaxGZIs = new XarFile(woPkgIs).getInputStream("Payload");
+    }
+    }__CLR2_2_11lj1ljfglxv4g9.R.E[2163]++;GZIPInputStream woPaxFileIs = new GZIPInputStream(woPaxGZIs);
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2164]++;CPIO cpio = new CPIO(woPaxFileIs);
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2165]++;cpio.setLength(rawLength);
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2166]++;cpio.extractTo(destinationFolder, symbolicLinksSupported, new ConsoleProgressMonitor("Extracting WebObjects Runtime"));    	
+    
+    
+    __CLR2_2_11lj1ljfglxv4g9.R.E[2167]++;if ((((windows)&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2168]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2169]==0&false))) {{
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2170]++;System.out.print("Shuffling around for Windows: ");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2171]++;File localFolder = new File(destinationFolder, "Local");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2172]++;if ((((localFolder.exists())&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2173]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2174]==0&false))) {{
+        __CLR2_2_11lj1ljfglxv4g9.R.E[2175]++;throw new IOException("The folder '" + localFolder + "' already exists.");
+      }
+      }__CLR2_2_11lj1ljfglxv4g9.R.E[2176]++;if ((((!localFolder.mkdirs())&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2177]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2178]==0&false))) {{
+        __CLR2_2_11lj1ljfglxv4g9.R.E[2179]++;throw new IOException("Failed to create the directory '" + localFolder + "'.");
+      }
+
+      }__CLR2_2_11lj1ljfglxv4g9.R.E[2180]++;File localLibraryFolder = new File(localFolder, "Library");
+
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2181]++;File originalLibraryFolder = new File(destinationFolder, "Library");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2182]++;if ((((!originalLibraryFolder.renameTo(localLibraryFolder))&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2183]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2184]==0&false))) {{
+        __CLR2_2_11lj1ljfglxv4g9.R.E[2185]++;throw new IOException("Failed to move '" + originalLibraryFolder + "' to '" + localLibraryFolder + "'.");
+      }
+
+      }__CLR2_2_11lj1ljfglxv4g9.R.E[2186]++;File originalSystemFolder = new File(destinationFolder, "System");
+
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2187]++;File originalSystemLibraryFolder = new File(originalSystemFolder, "Library");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2188]++;File libraryFolder = new File(destinationFolder, "Library");
+      __CLR2_2_11lj1ljfglxv4g9.R.E[2189]++;if ((((libraryFolder.exists())&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2190]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2191]==0&false))) {{
+        __CLR2_2_11lj1ljfglxv4g9.R.E[2192]++;throw new IOException("The folder '" + libraryFolder + "' already exists.");
+      }
+      }__CLR2_2_11lj1ljfglxv4g9.R.E[2193]++;if ((((!originalSystemLibraryFolder.renameTo(libraryFolder))&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2194]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2195]==0&false))) {{
+        __CLR2_2_11lj1ljfglxv4g9.R.E[2196]++;throw new IOException("Failed to move '" + originalSystemLibraryFolder + "' to '" + libraryFolder + "'.");
+      }
+
+      }__CLR2_2_11lj1ljfglxv4g9.R.E[2197]++;if ((((!originalSystemFolder.delete())&&(++__CLR2_2_11lj1ljfglxv4g9.R.E[2198]!=0|true))||(++__CLR2_2_11lj1ljfglxv4g9.R.E[2199]==0&false))) {{
+        __CLR2_2_11lj1ljfglxv4g9.R.E[2200]++;throw new IOException("Failed to delete '" + originalSystemFolder + ".");
+      }
+      }__CLR2_2_11lj1ljfglxv4g9.R.E[2201]++;System.out.println("Done");
+    }
+    
+    }__CLR2_2_11lj1ljfglxv4g9.R.E[2202]++;System.out.println("Installation Complete");
+  }
+}

@@ -1,0 +1,17 @@
+/* $$ This file has been instrumented by Clover 2.2.1#20080423154828733 $$ */package com.mdimension.woinstaller;
+
+public class ConsoleProgressMonitor implements IProgressMonitor {public static class __CLR2_2_11p71p7fglxv4gi{public static com_cenqua_clover.b R;static{try{if(20080423154828733L!=com_cenqua_clover.CloverVersionInfo.getBuildStamp()){com_cenqua_clover.Clover.l("[CLOVER] WARNING: The Clover version used in instrumentation does not match the runtime version. You need to run instrumented classes against the same version of Clover that you instrumented with.");com_cenqua_clover.Clover.l("[CLOVER] WARNING: Instr=2.2.1#20080423154828733,Runtime="+com_cenqua_clover.CloverVersionInfo.getReleaseNum() + "#"+com_cenqua_clover.CloverVersionInfo.getBuildStamp());}R=com_cenqua_clover.Clover.getRecorder(new char[]{47,85,115,101,114,115,47,113,47,68,101,118,101,108,111,112,109,101,110,116,47,87,101,98,79,98,106,101,99,116,115,47,87,79,73,110,115,116,97,108,108,47,46,99,108,111,118,101,114,47,99,111,118,101,114,97,103,101,46,100,98},1211617645916L,1000L,2203);}catch(java.lang.Throwable t){java.lang.System.err.println("[CLOVER] FATAL ERROR: Clover could not be initialised. Are you sure you have Clover in the runtime classpath? ("+t.getClass()+":"+t.getMessage()+")");}}}
+  private String _name;
+
+  public ConsoleProgressMonitor(String name) {__CLR2_2_11p71p7fglxv4gi.R.E[2203]++;
+    __CLR2_2_11p71p7fglxv4gi.R.E[2204]++;_name = name;
+  }
+
+  public void progress(long amount, long totalSize) {__CLR2_2_11p71p7fglxv4gi.R.E[2205]++;
+    __CLR2_2_11p71p7fglxv4gi.R.E[2206]++;System.out.print(_name + ": " + (int) (((float) amount / (float) totalSize) * 100.0) + "%  \r");
+  }
+
+  public void done() {__CLR2_2_11p71p7fglxv4gi.R.E[2207]++;
+    __CLR2_2_11p71p7fglxv4gi.R.E[2208]++;System.out.println(_name + ": Done");
+  }
+}

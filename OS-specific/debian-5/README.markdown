@@ -29,26 +29,19 @@
 
 Add "contrib non-free" source qualifiers to the file:
 
-<style>
-.add {
-	font-weight: bold;
-	color: green;
-}
-</style>
-
-<pre style="outline:1px solid lightgray">
+<pre>
 	# 
 	# deb cdrom:[Debian GNU/Linux 5.0.0 _Lenny_ - Official i386 NETINST Binary-1 20090214-16:03]/ lenny main
 	
 	#deb cdrom:[Debian GNU/Linux 5.0.0 _Lenny_ - Official i386 NETINST Binary-1 20090214-16:03]/ lenny main
 	
-	http://debian.uchicago.edu/debian/ lenny main <span class="add" style="font-weight:bold;color:green">contrib non-free</span>
+	http://debian.uchicago.edu/debian/ lenny main <font color="green"><b>contrib non-free</b></font>
 	deb-src http://debian.uchicago.edu/debian/ lenny main
 	
-	deb http://security.debian.org/ lenny/updates main <span style="font-weight:bold;color:green">contrib non-free</span>
+	deb http://security.debian.org/ lenny/updates main <font color="green"><b>contrib non-free</b></font>
 	deb-src http://security.debian.org/ lenny/updates main
 	
-	deb http://volatile.debian.org/debian-volatile lenny/volatile main <span style="font-weight:bold;color:green">contrib non-free</span>
+	deb http://volatile.debian.org/debian-volatile lenny/volatile main <font color="green"><b>contrib non-free</b></font>
 	deb-src http://volatile.debian.org/debian-volatile lenny/volatile main
 </pre>
 
@@ -139,8 +132,8 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 	
 	pico /etc/apache2/sites-enabled/000-default
 
-<pre style="outline:1px solid lightgray">
-	<span style="font-weight:bold;color:green">Include /etc/apache2/apache_webobjects.conf</span>
+<pre>
+	<font color="green"><b>Include /etc/apache2/apache_webobjects.conf</b></font>
 	
 	&lt;VirtualHost *:80>
 		ServerAdmin webmaster@localhost
@@ -151,13 +144,13 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 			AllowOverride None
 		&lt;/Directory>
 		
-		<span style="font-weight:bold;color:red">ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
+		<font color="red"><b>ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 		&lt;Directory "/usr/lib/cgi-bin">
 			AllowOverride None
 			Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
 			Order allow,deny
 			Allow from all
-		&lt;/Directory></span>
+		&lt;/Directory></b></font>
 		
 		&lt;Directory /var/www/>
 			Options Indexes FollowSymLinks MultiViews

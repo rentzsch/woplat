@@ -1,4 +1,4 @@
-# WebObjects v5.3 & v5.4 Debian v5 "Lenny" Installation Recipe
+# Recipe for Installing WebObjects 5.3 and 5.4 on Debian v5 Lenny
 
 ## Create a new VMware VM
 
@@ -277,7 +277,29 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 
 ## DHCP -> Static Address
 
-	TODO
+*Best do this connected directly to the VMware window since any ssh connections will be terminated.*
+
+	ifdown eth0
+	pico /etc/network/interfaces
+<pre>
+ 	# This file describes the network interfaces available on your system
+ 	# and how to activate them. For more information, see interfaces(5).
+ 
+ 	# The loopback network interface
+ 	auto lo
+ 	iface lo inet loopback
+ 
+ 	# The primary network interface
+ 	allow-hotplug eth0
+-	iface eth0 inet dhcp
++	#iface eth0 inet dhcp
++	iface eth0 inet static
++		address 12.34.56.78
++		netmask 255.255.255.0
++		gateway 12.34.56.71
+</pre>
+	ifup eth0
+	cd /etc && hg addremove && hg ci -m 'change to static IP address'
 
 ## Update domain name
 

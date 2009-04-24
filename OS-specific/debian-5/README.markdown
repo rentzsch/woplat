@@ -36,15 +36,17 @@ Password: pass
 
 (You'll want to change this later.)
 
+## Install ssh
+
+	apt-get install ssh
+
+*Now would be a good time to switch from typing directly into the VM's window to ssh-via-Terminal.app so you can leverage copy & pasting for commands. Use `ifconfig eth0` to discover your VM's IP address.*
+
 ## Remove nonadmin user
 
 You can add your own users later.
 
 	userdel --remove wolf
-
-## Install ssh
-
-	apt-get install ssh
 
 ## Install Mercurial
 
@@ -127,6 +129,7 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 	
 	su - appserver
 	echo 'export NEXT_ROOT=/opt' > .bash_profile
+	mkdir /opt/Local/Library/WebObjects/Apps && mkdir /opt/Local/Library/WebObjects/Logs
 	exit
 	
 	cd /etc && hg addremove && hg ci -m 'useradd appserver && groupadd appserveradm'
@@ -158,7 +161,6 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 ## Install Adaptor (part 3 of 3)
 
 	mv ~/$WOPLAT/apache_webobjects.conf /etc/apache2/apache_webobjects.conf
-	
 	pico /etc/apache2/sites-enabled/000-default
 
 <pre>
@@ -226,9 +228,35 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 
 	/etc/init.d/webobjects start
 
+## Use JavaMonitor to Initialize Your Host
+
+* Open http://192.168.22.xxx:56789/ in your browser
+* Hosts tab > Add Host: "localhost" of type: Unix
+* Preferences tab > Set a password. This is used by both wotaskd and JavaMonitor.
+
 ## Strengthen your root password
 
 	passwd
+
+## Install MySQL
+
+	apt-get install mysql-server libmysql-java
+	cd /etc && hg addremove && hg ci -m 'apt-get install mysql-server libmysql-java'
+	# Put the .jar where WO will find it.
+	ln -s /usr/share/java/mysql-connector-java.jar /opt/Local/Library/WebObjects/Extensions
+		
+	# for some reason mysql brings along a mail server. Turn it off.
+	/etc/init.d/exim4 stop
+	update-rc.d exim remove
+	cd /etc && hg addremove && hg ci -m 'update-rc.d exim remove'
+
+## (Optional) Install Wonder
+
+	su - appserver
+	mkdir /opt/Local/Library/Frameworks && cd /opt/Local/Library/Frameworks
+	wget http://webobjects.mdimension.com/wonder/Wonder-latest-Frameworks-53.tar.gz
+	tar xfz Wonder-latest-Frameworks-53.tar.gz && rm Wonder-latest-Frameworks-53.tar.gz
+	exit
 
 ## (Optional) Install lsof
 
@@ -238,15 +266,19 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 ## (Optional) Install ntp
 
 	apt-get install ntp
+	cd /etc && hg addremove && hg ci -m 'apt-get install ntp'
 
-## Disable DHCP
+## (Optional) Install munin
+
+	apt-get install munin munin-node
+	cd /etc && hg addremove && hg ci -m 'apt-get install munin munin-node'
+
+*Reports will be at http://server/munin after a while -- the cron job need to run.*
+
+## DHCP -> Static Address
 
 	TODO
 
 ## Update domain name
-
-	TODO
-
-## Update Time Zone
 
 	TODO

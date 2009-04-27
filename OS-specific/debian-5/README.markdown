@@ -98,7 +98,7 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 
 ## Install WebObjects v5.3.3 and v5.4.3
 
-	wget http://webobjects.mdimension.com/wolips/WOInstaller.jar
+	cd; wget http://webobjects.mdimension.com/wolips/WOInstaller.jar
 	
 	mkdir /opt/wo533 && mkdir /opt/wo543
 
@@ -247,8 +247,8 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 		
 	# for some reason mysql brings along a mail server. Turn it off.
 	/etc/init.d/exim4 stop
-	update-rc.d exim remove
-	cd /etc && hg addremove && hg ci -m 'update-rc.d exim remove'
+	update-rc.d -f exim4 remove
+	cd /etc && hg addremove && hg ci -m 'update-rc.d -f exim4 remove'
 
 ## (Optional) Install Wonder
 
@@ -273,7 +273,7 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 	apt-get install munin munin-node
 	cd /etc && hg addremove && hg ci -m 'apt-get install munin munin-node'
 
-*Reports will be at http://server/munin after a while -- the cron job need to run.*
+*Reports will be at http://server/munin after a while -- the cron job needs to run first.*
 
 ## DHCP -> Static Address
 

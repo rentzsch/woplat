@@ -47,6 +47,11 @@ Selectively install WebObject 5.4.3's Apache 2.2 adapter, since Snow Leopard com
 	sudo cp -R wo543/System/Library/WebObjects/Adaptors/Apache2.2 \
 		/System/Library/WebObjects/Adaptors
 
+But WebObject 5.4.3's Apache 2.2 adapter, targeted for 10.5, SEGFAULTs on 10.6. So replace the `.so` with one that was compiled for 10.6:
+
+	curl -O 'http://webobjects.mdimension.com/wonder/mod_WebObjects/Apache2.2/macosx/10.6/mod_WebObjects.so'
+	sudo mv mod_WebObjects.so /System/Library/WebObjects/Adaptors/Apache2.2
+
 Add WebObjects to `/etc/apache2/httpd.conf`:
 
 	    <IfModule ssl_module>
@@ -71,7 +76,6 @@ Introduce wotaskd to launchd:
 	sudo mv com.apple.wotaskd.plist /System/Library/LaunchDaemons
 
 `com.apple.wotaskd.plist` needs an ownership of `root/wheel` otherwise `launchctl` will refused to load it, citing "Dubious ownership".
-
 
 ### Project Wonder (Optional)
 
@@ -128,7 +132,7 @@ You need `woproject.jar` where `ant` can find it. Fortunately WOLips comes with 
 		~/Applications/eclipse/plugins/org.objectstyle.wolips.woproject.ant_3.4.*/lib/woproject.jar \
 		/usr/share/ant/lib
 
-MOTE: When you upgrade your WOLips, you'll probably have to re-issue this `ln` command to get command-line builds working again.
+NOTE: When you upgrade your WOLips, you'll probably have to re-issue this `ln` command to get command-line builds working again.
 
 An alternative is to simply copy the jar file instead of linking it, but a broken symlink results in an somewhat-obvious error while I fear a significantly mismatched woproject from what I'm using in Eclipse+WOLips.
 

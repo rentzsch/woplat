@@ -256,7 +256,12 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 	mkdir /opt/Local/Library/Frameworks && cd /opt/Local/Library/Frameworks
 	wget http://webobjects.mdimension.com/wonder/Wonder-latest-Frameworks-53.tar.gz
 	tar xfz Wonder-latest-Frameworks-53.tar.gz && rm Wonder-latest-Frameworks-53.tar.gz
-	exit
+
+## (Optional) Install Mail Jars
+
+If you have WebObejcts applications that send email, you'll probably need activation.jar and mail.jar.
+
+	scp activation.jar mail.jar root@example.com:/opt/Local/Library/WebObjects/Extensions
 
 ## (Optional) Install lsof
 
@@ -300,7 +305,3 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 </pre>
 	ifup eth0
 	cd /etc && hg addremove && hg ci -m 'change to static IP address'
-
-## Update domain name
-
-	TODO

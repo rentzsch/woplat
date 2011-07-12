@@ -31,7 +31,7 @@ Install crucial WebObjects support folder:
 
 	cp -R wo533/Library/WebObjects /Library
 	mkdir /Library/WebObjects/Configuration
-	sudo chown appserver /Library/WebObjects/Configuration
+	sudo chown -R appserver /Library/WebObjects/Configuration
 
 ### Apache, wotaskd, JavaMonitor
 

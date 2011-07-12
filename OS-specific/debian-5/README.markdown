@@ -259,7 +259,7 @@ This work-around is critical, otherwise WebObjects apps won't start cause they c
 
 ## (Optional) Install Mail Jars
 
-If you have WebObejcts applications that send email, you'll probably need activation.jar and mail.jar.
+If you have WebObjects applications that send email, you'll probably need activation.jar and mail.jar.
 
 	scp activation.jar mail.jar root@example.com:/opt/Local/Library/WebObjects/Extensions
 

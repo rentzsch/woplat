@@ -74,6 +74,9 @@ Introduce wotaskd to launchd:
 	sudo chown root com.apple.wotaskd.plist
 	sudo chgrp wheel com.apple.wotaskd.plist
 	sudo mv com.apple.wotaskd.plist /System/Library/LaunchDaemons
+	touch /var/log/webobjects.log
+	chown appserver /var/log/webobjects.log
+	sudo launchctl load /System/Library/LaunchDaemons/com.apple.wotaskd.plist
 
 `com.apple.wotaskd.plist` needs an ownership of `root/wheel` otherwise `launchctl` will refused to load it, citing "Dubious ownership".
 

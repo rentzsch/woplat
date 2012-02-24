@@ -21,6 +21,7 @@ Install crucial WebObjects frameworks:
 		JavaFoundation.framework \
 		JavaJDBCAdaptor.framework \
 		JavaWebObjects.framework \
+		JavaWOExtensions.framework \
 		JavaXML.framework \
 		/System/Library/Frameworks
 	cd ../PrivateFrameworks
